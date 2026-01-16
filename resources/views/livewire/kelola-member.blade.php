@@ -14,137 +14,95 @@
             </div>
 
             <!-- Search, Filter, and Per Page Section -->
-            <div class="mb-6 space-y-4">
-                <!-- Search Bar -->
-                <div class="w-full">
-                    <x-g-input 
-                        wire:model.live.debounce.300ms="searchVerifiedMember"
-                        class="w-full"
-                        label="Cari Member"
-                        placeholder="Cari berdasarkan nama, email, username, atau nomor telepon..."
-                    />
+            <div class="mb-10 space-y-6">
+                <div class="group bg-white rounded-[2rem] p-2 border border-slate-100 shadow-[0_10px_30px_-15px_rgba(0,0,0,0.05)] focus-within:shadow-[0_15px_35px_-12px_rgba(0,0,0,0.1)] transition-all duration-500">
+                    <div class="relative flex items-center">
+                        <div class="pl-5 text-slate-400 group-focus-within:text-warna-500 transition-colors">
+                            <i class="fas fa-search text-sm"></i>
+                        </div>
+                        <input 
+                            wire:model.live.debounce.300ms="searchVerifiedMember"
+                            type="text"
+                            class="w-full bg-transparent border-none focus:ring-0 text-sm font-bold text-[#0F172A] placeholder:text-slate-400 placeholder:font-medium py-4 px-4"
+                            placeholder="Cari member berdasarkan nama, email, atau telepon..."
+                        >
+                    </div>
                 </div>
 
-                <!-- Controls Row -->
-                <div class="flex flex-col lg:flex-row items-start lg:items-end justify-between gap-4">
-                    <!-- Left Side - Per Page & Filter -->
-                    <div class="flex flex-col sm:flex-row items-start sm:items-end gap-3 w-full lg:w-auto">
-                        <!-- Per Page Selector -->
-                        <div class="w-full sm:w-auto min-w-0">
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Per Halaman</label>
-                            <select wire:model.live="perPage" 
-                                    class="w-full  px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
-                                <option value="5">5</option>
-                                <option value="10">10</option>
-                                <option value="25">25</option>
-                                <option value="50">50</option>
-                                <option value="100">100</option>
-                            </select>
+                <div class="flex flex-col lg:flex-row items-center justify-between gap-6">
+                    <div class="flex flex-wrap items-center gap-4 w-full lg:w-auto">
+                        
+                        <div class="flex items-center bg-white px-5 py-3 rounded-2xl border border-slate-100 shadow-sm transition-all hover:shadow-md">
+                            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 mr-3">Show</label>
+                            <div class="relative flex items-center">
+                                <select wire:model.live="perPage" 
+                                        class="bg-transparent text-sm font-black text-[#0F172A] border-none focus:ring-0 focus:outline-none cursor-pointer appearance-none py-0 pl-0 pr-6 z-10 relative bg-none [-webkit-appearance:none] [-moz-appearance:none]">
+                                    <option value="5">05</option>
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                </select>
+                                <i class="fa-solid fa-angle-down text-[10px] text-slate-400 absolute right-0 pointer-events-none"></i>
+                            </div>
                         </div>
                         
-                        <!-- Filter Dropdown -->
-                        <div class="relative w-full sm:w-auto">
+                        <div class="relative">
                             <button id="filterDropdownButton" 
                                     data-dropdown-toggle="filterDropdown" 
-                                    data-dropdown-placement="bottom-start"
-                                    class="w-full sm:w-auto px-4 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 min-h-[42px]
-                                    {{ $filterMemberType || $filterStatus ? 'bg-blue-100 text-blue-700 border border-blue-200' : '' }}"
-                                    type="button">
-                                <i class="fas fa-filter text-sm"></i>
-                                <span>Filter</span>
+                                    class="px-6 py-3 bg-white hover:bg-slate-50 text-slate-600 rounded-2xl border border-slate-100 shadow-sm transition-all duration-300 flex items-center gap-3 group
+                                    {{ $filterMemberType || $filterStatus ? 'ring-2 ring-warna-500/20 border-warna-500/50 text-warna-600' : '' }}">
+                                <i class="fas fa-filter text-xs group-hover:rotate-12 transition-transform"></i>
+                                <span class="text-xs font-black uppercase tracking-widest">Filter</span>
                                 @if($filterMemberType || $filterStatus)
-                                    <span class="bg-blue-500 text-white text-xs rounded-full px-2 py-0.5 ml-1 min-w-[20px] text-center">
+                                    <span class="bg-warna-500 text-white text-[10px] font-black rounded-lg px-2 py-0.5 shadow-sm shadow-warna-500/30">
                                         {{ ($filterMemberType ? 1 : 0) + ($filterStatus ? 1 : 0) }}
                                     </span>
                                 @endif
-                                <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                                </svg>
                             </button>
 
-                            <!-- Dropdown menu -->
-                            <div id="filterDropdown" class="z-50 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-80 max-w-[90vw] border border-gray-200">
-                                <div class="p-4">
-                                    <h3 class="text-sm font-semibold text-gray-800 mb-4 flex items-center">
-                                        <i class="fas fa-filter mr-2 text-blue-600"></i>
-                                        Filter Member
-                                    </h3>
-                                    
-                                    <div class="space-y-4">
-                                        <!-- Filter Jenis Member -->
-                                        <div>
-                                            <label class="block mb-2 text-sm font-medium text-gray-900">Jenis Member</label>
-                                            <select wire:model.live="filterMemberType" 
-                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                                                <option value="">Semua Jenis</option>
-                                                <option value="local">Local ({{ $this->getFilterCounts()['local'] }})</option>
-                                                <option value="foreign">Foreign ({{ $this->getFilterCounts()['foreign'] }})</option>
+                            <div id="filterDropdown" class="z-50 hidden bg-white/95 backdrop-blur-xl rounded-[2rem] shadow-2xl w-80 border border-white p-6 transition-all duration-300">
+                                <h3 class="text-xs font-black text-[#0F172A] uppercase tracking-widest mb-5 flex items-center italic">
+                                    <span class="w-1 h-4 bg-warna-500 rounded-full mr-2"></span>
+                                    Filter Options
+                                </h3>
+                                
+                                <div class="space-y-5">
+                                    @foreach([
+                                        ['label' => 'Jenis Member', 'model' => 'filterMemberType', 'options' => ['local' => 'Local', 'foreign' => 'Foreign']],
+                                        ['label' => 'Status Member', 'model' => 'filterStatus', 'options' => ['active' => 'Active', 'frozen' => 'Frozen', 'inactive' => 'Inactive', 'pending_email_verification' => 'Pending Email', 'pending_admin_verification' => 'Pending Admin']]
+                                    ] as $f)
+                                    <div>
+                                        <label class="block mb-2 text-[10px] font-black text-slate-400 uppercase tracking-widest">{{ $f['label'] }}</label>
+                                        <div class="relative">
+                                            <select wire:model.live="{{ $f['model'] }}" 
+                                                    class="w-full bg-slate-50 border-none text-sm font-bold text-[#0F172A] rounded-xl focus:ring-2 focus:ring-warna-500/20 block p-3 appearance-none">
+                                                <option value="">Semua</option>
+                                                @foreach($f['options'] as $val => $label)
+                                                    <option value="{{ $val }}">{{ $label }}</option>
+                                                @endforeach
                                             </select>
-                                        </div>
-
-                                        <!-- Filter Status -->
-                                        <div>
-                                            <label class="block mb-2 text-sm font-medium text-gray-900">Status Member</label>
-                                            <select wire:model.live="filterStatus" 
-                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                                                <option value="">Semua Status</option>
-                                                <option value="active">Active ({{ $this->getFilterCounts()['active'] }})</option>
-                                                <option value="frozen">Frozen ({{ $this->getFilterCounts()['frozen'] }})</option>
-                                                <option value="inactive">Inactive ({{ $this->getFilterCounts()['inactive'] }})</option>
-                                                <option value="pending_email_verification">Pending Email ({{ $this->getFilterCounts()['pending_email_verification'] }})</option>
-                                                <option value="pending_admin_verification">Pending Admin ({{ $this->getFilterCounts()['pending_admin_verification'] }})</option>
-                                            </select>
+                                            <i class="fa-solid fa-chevron-down text-[8px] text-slate-400 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none"></i>
                                         </div>
                                     </div>
+                                    @endforeach
+                                </div>
 
-                                    <!-- Filter Actions -->
-                                    <div class="mt-5 pt-4 border-t border-gray-200">
-                                        <div class="flex items-center justify-between">
-                                            <div class="text-sm text-gray-600">
-                                                Total: <span class="font-semibold text-blue-600">{{ $this->getFilterCounts()['total'] }}</span> member
-                                            </div>
-                                            @if($filterMemberType || $filterStatus)
-                                                <button wire:click="resetFilters" 
-                                                        class="text-xs text-red-600 hover:text-red-700 font-medium px-2 py-1 rounded hover:bg-red-50 transition-colors">
-                                                    <i class="fas fa-times mr-1"></i>Reset Filter
-                                                </button>
-                                            @endif
-                                        </div>
-                                    </div>
+                                <div class="mt-6 pt-5 border-t border-slate-100 flex items-center justify-between">
+                                    <span class="text-[10px] font-bold text-slate-400">Total: <span class="text-[#0F172A]">{{ $this->getFilterCounts()['total'] }}</span></span>
+                                    <button wire:click="resetFilters" class="text-[10px] font-black uppercase tracking-widest text-rose-500 hover:text-rose-600 transition-colors">
+                                        Reset All
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Right Side - Active Filters & Reset -->
-                    <div class="flex items-center gap-2 flex-wrap w-full lg:w-auto">
-                        <!-- Active Filter Tags -->
-                        @if($filterMemberType)
-                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                <i class="fas fa-tag mr-1"></i>
-                                {{ ucfirst($filterMemberType) }}
-                                <button wire:click="$set('filterMemberType', '')" class="ml-2 hover:text-blue-600">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </span>
-                        @endif
-                        
-                        @if($filterStatus)
-                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                <i class="fas fa-circle mr-1"></i>
-                                {{ str_replace('_', ' ', ucfirst($filterStatus)) }}
-                                <button wire:click="$set('filterStatus', '')" class="ml-2 hover:text-green-600">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </span>
-                        @endif
-
-                        <!-- Reset All Button -->
+                    <div class="flex items-center gap-3 flex-wrap justify-end">
                         @if($filterMemberType || $filterStatus || $searchVerifiedMember)
                             <button wire:click="resetFilters" 
-                                    class="px-3 py-1.5 bg-red-100 hover:bg-red-200 text-red-700 rounded-lg transition-all duration-200 flex items-center gap-1.5 text-sm">
-                                <i class="fas fa-refresh text-xs"></i>
-                                <span>Reset All</span>
+                                    class="px-5 py-2.5 bg-rose-50 text-rose-600 rounded-2xl hover:bg-rose-100 transition-all text-[10px] font-black uppercase tracking-widest flex items-center gap-2 border border-rose-100/50">
+                                <i class="fas fa-undo-alt"></i>
+                                Reset Search
                             </button>
                         @endif
                     </div>
@@ -152,131 +110,102 @@
             </div>
 
             <!-- Table Section dengan Sorting -->
-            <div class="w-full overflow-hidden border border-gray-200 rounded-lg">
+            <div class="bg-white rounded-[2.5rem] border border-white shadow-[0_20px_50px_-20px_rgba(0,0,0,0.1)] overflow-hidden transition-all duration-300">
                 <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <!-- Sortable Headers dengan responsive -->
-                                <th class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    <button wire:click="sortBy('name')" 
-                                            class="flex items-center gap-1 hover:text-gray-700 transition-colors">
-                                        <span class="truncate">Nama</span>
-                                        @if($sortField === 'name')
-                                            <i class="fas fa-sort-{{ $sortDirection === 'asc' ? 'up' : 'down' }} text-blue-600 flex-shrink-0"></i>
-                                        @else
-                                            <i class="fas fa-sort text-gray-400 flex-shrink-0"></i>
-                                        @endif
+                    <table class="min-w-full">
+                        <thead>
+                            <tr class="bg-slate-50/50">
+                                <th class="px-6 py-4 text-left">
+                                    <button wire:click="sortBy('name')" class="group flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] hover:text-warna-500 transition-colors">
+                                        <span>Nama Member</span>
+                                        <i class="fas fa-sort-{{ $sortField === 'name' ? ($sortDirection === 'asc' ? 'up' : 'down') : 'alt' }} {{ $sortField === 'name' ? 'text-warna-500' : 'opacity-30' }}"></i>
                                     </button>
                                 </th>
-                                <th class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">
-                                    <button wire:click="sortBy('email')" 
-                                            class="flex items-center gap-1 hover:text-gray-700 transition-colors">
-                                        <span class="truncate">Email</span>
-                                        @if($sortField === 'email')
-                                            <i class="fas fa-sort-{{ $sortDirection === 'asc' ? 'up' : 'down' }} text-blue-600 flex-shrink-0"></i>
-                                        @else
-                                            <i class="fas fa-sort text-gray-400 flex-shrink-0"></i>
-                                        @endif
+                                <th class="px-6 py-4 text-left hidden md:table-cell">
+                                    <button wire:click="sortBy('email')" class="group flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] hover:text-warna-500 transition-colors">
+                                        <span>Email</span>
+                                        <i class="fas fa-sort-{{ $sortField === 'email' ? ($sortDirection === 'asc' ? 'up' : 'down') : 'alt' }} {{ $sortField === 'email' ? 'text-warna-500' : 'opacity-30' }}"></i>
                                     </button>
                                 </th>
-                                <th class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    <button wire:click="sortBy('status')" 
-                                            class="flex items-center gap-1 hover:text-gray-700 transition-colors">
-                                        <span class="truncate">Status</span>
-                                        @if($sortField === 'status')
-                                            <i class="fas fa-sort-{{ $sortDirection === 'asc' ? 'up' : 'down' }} text-blue-600 flex-shrink-0"></i>
-                                        @else
-                                            <i class="fas fa-sort text-gray-400 flex-shrink-0"></i>
-                                        @endif
+                                <th class="px-6 py-4 text-left">
+                                    <button wire:click="sortBy('status')" class="group flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] hover:text-warna-500 transition-colors">
+                                        <span>Status</span>
+                                        <i class="fas fa-sort-{{ $sortField === 'status' ? ($sortDirection === 'asc' ? 'up' : 'down') : 'alt' }} {{ $sortField === 'status' ? 'text-warna-500' : 'opacity-30' }}"></i>
                                     </button>
                                 </th>
-                                <th class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden lg:table-cell">
-                                    <button wire:click="sortBy('membership_expiration_date')" 
-                                            class="flex items-center gap-1 hover:text-gray-700 transition-colors">
-                                        <span class="truncate">Expired</span>
-                                        @if($sortField === 'membership_expiration_date')
-                                            <i class="fas fa-sort-{{ $sortDirection === 'asc' ? 'up' : 'down' }} text-blue-600 flex-shrink-0"></i>
-                                        @else
-                                            <i class="fas fa-sort text-gray-400 flex-shrink-0"></i>
-                                        @endif
+                                <th class="px-6 py-4 text-left hidden lg:table-cell">
+                                    <button wire:click="sortBy('membership_expiration_date')" class="group flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] hover:text-warna-500 transition-colors">
+                                        <span>Expired</span>
+                                        <i class="fas fa-sort-{{ $sortField === 'membership_expiration_date' ? ($sortDirection === 'asc' ? 'up' : 'down') : 'alt' }} {{ $sortField === 'membership_expiration_date' ? 'text-warna-500' : 'opacity-30' }}"></i>
                                     </button>
                                 </th>
-                                <th class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden sm:table-cell">
-                                    <button wire:click="sortBy('member_type')" 
-                                            class="flex items-center gap-1 hover:text-gray-700 transition-colors">
-                                        <span class="truncate">Tipe</span>
-                                        @if($sortField === 'member_type')
-                                            <i class="fas fa-sort-{{ $sortDirection === 'asc' ? 'up' : 'down' }} text-blue-600 flex-shrink-0"></i>
-                                        @else
-                                            <i class="fas fa-sort text-gray-400 flex-shrink-0"></i>
-                                        @endif
+                                <th class="px-6 py-4 text-left hidden sm:table-cell">
+                                    <button wire:click="sortBy('member_type')" class="group flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] hover:text-warna-500 transition-colors">
+                                        <span>Tipe</span>
+                                        <i class="fas fa-sort-{{ $sortField === 'member_type' ? ($sortDirection === 'asc' ? 'up' : 'down') : 'alt' }} {{ $sortField === 'member_type' ? 'text-warna-500' : 'opacity-30' }}"></i>
                                     </button>
                                 </th>
-                                <th class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                                <th class="px-6 py-4 text-center text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Aksi</th>
                             </tr>
                         </thead>
                         
-                        <tbody class="bg-white divide-y divide-gray-100">
+                        <tbody class="divide-y divide-slate-50">
                             @forelse($verifiedMembers as $member)
-                                <tr class="hover:bg-gray-50 transition-colors duration-150">
-                                    <td class="px-3 sm:px-6 py-4 text-sm font-medium text-gray-900">
-                                        <div class="max-w-[150px] sm:max-w-none">
-                                            <div class="truncate font-medium">{{ $member->name }}</div>
-                                            <div class="text-xs text-gray-500 md:hidden truncate">{{ $member->email }}</div>
+                                <tr class="group hover:bg-slate-50/80 transition-all duration-300">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex flex-col">
+                                            <span class="text-sm font-black text-[#0F172A] uppercase tracking-tight">{{ $member->name }}</span>
+                                            <span class="text-[10px] text-slate-400 md:hidden font-bold">{{ $member->email }}</span>
                                         </div>
                                     </td>
-                                    <td class="px-3 sm:px-6 py-4 text-sm text-gray-500 hidden md:table-cell">
-                                        <div class="max-w-[200px] truncate">{{ $member->email }}</div>
+                                    <td class="px-6 py-4 hidden md:table-cell">
+                                        <span class="text-xs font-bold text-slate-500">{{ $member->email }}</span>
                                     </td>
-                                    <td class="px-3 sm:px-6 py-4">
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                            {{ $member->status === 'active' ? 'bg-green-100 text-green-800' : 
-                                            ($member->status === 'frozen' ? 'bg-yellow-100 text-yellow-800' : 
-                                            ($member->status === 'inactive' ? 'bg-red-100 text-red-800' :
-                                            ($member->status === 'pending_email_verification' ? 'bg-orange-100 text-orange-800' : 'bg-purple-100 text-purple-800'))) }}">
-                                            <span class="truncate">{{ str_replace('_', ' ', ucfirst($member->status)) }}</span>
+                                    <td class="px-6 py-4">
+                                        @php
+                                            $statusStyles = [
+                                                'active' => 'bg-emerald-500 text-white',
+                                                'frozen' => 'bg-amber-400 text-white',
+                                                'inactive' => 'bg-rose-500 text-white',
+                                                'pending_email_verification' => 'bg-slate-200 text-slate-600',
+                                                'pending_admin_verification' => 'bg-[#0F172A] text-white',
+                                            ];
+                                        @endphp
+                                        <span class="px-3 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest {{ $statusStyles[$member->status] ?? 'bg-slate-100 text-slate-600' }} shadow-sm">
+                                            {{ str_replace('_', ' ', $member->status) }}
                                         </span>
                                     </td>
-                                    <td class="px-3 sm:px-6 py-4 text-sm text-gray-500 hidden lg:table-cell">
+                                    <td class="px-6 py-4 hidden lg:table-cell">
                                         @if($member->membership_expiration_date)
-                                            <span class="{{ $member->membership_expiration_date->isPast() ? 'text-red-600 font-medium' : 'text-gray-900' }}">
-                                                {{ $member->membership_expiration_date->format('d/m/Y') }}
-                                            </span>
+                                            <div class="flex items-center gap-2">
+                                                <div class="w-1.5 h-1.5 rounded-full {{ $member->membership_expiration_date->isPast() ? 'bg-rose-500' : 'bg-emerald-500' }}"></div>
+                                                <span class="text-xs font-black italic {{ $member->membership_expiration_date->isPast() ? 'text-rose-600' : 'text-[#0F172A]' }}">
+                                                    {{ $member->membership_expiration_date->format('d/m/Y') }}
+                                                </span>
+                                            </div>
                                         @else
-                                            <span class="text-gray-400">-</span>
+                                            <span class="text-xs font-bold text-slate-300">-</span>
                                         @endif
                                     </td>
-                                    <td class="px-3 sm:px-6 py-4 text-sm text-gray-500 hidden sm:table-cell">
-                                        <span class="inline-flex items-center px-2 py-1 rounded text-xs
-                                            {{ $member->member_type === 'local' ? 'bg-blue-100 text-blue-800' : 'bg-purple-100 text-purple-800' }}">
-                                            <i class="fas {{ $member->member_type === 'local' ? 'fa-home' : 'fa-globe' }} mr-1 flex-shrink-0"></i>
-                                            <span class="truncate">{{ ucfirst($member->member_type) }}</span>
+                                    <td class="px-6 py-4 hidden sm:table-cell">
+                                        <span class="inline-flex items-center text-[10px] font-black uppercase tracking-widest {{ $member->member_type === 'local' ? 'text-blue-600' : 'text-purple-600' }}">
+                                            <i class="fas {{ $member->member_type === 'local' ? 'fa-home' : 'fa-globe' }} mr-2"></i>
+                                            {{ $member->member_type }}
                                         </span>
                                     </td>
-                                    <td class="px-3 sm:px-6 py-4 text-sm font-medium">
+                                    <td class="px-6 py-4 text-center">
                                         <button wire:click="openDetailMemberModal({{ $member->id }})" 
-                                                class="text-indigo-600 hover:text-indigo-900 transition-colors duration-150 text-sm">
+                                                class="px-4 py-2 bg-slate-900 hover:bg-warna-500 text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-xl transition-all duration-300 shadow-md hover:shadow-warna-500/20 active:scale-95">
                                             Detail
                                         </button>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="6" class="px-3 sm:px-6 py-12 text-sm text-gray-500 text-center">
-                                        <div class="flex flex-col items-center">
-                                            <i class="fas fa-users text-gray-300 text-4xl mb-4"></i>
-                                            @if($searchVerifiedMember || $filterMemberType || $filterStatus)
-                                                <p class="font-medium mb-2">Tidak ada member yang sesuai dengan filter</p>
-                                                <p class="text-xs text-gray-400 mb-4">Coba ubah kriteria pencarian atau filter Anda</p>
-                                                <button wire:click="resetFilters" 
-                                                        class="px-4 py-2 bg-blue-100 text-blue-700 rounded-lg text-xs hover:bg-blue-200 transition-colors">
-                                                    Reset Filter
-                                                </button>
-                                            @else
-                                                <p class="font-medium mb-2">Belum ada member terdaftar</p>
-                                                <p class="text-xs text-gray-400">Member yang baru mendaftar akan muncul di sini</p>
-                                            @endif
+                                    <td colspan="6" class="px-6 py-20 text-center">
+                                        <div class="flex flex-col items-center opacity-20">
+                                            <i class="fas fa-users-slash text-6xl mb-4 text-slate-300"></i>
+                                            <p class="text-[10px] font-black uppercase tracking-[0.3em]">No Member Data Found</p>
                                         </div>
                                     </td>
                                 </tr>
@@ -285,36 +214,36 @@
                     </table>
                 </div>
             </div>
-
             <!-- Enhanced Pagination Section -->
-            <div class="mt-6">
-                <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <!-- Pagination Info -->
-                    <div class="text-sm text-gray-600 text-center sm:text-left">
-                        @if($verifiedMembers->count() > 0)
-                            Menampilkan {{ $verifiedMembers->firstItem() }} - {{ $verifiedMembers->lastItem() }} 
-                            dari {{ $verifiedMembers->total() }} member
-                            @if($searchVerifiedMember || $filterMemberType || $filterStatus)
-                                <span class="text-blue-600 font-medium">(difilter)</span>
-                            @endif
-                        @else
-                            Tidak ada data untuk ditampilkan
-                        @endif
+            <div class="mt-10 mb-6">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-6 px-4">
+                    <div class="order-2 md:order-1">
+                        <div class="bg-white px-6 py-3 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-3">
+                            <div class="w-1.5 h-1.5 rounded-full bg-warna-500 animate-pulse"></div>
+                            <p class="text-[10px] font-black uppercase tracking-[0.15em] text-slate-400">
+                                @if($verifiedMembers->count() > 0)
+                                    Menampilkan <span class="text-[#0F172A]">{{ $verifiedMembers->firstItem() }}-{{ $verifiedMembers->lastItem() }}</span> 
+                                    Dari <span class="text-[#0F172A]">{{ $verifiedMembers->total() }}</span> Member
+                                    @if($searchVerifiedMember || $filterMemberType || $filterStatus)
+                                        <span class="ml-1 text-warna-500 italic lowercase tracking-tight">(difilter)</span>
+                                    @endif
+                                @else
+                                    Tidak ada data ditemukan
+                                @endif
+                            </p>
+                        </div>
                     </div>
 
-                    <!-- Pagination Links -->
-                    <div class="flex items-center gap-1 flex-wrap justify-center">
+                    <div class="order-1 md:order-2">
                         @if($verifiedMembers->hasPages())
-                            <!-- Previous Button -->
-                            @if(!$verifiedMembers->onFirstPage())
-                                <button wire:click="previousPage" 
-                                        class="px-3 py-2 text-sm bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-                                    <i class="fas fa-chevron-left"></i>
-                                </button>
-                            @endif
+                        <div class="flex items-center gap-2">
+                            <button wire:click="previousPage" 
+                                    {{ $verifiedMembers->onFirstPage() ? 'disabled' : '' }}
+                                    class="w-11 h-11 flex items-center justify-center bg-white border border-slate-100 rounded-xl text-slate-400 hover:text-warna-500 hover:border-warna-500 shadow-sm transition-all duration-300 disabled:opacity-30 disabled:hover:text-slate-400 disabled:hover:border-slate-100">
+                                <i class="fas fa-chevron-left text-xs"></i>
+                            </button>
 
-                            <!-- Page Numbers -->
-                            <div class="flex items-center gap-1">
+                            <div class="flex items-center gap-2 bg-slate-50/50 p-1 rounded-2xl border border-slate-100/50">
                                 @php
                                     $currentPage = $verifiedMembers->currentPage();
                                     $lastPage = $verifiedMembers->lastPage();
@@ -323,41 +252,36 @@
                                 @endphp
 
                                 @if($startPage > 1)
-                                    <button wire:click="gotoPage(1)" 
-                                            class="px-3 py-2 text-sm bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-                                        1
-                                    </button>
+                                    <button wire:click="gotoPage(1)" class="w-10 h-10 flex items-center justify-center text-xs font-black text-slate-400 hover:text-[#0F172A] transition-colors">1</button>
                                     @if($startPage > 2)
-                                        <span class="px-2 text-gray-500 text-sm">...</span>
+                                        <span class="text-slate-300 text-xs font-black">...</span>
                                     @endif
                                 @endif
 
                                 @for($page = $startPage; $page <= $endPage; $page++)
                                     <button wire:click="gotoPage({{ $page }})" 
-                                            class="px-3 py-2 text-sm rounded-lg transition-colors
-                                            {{ $page === $currentPage ? 'bg-blue-600 text-white' : 'bg-white border border-gray-300 hover:bg-gray-50' }}">
+                                            class="w-10 h-10 flex items-center justify-center text-xs font-black rounded-xl transition-all duration-300
+                                            {{ $page === $currentPage 
+                                                ? 'bg-[#0F172A] text-white shadow-lg shadow-slate-900/20 scale-110' 
+                                                : 'text-slate-400 hover:bg-white hover:text-[#0F172A] hover:shadow-sm' }}">
                                         {{ $page }}
                                     </button>
                                 @endfor
 
                                 @if($endPage < $lastPage)
                                     @if($endPage < $lastPage - 1)
-                                        <span class="px-2 text-gray-500 text-sm">...</span>
+                                        <span class="text-slate-300 text-xs font-black">...</span>
                                     @endif
-                                    <button wire:click="gotoPage({{ $lastPage }})" 
-                                            class="px-3 py-2 text-sm bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-                                        {{ $lastPage }}
-                                    </button>
+                                    <button wire:click="gotoPage({{ $lastPage }})" class="w-10 h-10 flex items-center justify-center text-xs font-black text-slate-400 hover:text-[#0F172A] transition-colors">{{ $lastPage }}</button>
                                 @endif
                             </div>
 
-                            <!-- Next Button -->
-                            @if($verifiedMembers->hasMorePages())
-                                <button wire:click="nextPage" 
-                                        class="px-3 py-2 text-sm bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-                                    <i class="fas fa-chevron-right"></i>
-                                </button>
-                            @endif
+                            <button wire:click="nextPage" 
+                                    {{ !$verifiedMembers->hasMorePages() ? 'disabled' : '' }}
+                                    class="w-11 h-11 flex items-center justify-center bg-white border border-slate-100 rounded-xl text-slate-400 hover:text-warna-500 hover:border-warna-500 shadow-sm transition-all duration-300 disabled:opacity-30 disabled:hover:text-slate-400 disabled:hover:border-slate-100">
+                                <i class="fas fa-chevron-right text-xs"></i>
+                            </button>
+                        </div>
                         @endif
                     </div>
                 </div>
@@ -375,373 +299,303 @@
         <div class="fixed z-50 inset-0 flex items-center justify-center bg-warna-300/50 backdrop-blur-sm">
             <x-input-modal class="relative bg-white rounded-lg shadow-lg p-6 mx-7 md:mx-0 w-full {{ ($detailMemberMode ? 'max-w-4xl' : 'max-w-2xl') }}">
                 
-                @if($TambahMemberMode)
-                    <x-slot name="title">Tambah Member</x-slot>
-                    <x-slot name="subtitle" >Silakan lengkapi informasi berikut untuk menambahkan member baru.</x-slot>
-                    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6 mt-5">
-                        <div class="flex">
-                            <div class="flex-shrink-0">
-                                <i class="fas fa-exclamation-triangle text-yellow-400"></i>
+               @if($TambahMemberMode)
+                        <x-slot name="title">
+                            <div class="flex items-center gap-3">
+                                <div class="w-1.5 h-6 bg-warna-500 rounded-full"></div>
+                                <span class="text-lg font-black text-[#0F172A] uppercase tracking-tighter italic">Tambah <span class="text-warna-500">Member</span></span>
                             </div>
-                            <div class="ml-3">
-                                <h3 class="text-sm font-medium text-yellow-800">
-                                    Peringatan!
-                                </h3>
-                                <div class="mt-2 text-sm text-yellow-700">
-                                    <p>Fitur tambah member ini hanya untuk keadaan <strong>urgent</strong>. <span class="hidden lg:inline">Untuk pendaftaran normal, silakan gunakan sistem pendaftaran online melalui website.</span></p>
+                        </x-slot>
+                        
+                        <x-slot name="subtitle">
+                            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-widest ml-4">Lengkapi informasi member baru di bawah ini.</span>
+                        </x-slot>
+
+                        <div class="bg-white border-l-4 border-amber-400 rounded-2xl p-5 mb-8 mt-6 shadow-[0_10px_30px_-15px_rgba(251,191,36,0.2)]">
+                            <div class="flex items-start gap-4">
+                                <div class="flex-shrink-0 w-10 h-10 bg-amber-50 rounded-xl flex items-center justify-center">
+                                    <i class="fas fa-bolt-lightning text-amber-500"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-xs font-black text-amber-800 uppercase tracking-widest mb-1">Peringatan Penting!</h3>
+                                    <p class="text-[11px] font-bold text-amber-700/80 leading-relaxed">
+                                        Fitur ini hanya untuk keadaan <span class="text-amber-900 underline decoration-2">urgent</span>. 
+                                        Gunakan pendaftaran online melalui website untuk prosedur normal.
+                                    </p>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <form wire:submit.prevent='addMember' class="w-full mt-8 md:mt-10">
-                        <div class="max-h-[35vh] overflow-y-auto pr-2">
-                            <x-g-input 
-                                wire:model.live="name"
-                                class="mb-5 md:mb-6"
-                                label="Nama Lengkap"
-                            />
+
+                    <form wire:submit.prevent='addMember' class="w-full mt-5">
+                        <div class="max-h-[45vh] overflow-y-auto pt-4 pr-4 space-y-6 custom-scrollbar">
+                            
+                            <div class="relative">
+                                <x-g-input 
+                                    wire:model.live="name"
+                                    class="mb-2"
+                                    label="Nama Lengkap"
+                                    placeholder="Contoh: Budi Santoso"
+                                />
+                            </div>
+
                             <x-g-input 
                                 wire:model.live="nomor_telepon"
                                 type="number"
-                                class="mb-5 md:mb-6"
+                                class="mb-2"
                                 label="Nomor Telepon"
+                                placeholder="08123456789"
                             />
+
                             <x-g-input 
                                 wire:model.live="email"
                                 type="email"
-                                class="mb-5 md:mb-6"
-                                label="Email"
-                            />
-                            <x-g-input 
-                                wire:model.live="username"
-                                type="text"
-                                class="mb-5 md:mb-6"
-                                label="Username"
-                            />
-                            <x-g-input 
-                                wire:model.live="password"
-                                type="password"
-                                class="mb-5 md:mb-6"
-                                label="Password"
+                                class="mb-2"
+                                label="Alamat Email"
+                                placeholder="budi@example.com"
                             />
                             
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                <x-g-input 
+                                    wire:model.live="username"
+                                    type="text"
+                                    label="Username"
+                                    placeholder="budiarena"
+                                />
+                                <x-g-input 
+                                    wire:model.live="password"
+                                    type="password"
+                                    label="Password"
+                                    placeholder="••••••••"
+                                />
+                            </div>
                         </div>
+
                         @if($errors->any())
-                            <div class="text-red-500 text-sm mt-2">
+                            <div class="mt-4 p-4 bg-rose-50 rounded-2xl border border-rose-100">
                                 @foreach($errors->all() as $error)
-                                    <p>{{ $error }}</p>
+                                    <p class="text-[10px] font-black text-rose-500 uppercase tracking-wide flex items-center gap-2">
+                                        <i class="fas fa-circle-xmark"></i> {{ $error }}
+                                    </p>
                                 @endforeach
                             </div>
                         @endif
-                        <div class="flex justify-end mt-8 md:mt-9">
-                            <button @click="show = false"  type="button" wire:click="closeInputModal" class="px-5 py-2 bg-gray-300 hover:bg-gray-300/80 active:scale-95 transition-all text-gray-700 rounded-lg mr-2">Batal</button>
-                            <button type="submit" class="px-5 py-2 bg-warna-700 hover:bg-warna-700/80 active:scale-95 transition-all text-white rounded-lg">Simpan</button>
+
+                        <div class="flex items-center justify-end gap-3 mt-10">
+                            <button @click="show = false" type="button" wire:click="closeInputModal" 
+                                    class="px-8 py-3 bg-slate-50 text-slate-400 text-[10px] font-black uppercase tracking-[0.2em] rounded-2xl hover:bg-slate-100 hover:text-slate-600 transition-all duration-300">
+                                Batal
+                            </button>
+                            <button type="submit" 
+                                    class="px-10 py-3 bg-[#0F172A] text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-2xl shadow-xl shadow-slate-900/20 hover:bg-warna-500 hover:shadow-warna-500/40 hover:-translate-y-1 active:scale-95 transition-all duration-300">
+                                Simpan Member
+                            </button>
                         </div>
                     </form>
-                @elseif($detailMemberMode)
-                    <x-slot name="title">Detail Member</x-slot>
-                    <x-slot name="subtitle">Berikut adalah detail informasi member.</x-slot>
-                    
-                    <div class="max-h-[45vh] overflow-y-auto py-4 mt-6">
-                        <!-- Header Section with Member Info -->
-                        <div class="bg-white rounded-xl p-4 sm:p-6 mb-6 border border-blue-100 hover:shadow-lg transition-shadow duration-200">
-                            <div class="flex flex-col lg:flex-row lg:justify-between gap-4">
-                                <div class="flex items-center gap-3 sm:gap-4">
-                                    <div class="w-12 h-12 sm:w-16 sm:h-16 bg-warna-400 rounded-full flex items-center justify-center flex-shrink-0 font-semibold text-white">
-                                        {{ strtoupper(substr($memberDetail['name'], 0, 2)) }}
-                                    </div>
-                                    <div class="min-w-0 flex-1">
-                                        <h3 class="text-lg sm:text-xl font-bold text-gray-900 truncate">{{ $memberDetail['name'] }}</h3>
-                                        <p class="text-gray-600 text-sm truncate">{{ $memberDetail['email'] }}</p>
-                                        <div class="flex items-center gap-2 mt-1">
-                                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium
-                                                {{ $memberDetail['member_type'] === 'local' ? 'bg-blue-100 text-blue-800' : 'bg-purple-100 text-purple-800' }}">
-                                                <i class="fas {{ $memberDetail['member_type'] === 'local' ? 'fa-home' : 'fa-globe' }} mr-1"></i>
-                                                {{ ucfirst($memberDetail['member_type']) }}
-                                            </span>
-                                        </div>
+            @elseif($detailMemberMode)
+                <x-slot name="title">
+                    <div class="flex items-center gap-3">
+                        <div class="w-1.5 h-6 bg-warna-500 rounded-full shadow-[0_0_10px_rgba(var(--warna-500),0.5)]"></div>
+                        <span class="text-base font-black text-[#0F172A] uppercase italic tracking-wider">Detail <span class="text-warna-500">Member</span></span>
+                    </div>
+                </x-slot>
+                <x-slot name="subtitle">Informasi profil dan histori absensi member.</x-slot>
+                
+                <div class="max-h-[55vh] overflow-y-auto py-2 mt-4 pr-1 custom-scrollbar">
+                    <div class="bg-[#0F172A] rounded-3xl p-6 mb-6 shadow-xl relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-warna-500 opacity-10 rounded-full -mr-16 -mt-16 blur-3xl"></div>
+                        
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 relative z-10">
+                            <div class="flex items-center gap-5">
+                                <div class="w-16 h-16 bg-warna-500 rounded-2xl flex items-center justify-center shadow-lg shadow-warna-500/30 transform -rotate-3">
+                                    <span class="text-xl font-black text-[#0F172A] italic">{{ strtoupper(substr($memberDetail['name'], 0, 2)) }}</span>
+                                </div>
+                                <div class="min-w-0">
+                                    <h3 class="text-xl font-black text-white uppercase truncate italic tracking-tight">{{ $memberDetail['name'] }}</h3>
+                                    <p class="text-slate-400 text-[11px] font-bold truncate tracking-widest uppercase opacity-80">{{ $memberDetail['email'] }}</p>
+                                    <div class="flex gap-2 mt-2">
+                                        <span class="px-2 py-0.5 bg-warna-500/20 border border-warna-500/30 rounded text-[9px] font-black uppercase text-warna-500 italic">
+                                            {{ $memberDetail['member_type'] }}
+                                        </span>
                                     </div>
                                 </div>
-                                
-                                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-                                    <!-- Status Dropdown -->
-                                    <div class="relative flex-1 sm:flex-none" x-data="{ open: false }">
-                                        <button @click="open = !open" 
-                                                class="w-full sm:w-auto flex items-center justify-center px-3 sm:px-4 py-2 text-sm font-medium rounded-lg border-2 transition-all duration-200 hover:scale-105
-                                                {{ $memberDetail['status'] === 'active' ? 'bg-green-100 text-green-800 border-green-200 hover:bg-green-200' : 
-                                                ($memberDetail['status'] === 'frozen' ? 'bg-yellow-100 text-yellow-800 border-yellow-200 hover:bg-yellow-200' : 
-                                                ($memberDetail['status'] === 'inactive' ? 'bg-red-100 text-red-800 border-red-200 hover:bg-red-200' :
-                                                ($memberDetail['status'] === 'pending_email_verification' ? 'bg-orange-100 text-orange-800 border-orange-200 hover:bg-orange-200' : 'bg-purple-100 text-purple-800 border-purple-200 hover:bg-purple-200'))) }}">
-                                            <div class="w-2 h-2 rounded-full mr-2 flex-shrink-0
-                                                {{ $memberDetail['status'] === 'active' ? 'bg-green-500' : 
-                                                ($memberDetail['status'] === 'frozen' ? 'bg-yellow-500' : 
-                                                ($memberDetail['status'] === 'inactive' ? 'bg-red-500' :
-                                                ($memberDetail['status'] === 'pending_email_verification' ? 'bg-orange-500' : 'bg-purple-500'))) }}">
-                                            </div>
-                                            <span class="truncate">{{ str_replace('_', ' ', ucfirst($memberDetail['status'])) }}</span>
-                                            <i class="fas fa-chevron-down ml-2 text-xs flex-shrink-0"></i>
-                                        </button>
-                                        
-                                        <div x-show="open" @click.away="open = false" 
-                                            x-transition:enter="transition ease-out duration-200"
-                                            x-transition:enter-start="transform opacity-0 scale-95"
-                                            x-transition:enter-end="transform opacity-100 scale-100"
-                                            x-transition:leave="transition ease-in duration-150"
-                                            x-transition:leave-start="transform opacity-100 scale-100"
-                                            x-transition:leave-end="transform opacity-0 scale-95"
-                                            class="absolute left-0 sm:right-0 mt-2 w-full sm:w-64 bg-white border border-gray-200 rounded-xl shadow-xl z-50 overflow-hidden">
-                                            <div class="py-2">
-                                                <button wire:click="changeStatus('active')" 
-                                                        @click="open = false"
-                                                        class="flex items-center w-full px-4 py-3 text-sm text-green-700 hover:bg-green-50 transition-colors">
-                                                    <div class="w-3 h-3 bg-green-500 rounded-full mr-3 flex-shrink-0"></div>
-                                                    <div>
-                                                        <div class="font-medium">Active</div>
-                                                        <div class="text-xs text-gray-500">Member dapat menggunakan fasilitas</div>
-                                                    </div>
-                                                </button>
-                                                <button wire:click="changeStatus('frozen')" 
-                                                        @click="open = false"
-                                                        class="flex items-center w-full px-4 py-3 text-sm text-yellow-700 hover:bg-yellow-50 transition-colors">
-                                                    <div class="w-3 h-3 bg-yellow-500 rounded-full mr-3 flex-shrink-0"></div>
-                                                    <div>
-                                                        <div class="font-medium">Frozen</div>
-                                                        <div class="text-xs text-gray-500">Membership dibekukan sementara</div>
-                                                    </div>
-                                                </button>
-                                                <button wire:click="changeStatus('inactive')" 
-                                                        @click="open = false"
-                                                        class="flex items-center w-full px-4 py-3 text-sm text-red-700 hover:bg-red-50 transition-colors">
-                                                    <div class="w-3 h-3 bg-red-500 rounded-full mr-3 flex-shrink-0"></div>
-                                                    <div>
-                                                        <div class="font-medium">Inactive</div>
-                                                        <div class="text-xs text-gray-500">Member tidak aktif</div>
-                                                    </div>
-                                                </button>
-                                                <button wire:click="changeStatus('pending_email_verification')" 
-                                                        @click="open = false"
-                                                        class="flex items-center w-full px-4 py-3 text-sm text-orange-700 hover:bg-orange-50 transition-colors">
-                                                    <div class="w-3 h-3 bg-orange-500 rounded-full mr-3 flex-shrink-0"></div>
-                                                    <div>
-                                                        <div class="font-medium">Pending Email</div>
-                                                        <div class="text-xs text-gray-500">Menunggu verifikasi email</div>
-                                                    </div>
-                                                </button>
-                                                <button wire:click="changeStatus('pending_admin_verification')" 
-                                                        @click="open = false"
-                                                        class="flex items-center w-full px-4 py-3 text-sm text-purple-700 hover:bg-purple-50 transition-colors">
-                                                    <div class="w-3 h-3 bg-purple-500 rounded-full mr-3 flex-shrink-0"></div>
-                                                    <div>
-                                                        <div class="font-medium">Pending Admin</div>
-                                                        <div class="text-xs text-gray-500">Menunggu verifikasi admin</div>
-                                                    </div>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Edit Button -->
-                                    <button wire:click="openEditMemberModal" 
-                                            class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-all duration-200 hover:scale-105 flex items-center justify-center gap-2">
-                                        <i class="fas fa-edit"></i>
-                                        <span>Edit</span>
+                            </div>
+                            
+                            <div class="flex items-center gap-3 w-full sm:w-auto">
+                                <div class="relative flex-1 sm:flex-none" x-data="{ open: false }">
+                                    @php
+                                        $statusStyles = [
+                                            'active' => 'bg-warna-500 text-[#0F172A]',
+                                            'frozen' => 'bg-amber-400 text-[#0F172A]',
+                                            'inactive' => 'bg-rose-500 text-white',
+                                            'pending_email_verification' => 'bg-slate-600 text-white',
+                                            'pending_admin_verification' => 'bg-indigo-600 text-white',
+                                        ];
+                                        $currentStyle = $statusStyles[$memberDetail['status']] ?? 'bg-slate-400';
+                                    @endphp
+                                    <button @click="open = !open" 
+                                            class="w-full flex items-center justify-center px-5 py-2.5 {{ $currentStyle }} rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg transition-all hover:scale-105 active:scale-95">
+                                        {{ str_replace('_', ' ', $memberDetail['status']) }}
+                                        <i class="fas fa-chevron-down ml-2 text-[8px]"></i>
                                     </button>
+                                    <div x-show="open" @click.away="open = false" 
+                                        class="absolute right-0 mt-2 w-48 bg-white border border-slate-100 rounded-xl shadow-2xl z-50 p-1 overflow-hidden">
+                                        @foreach(['active', 'frozen', 'inactive'] as $st)
+                                            <button wire:click="changeStatus('{{$st}}')" @click="open = false" 
+                                                    class="w-full text-left px-4 py-2 text-[10px] font-black uppercase hover:bg-warna-500 hover:text-[#0F172A] rounded-lg text-slate-600 transition-colors">
+                                                {{ $st }}
+                                            </button>
+                                        @endforeach
+                                    </div>
                                 </div>
+                                <button wire:click="openEditMemberModal" class="p-3 bg-white/10 border border-white/10 text-white hover:bg-warna-500 hover:text-[#0F172A] rounded-xl transition-all shadow-lg">
+                                    <i class="fas fa-edit text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-8">
+                        <div class="bg-white border-2 border-slate-100 rounded-3xl p-6 shadow-sm">
+                            <h4 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-5 flex items-center italic">
+                                <span class="w-8 h-[1px] bg-warna-500 mr-2"></span> DATA PRIBADI
+                            </h4>
+                            <div class="space-y-4">
+                                <div class="flex justify-between items-center py-1">
+                                    <span class="text-[10px] font-bold text-slate-400 uppercase">Username</span>
+                                    <span class="text-[11px] font-black text-[#0F172A] bg-slate-50 px-3 py-1 rounded-lg border border-slate-100">{{ $memberDetail['username'] }}</span>
+                                </div>
+                                <div class="flex justify-between items-center py-1">
+                                    <span class="text-[10px] font-bold text-slate-400 uppercase">Telepon</span>
+                                    <span class="text-[11px] font-black text-[#0F172A] italic">{{ $memberDetail['nomor_telepon'] }}</span>
+                                </div>
+                                @if($memberDetail['membership_expiration_date'])
+                                    <div class="flex justify-between items-center py-3 border-t border-dashed border-slate-200 mt-2">
+                                        <span class="text-[10px] font-bold text-slate-400 uppercase">Expired</span>
+                                        <span class="text-[12px] font-black {{ \Carbon\Carbon::parse($memberDetail['membership_expiration_date'])->isPast() ? 'text-rose-500' : 'text-warna-500' }} italic">
+                                            {{ \Carbon\Carbon::parse($memberDetail['membership_expiration_date'])->format('d M Y') }}
+                                        </span>
+                                    </div>
+                                @endif
                             </div>
                         </div>
 
-                        <!-- Member Details Cards -->
-                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6">
-                            <!-- Personal Information Card -->
-                            <div class="bg-white border border-gray-200 rounded-xl p-4 sm:p-6 hover:shadow-lg transition-shadow duration-200">
-                                <h4 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                                    <i class="fas fa-user-circle mr-3 text-blue-600"></i>
-                                    Informasi Pribadi
-                                </h4>
-                                <div class="space-y-3">
-                                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between py-2 border-b border-gray-100">
-                                        <span class="text-gray-600 font-medium text-sm sm:text-base">Username:</span>
-                                        <span class="text-gray-900 font-mono bg-gray-50 px-2 py-1 rounded text-sm mt-1 sm:mt-0 break-all">{{ $memberDetail['username'] }}</span>
-                                    </div>
-                                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between py-2 border-b border-gray-100">
-                                        <span class="text-gray-600 font-medium text-sm sm:text-base">Telepon:</span>
-                                        <span class="text-gray-900 text-sm sm:text-base mt-1 sm:mt-0">{{ $memberDetail['nomor_telepon'] }}</span>
-                                    </div>
-                                    @if($memberDetail['membership_expiration_date'])
-                                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between py-2">
-                                            <span class="text-gray-600 font-medium text-sm sm:text-base">Expired:</span>
-                                            <span class="text-gray-900 font-semibold text-sm sm:text-base mt-1 sm:mt-0
-                                                {{ \Carbon\Carbon::parse($memberDetail['membership_expiration_date'])->isPast() ? 'text-red-600' : 'text-green-600' }}">
-                                                {{ \Carbon\Carbon::parse($memberDetail['membership_expiration_date'])->format('d/m/Y') }}
-                                            </span>
-                                        </div>
+                        <div class="bg-[#0F172A] rounded-3xl p-6 relative overflow-hidden shadow-xl">
+                            <div class="absolute -bottom-6 -left-6 w-24 h-24 bg-warna-500 opacity-5 rounded-full blur-2xl"></div>
+                            <h4 class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-6 italic">TOTAL PERFORMA</h4>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="bg-white/5 p-4 rounded-2xl border border-white/5 shadow-inner">
+                                    <div class="text-2xl font-black text-warna-500 italic leading-none">{{ $attendanceStats['attendedDays'] }}</div>
+                                    <div class="text-[8px] font-bold text-white uppercase mt-2 tracking-widest opacity-60">Hari Hadir</div>
+                                </div>
+                                <div class="bg-warna-500 p-4 rounded-2xl shadow-lg shadow-warna-500/20">
+                                    <div class="text-2xl font-black text-[#0F172A] italic leading-none">{{ $attendanceStats['attendancePercentage'] }}%</div>
+                                    <div class="text-[8px] font-bold text-[#0F172A] uppercase mt-2 tracking-widest opacity-80">Rasio</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border-2 border-slate-100 rounded-3xl p-6 shadow-sm mb-6">
+                        <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8">
+                            <h4 class="text-[11px] font-black text-[#0F172A] uppercase italic tracking-widest flex items-center">
+                                <i class="fas fa-calendar-alt text-warna-500 mr-2 text-sm"></i>
+                                Kalender Absensi
+                            </h4>
+                            
+                            <div class="flex items-center gap-2 bg-slate-100 p-1.5 rounded-2xl border border-slate-200 shadow-inner">
+                                <select wire:model.live="selectedMonth" 
+                                    class="appearance-none bg-white border-none text-[9px] font-black uppercase text-[#0F172A] rounded-xl py-2 pl-3 pr-8 focus:ring-2 focus:ring-warna-500 transition-all cursor-pointer shadow-sm">
+                                    @foreach($monthOptions as $value => $label) <option value="{{ $value }}">{{ $label }}</option> @endforeach
+                                </select>
+                                <select wire:model.live="selectedYear" 
+                                    class="appearance-none bg-white border-none text-[9px] font-black uppercase text-[#0F172A] rounded-xl py-2 pl-3 pr-8 focus:ring-2 focus:ring-warna-500 transition-all cursor-pointer shadow-sm">
+                                    @foreach($yearOptions as $value => $label) <option value="{{ $value }}">{{ $label }}</option> @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-7 gap-2 mb-8">
+                            @foreach(['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'] as $dayName)
+                                <div class="text-center text-[8px] font-black text-slate-400 uppercase py-2 tracking-widest">{{ $dayName }}</div>
+                            @endforeach
+                            
+                            @foreach($calendarDays as $day)
+                                <div class="aspect-square relative flex flex-col items-center justify-center text-[11px] font-black rounded-xl border-2 transition-all duration-300
+                                    {{ !$day['isCurrentMonth'] ? 'bg-slate-50 text-slate-300 border-transparent opacity-60' : '' }}
+                                    {{ $day['isCurrentMonth'] && !$day['isMembershipActive'] ? 'bg-slate-50 text-slate-400 border-slate-100' : '' }}
+                                    {{ $day['isCurrentMonth'] && $day['isMembershipActive'] && !$day['isAttended'] ? 'bg-white text-slate-800 border-warna-500/20 shadow-sm hover:border-warna-500' : '' }}
+                                    {{ $day['isAttended'] ? 'bg-[#0F172A] text-white border-[#0F172A] shadow-xl scale-[1.05] z-10' : '' }}
+                                    {{ $day['isToday'] && !$day['isAttended'] ? 'ring-2 ring-warna-500 ring-offset-2 border-transparent' : '' }}">
+                                    
+                                    {{ $day['day'] }}
+
+                                    @if($day['isMembershipActive'] && !$day['isAttended'] && $day['isCurrentMonth'])
+                                        <span class="text-[6px] absolute bottom-1.5 font-black text-warna-500 tracking-tighter uppercase italic">Aktif</span>
+                                    @endif
+
+                                    @if($day['isAttended'])
+                                        <div class="absolute top-1.5 right-1.5 w-2 h-2 bg-warna-500 rounded-full shadow-[0_0_8px_rgba(var(--warna-500),0.8)] border-2 border-[#0F172A]"></div>
                                     @endif
                                 </div>
-                            </div>
-
-                            <!-- Quick Stats Card -->
-                            <div class="bg-white border border-gray-200 rounded-xl p-4 sm:p-6 hover:shadow-lg transition-shadow duration-200">
-                                <h4 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                                    <i class="fas fa-chart-line mr-3 text-green-600"></i>
-                                    Statistik Cepat
-                                </h4>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div class="text-center p-3 bg-blue-50 rounded-lg">
-                                        <div class="text-xl sm:text-2xl font-bold text-blue-600">{{ $attendanceStats['attendedDays'] }}</div>
-                                        <div class="text-xs text-gray-600">Hari Hadir</div>
-                                    </div>
-                                    <div class="text-center p-3 bg-purple-50 rounded-lg">
-                                        <div class="text-xl sm:text-2xl font-bold text-purple-600">{{ $attendanceStats['attendancePercentage'] }}%</div>
-                                        <div class="text-xs text-gray-600">Kehadiran</div>
-                                    </div>
-                                </div>
-                            </div>
+                            @endforeach
                         </div>
 
-                        <!-- Attendance Calendar Section -->
-                        <div class="bg-white border border-gray-200 rounded-xl p-4 sm:p-6 hover:shadow-lg transition-shadow duration-200">
-                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-                                <h4 class="text-lg font-semibold text-gray-900 flex items-center">
-                                    <i class="fas fa-calendar-alt mr-3 text-indigo-600"></i>
-                                    Kalender Absensi
-                                </h4>
-                                
-                                <!-- Month/Year Selectors -->
-                                <div class="flex gap-2 sm:gap-3">
-                                    <select wire:model.live="selectedMonth" 
-                                            class="flex-1 sm:flex-none px-2 sm:px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm bg-white">
-                                        @foreach($monthOptions as $value => $label)
-                                            <option value="{{ $value }}">{{ $label }}</option>
-                                        @endforeach
-                                    </select>
-                                    <select wire:model.live="selectedYear" 
-                                            class="flex-1 sm:flex-none px-2 sm:px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm bg-white">
-                                        @foreach($yearOptions as $value => $label)
-                                            <option value="{{ $value }}">{{ $label }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
+                        <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100 flex flex-wrap gap-5 justify-center">
+                            <div class="flex items-center gap-2 text-[9px] font-black text-[#0F172A] uppercase italic">
+                                <div class="w-3.5 h-3.5 bg-[#0F172A] rounded shadow-sm border border-white/10"></div> Hadir
                             </div>
-
-                            <!-- Calendar Header -->
-                            <div class="grid grid-cols-7 gap-1 sm:gap-2 mb-3">
-                                @foreach(['S', 'S', 'R', 'K', 'J', 'S', 'M'] as $index => $day)
-                                    <div class="text-center text-xs sm:text-sm font-semibold text-gray-700 py-2 bg-gray-50 rounded-lg">
-                                        <span class="block sm:hidden">{{ $day }}</span>
-                                        <span class="hidden sm:block">{{ ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'][$index] }}</span>
-                                    </div>
-                                @endforeach
+                            <div class="flex items-center gap-2 text-[9px] font-black text-warna-500 uppercase italic">
+                                <div class="w-3.5 h-3.5 bg-white border-2 border-warna-500/30 rounded shadow-sm"></div> Member Aktif
                             </div>
-
-                            <!-- Calendar Grid -->
-                            <div class="grid grid-cols-7 gap-1 sm:gap-2 mb-6">
-                                @foreach($calendarDays as $day)
-                                    <div class="relative h-10 sm:h-12 flex items-center justify-center text-xs sm:text-sm rounded-lg border transition-all duration-200 hover:scale-105
-                                        {{ !$day['isCurrentMonth'] ? 'bg-gray-50 text-gray-400 border-gray-200' : 'bg-white border-gray-300' }}
-                                        {{ $day['isToday'] ? 'ring-2 ring-blue-500 bg-blue-50' : '' }}
-                                        {{ $day['isAttended'] ? 'bg-green-100 border-green-300 shadow-sm' : '' }}
-                                        {{ $day['isMembershipActive'] && !$day['isAttended'] ? 'bg-blue-50 border-blue-200' : '' }}">
-                                        
-                                        <span class="font-medium
-                                            {{ $day['isAttended'] ? 'text-green-800' : '' }}
-                                            {{ $day['isMembershipActive'] && !$day['isAttended'] ? 'text-blue-600' : '' }}
-                                            {{ !$day['isMembershipActive'] && $day['isCurrentMonth'] ? 'text-gray-700' : '' }}
-                                            {{ !$day['isCurrentMonth'] ? 'text-gray-400' : '' }}">
-                                            {{ $day['day'] }}
-                                        </span>
-                                        
-                                        @if($day['isAttended'])
-                                            <div class="absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1">
-                                                <div class="w-4 h-4 sm:w-5 sm:h-5 bg-green-500 rounded-full flex items-center justify-center shadow-sm">
-                                                    <i class="fas fa-check text-white text-xs"></i>
-                                                </div>
-                                            </div>
-                                        @endif
-                                    </div>
-                                @endforeach
+                            <div class="flex items-center gap-2 text-[9px] font-black text-slate-400 uppercase italic">
+                                <div class="w-3.5 h-3.5 bg-slate-50 border-2 border-slate-200 rounded"></div> Tidak Aktif
                             </div>
-
-                            <!-- Legend -->
-                            <div class="grid grid-cols-2 lg:flex lg:flex-wrap items-center gap-3 lg:gap-6 p-3 sm:p-4 bg-gray-50 rounded-lg text-xs sm:text-sm">
-                                <div class="flex items-center gap-2">
-                                    <div class="w-4 h-4 sm:w-5 sm:h-5 bg-green-100 border-2 border-green-300 rounded-lg flex items-center justify-center flex-shrink-0">
-                                        <i class="fas fa-check text-green-600 text-xs"></i>
-                                    </div>
-                                    <span class="text-gray-700 font-medium">Hadir</span>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <div class="w-4 h-4 sm:w-5 sm:h-5 bg-blue-50 border-2 border-blue-200 rounded-lg flex items-center justify-center flex-shrink-0">
-                                        <span class="text-blue-600 text-xs font-bold">A</span>
-                                    </div>
-                                    <span class="text-gray-700 font-medium">Aktif</span>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <div class="w-4 h-4 sm:w-5 sm:h-5 bg-white border-2 border-gray-300 rounded-lg flex-shrink-0"></div>
-                                    <span class="text-gray-700 font-medium">Tidak Aktif</span>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <div class="w-4 h-4 sm:w-5 sm:h-5 bg-blue-50 border-2 border-blue-500 rounded-lg flex-shrink-0"></div>
-                                    <span class="text-gray-700 font-medium">Hari Ini</span>
-                                </div>
-                            </div>
-
-                            <!-- Monthly Statistics -->
-                            <div class="mt-6 p-3 sm:p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl">
-                                <h5 class="font-semibold text-gray-800 mb-4 text-center text-sm sm:text-base">
-                                    Statistik {{ $attendanceStats['monthName'] }} {{ $attendanceStats['year'] }}
-                                </h5>
-                                <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-                                    <div class="text-center p-2 sm:p-3 bg-white rounded-lg shadow-sm">
-                                        <div class="text-lg sm:text-2xl font-bold text-green-600">{{ $attendanceStats['attendedDays'] }}</div>
-                                        <div class="text-xs text-gray-600 mt-1">Hari Hadir</div>
-                                    </div>
-                                    <div class="text-center p-2 sm:p-3 bg-white rounded-lg shadow-sm">
-                                        <div class="text-lg sm:text-2xl font-bold text-blue-600">{{ $attendanceStats['membershipActiveDays'] }}</div>
-                                        <div class="text-xs text-gray-600 mt-1">Hari Aktif</div>
-                                    </div>
-                                    <div class="text-center p-2 sm:p-3 bg-white rounded-lg shadow-sm">
-                                        <div class="text-lg sm:text-2xl font-bold text-red-600">{{ $attendanceStats['notAttendedDays'] }}</div>
-                                        <div class="text-xs text-gray-600 mt-1">Tidak Hadir</div>
-                                    </div>
-                                    <div class="text-center p-2 sm:p-3 bg-white rounded-lg shadow-sm">
-                                        <div class="text-lg sm:text-2xl font-bold text-purple-600">{{ $attendanceStats['attendancePercentage'] }}%</div>
-                                        <div class="text-xs text-gray-600 mt-1">Persentase</div>
-                                    </div>
-                                </div>
+                            <div class="flex items-center gap-2 text-[9px] font-black text-warna-500 uppercase italic">
+                                <div class="w-3.5 h-3.5 ring-2 ring-warna-500 rounded ring-offset-1"></div> Hari Ini
                             </div>
                         </div>
                     </div>
 
-                    <!-- Action Buttons -->
-                    <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mt-8 pt-6 border-t border-gray-200">
-
-                        <div class="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
-                            <button  
-                            class="order-2 sm:order-1 px-4 py-2 bg-warna-900 hover:bg-warna-900/80 text-white rounded-lg transition-all duration-200 hover:scale-105 flex items-center gap-2 text-sm"  
-                            wire:click="openHapusMemberModal"
-                            data-tooltip-target="tooltip-delete-member"
-                            data-tooltip-placement="top"
-                            >
-                                <i class="fas fa-trash"></i>
-                                <span>Hapus Akun</span>
-                            </button>
-
-                            <button wire:click="testAbsen" 
-                            class="w-full sm:w-auto px-4 py-2 bg-warna-700 hover:bg-warna-700/80 text-white rounded-lg transition-all duration-200 hover:scale-105 flex items-center justify-center gap-2 text-sm">
-                                <i class="fas fa-pen"></i>
-                                <span>Absen Manual</span>
-                            </button>
-                        </div>
-
-                        <div class="mt-3 lg:mt-0 order-1 sm:order-2 flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
-                            <button @click="show = false" type="button" wire:click="closeInputModal()" 
-                                    class="w-full sm:w-auto px-6 py-2 bg-gray-300 hover:bg-gray-400 text-gray-700 rounded-lg transition-all duration-200 hover:scale-105 flex items-center justify-center gap-2">
-                                <i class="fas fa-times"></i>
-                                <span>Tutup</span>
-                            </button>
+                    <div class="bg-warna-500 rounded-3xl p-6 shadow-xl shadow-warna-500/20">
+                        <h5 class="text-[10px] font-black text-[#0F172A] uppercase tracking-[0.2em] text-center mb-5 italic">
+                            Detail Absensi {{ $attendanceStats['monthName'] }} {{ $attendanceStats['year'] }}
+                        </h5>
+                        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                            <div class="bg-white p-4 rounded-2xl text-center shadow-md">
+                                <div class="text-xl font-black text-warna-500 italic leading-none">{{ $attendanceStats['attendedDays'] }}</div>
+                                <div class="text-[8px] font-bold text-slate-400 uppercase mt-2 tracking-widest">Hadir</div>
+                            </div>
+                            <div class="bg-white p-4 rounded-2xl text-center shadow-md">
+                                <div class="text-xl font-black text-[#0F172A] italic leading-none">{{ $attendanceStats['membershipActiveDays'] }}</div>
+                                <div class="text-[8px] font-bold text-slate-400 uppercase mt-2 tracking-widest">Aktif</div>
+                            </div>
+                            <div class="bg-[#0F172A] p-4 rounded-2xl text-center shadow-md border border-white/5">
+                                <div class="text-xl font-black text-rose-500 italic leading-none">{{ $attendanceStats['notAttendedDays'] }}</div>
+                                <div class="text-[8px] font-bold text-white uppercase mt-2 tracking-widest opacity-60">Absen</div>
+                            </div>
+                            <div class="bg-white p-4 rounded-2xl text-center shadow-md border-2 border-[#0F172A]">
+                                <div class="text-xl font-black text-[#0F172A] italic leading-none">{{ $attendanceStats['attendancePercentage'] }}%</div>
+                                <div class="text-[8px] font-bold text-slate-400 uppercase mt-2 tracking-widest">Persentase</div>
+                            </div>
                         </div>
                     </div>
-                @endif
+                </div>
+
+                <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mt-8 pt-6 border-t border-slate-100">
+                    <button wire:click="openHapusMemberModal" class="text-[10px] font-black uppercase text-rose-400 hover:text-rose-600 italic tracking-widest transition-all hover:scale-105 active:scale-95">
+                        <i class="fas fa-trash-alt mr-2"></i> Hapus Member
+                    </button>
+
+                    <div class="flex gap-3 w-full sm:w-auto">
+                        <button @click="show = false" wire:click="closeInputModal()" class="flex-1 sm:flex-none px-8 py-3 bg-slate-100 text-slate-500 rounded-2xl text-[11px] font-black uppercase tracking-widest hover:bg-slate-200 transition-all shadow-sm">
+                            Tutup
+                        </button>
+                        <button wire:click="testAbsen" class="flex-1 sm:flex-none px-10 py-3 bg-[#0F172A] text-warna-500 rounded-2xl text-[11px] font-black uppercase tracking-widest shadow-xl hover:bg-warna-500 hover:text-[#0F172A] transition-all border-2 border-warna-500/20 italic">
+                            <i class="fas fa-fingerprint mr-2 text-[14px]"></i> Absen Manual
+                        </button>
+                    </div>
+                </div>
+            @endif
             </x-input-modal>
         </div>
     @endif

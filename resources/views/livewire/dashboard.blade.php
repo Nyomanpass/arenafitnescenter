@@ -1,354 +1,239 @@
 <!-- resources/views/livewire/dashboard.blade.php -->
-<div class="flex flex-col space-y-8">
+<div class="flex flex-col space-y-12 pb-20 max-w-[1600px] mx-auto">
     
-    <!-- ✅ KATEGORI 1: RINGKASAN KEUANGAN -->
-    <div class="space-y-4">
-        <h2 class="text-xl font-bold text-gray-800 flex items-center">
-            <i class="fas fa-chart-line text-green-600 mr-3"></i>
-            Ringkasan Keuangan
-        </h2>
+    <div class="space-y-8">
+        <div class="flex flex-col">
+            <h2 class="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+                Dashboard <span class="text-slate-800">Overview</span>
+            </h2>
+            <p class="text-sm text-slate-500 font-medium">Laporan statistik keuangan dan aktivitas gym hari ini.</p>
+        </div>
         
-        <!-- Main Financial Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {{-- Pendapatan Hari Ini --}}
-            <div class="bg-gradient-to-r from-warna-700 to-green-500 text-white p-6 rounded-xl shadow-lg">
-            <div class="flex items-center justify-between">
-                <div>
-                <p class="text-sm text-green-100">Pendapatan Hari Ini</p>
-                <p class="text-2xl font-bold">Rp {{ number_format($todayRevenue ?? 0, 0, ',', '.') }}</p>
-                </div>
-                <div class="bg-white/20 p-3 rounded-full">
-                <i class="fas fa-coins text-xl"></i>
-                </div>
-            </div>
-            </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {{-- Card Pendapatan Utama --}}
+            @php
+                $financials = [
+                    ['title' => 'Pendapatan Hari Ini', 'amount' => $todayRevenue, 'icon' => 'fa-wallet', 'bg' => 'bg-warna-400', 'text' => 'text-black'],
+                    ['title' => 'Estimasi Bulan Ini', 'amount' => $thisMonthRevenue, 'icon' => 'fa-chart-pie', 'bg' => 'bg-zinc-900', 'text' => 'text-white'],
+                    ['title' => 'Total Tahun Ini', 'amount' => $thisYearRevenue, 'icon' => 'fa-vault', 'bg' => 'bg-white', 'text' => 'text-slate-900'],
+                ];
+            @endphp
 
-            {{-- Pendapatan Bulan Ini --}}
-            <div class="bg-gradient-to-r from-warna-700 to-green-500 text-white p-6 rounded-xl shadow-lg">
-            <div class="flex items-center justify-between">
-                <div>
-                <p class="text-sm text-green-100">Pendapatan Bulan Ini</p>
-                <p class="text-2xl font-bold">Rp {{ number_format($thisMonthRevenue ?? 0, 0, ',', '.') }}</p>
-                </div>
-                <div class="bg-white/20 p-3 rounded-full">
-                <i class="fas fa-calendar-alt text-xl"></i>
+            @foreach($financials as $item)
+            <div class="{{ $item['bg'] }} {{ $item['text'] }} rounded-[2.5rem] p-8 shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-white/5 relative group transition-all hover:translate-y-[-5px]">
+                <div class="relative z-10">
+                    <div class="w-12 h-12 rounded-2xl bg-black/5 dark:bg-white/10 flex items-center justify-center mb-6">
+                        <i class="fas {{ $item['icon'] }} text-xl"></i>
+                    </div>
+                    <p class="text-xs font-bold uppercase tracking-widest opacity-70">{{ $item['title'] }}</p>
+                    <p class="text-3xl font-black mt-2 tracking-tight">Rp {{ number_format($item['amount'] ?? 0, 0, ',', '.') }}</p>
                 </div>
             </div>
-            </div>
+            @endforeach
+        </div>
 
-            {{-- Pendapatan Tahun Ini --}}
-            <div class="bg-gradient-to-r from-warna-700 to-green-500 text-white p-6 rounded-xl shadow-lg">
-            <div class="flex items-center justify-between">
-                <div>
-                <p class="text-sm text-green-100">Pendapatan Tahun Ini</p>
-                <p class="text-2xl font-bold">Rp {{ number_format($thisYearRevenue ?? 0, 0, ',', '.') }}</p>
-                </div>
-                <div class="bg-white/20 p-3 rounded-full">
-                <i class="fas fa-chart-bar text-xl"></i>
-                </div>
+        {{-- Breakdown Kecil --}}
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            @foreach(['Membership' => 'membership', 'Daily Visit' => 'daily_visit', 'Produk' => 'products'] as $label => $key)
+            <div class="group bg-white dark:bg-zinc-900 border border-slate-400/20 dark:border-white/5 p-5 rounded-[1.5rem] flex items-center justify-between shadow-[0_10px_25px_-15px_rgba(0,0,0,0.1)] hover:shadow-[0_20px_30px_-10px_rgba(16,185,129,0.15)] transition-all duration-500 hover:-translate-y-1">
+                <span class="text-sm font-bold text-slate-600 dark:text-slate-400">{{ $label }}</span>
+                <span class="text-base font-extrabold text-slate-900 dark:text-white uppercase tracking-tight">
+                    Rp {{ number_format($revenueByType[$key] ?? 0, 0, ',', '.') }}
+                </span>
             </div>
+            @endforeach
+        </div>
+    </div>
+    <div class="bg-white dark:bg-zinc-900 rounded-[3rem] p-10 border border-slate-100 dark:border-white/5 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.1)] relative overflow-hidden">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
+        <div class="flex items-center">
+            <span class="w-2 h-10 bg-warna-500 rounded-full mr-4 shadow-[0_0_15px_rgba(16,185,129,0.5)]"></span>
+            <div>
+                <h2 class="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tighter italic">
+                    Ringkasan <span class="text-warna-500">Member</span>
+                </h2>
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Status Keanggotaan Arena Fitness</p>
             </div>
         </div>
 
-        <!-- Revenue Breakdown -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm text-gray-600">Membership</p>
-                        <p class="text-xl font-bold text-gray-800">Rp {{ number_format($revenueByType['membership'] ?? 0, 0, ',', '.') }}</p>
-                        <p class="text-xs text-gray-500 mt-1">Bulan ini</p>
-                    </div>
-                    <div class="bg-green-100 p-3 rounded-full">
-                        <i class="fas fa-id-card text-warna-700"></i>
-                    </div>
-                </div>
-            </div>
+        @if($expiringSoon > 0)
+        <div class="bg-white border-2 border-rose-100 px-6 py-2.5 rounded-2xl flex items-center shadow-[0_10px_20px_-10px_rgba(244,63,94,0.2)]">
+            <span class="text-rose-600 text-[11px] font-black uppercase tracking-widest flex items-center">
+                <i class="fa-solid fa-circle-exclamation mr-2 animate-pulse"></i>
+                {{ $expiringSoon }} Member Expired
+            </span>
+        </div>
+        @endif
+    </div>
 
-            <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm text-gray-600">Daily Visit</p>
-                        <p class="text-xl font-bold text-gray-800">Rp {{ number_format($revenueByType['daily_visit'] ?? 0, 0, ',', '.') }}</p>
-                        <p class="text-xs text-gray-500 mt-1">Bulan ini</p>
-                    </div>
-                    <div class="bg-green-100 p-3 rounded-full">
-                        <i class="fas fa-ticket-alt text-warna-700"></i>
-                    </div>
-                </div>
-            </div>
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-6">
+        @php
+            $stats = [
+                ['label' => 'Total Member', 'val' => $totalMembers, 'color' => 'text-slate-900', 'bg' => 'bg-slate-50'],
+                ['label' => 'Aktif', 'val' => $totalActive, 'color' => 'text-emerald-600', 'bg' => 'bg-emerald-50/50'],
+                ['label' => 'Frozen', 'val' => $totalFrozen, 'color' => 'text-amber-600', 'bg' => 'bg-amber-50/50'],
+                ['label' => 'Inactive', 'val' => $totalInactive, 'color' => 'text-rose-600', 'bg' => 'bg-rose-50/50'],
+                ['label' => 'Pending', 'val' => $totalPendingAdmin, 'color' => 'text-orange-600', 'bg' => 'bg-orange-50/50'],
+            ];
+        @endphp
+        
+        @foreach($stats as $s)
+        <div class="{{ $s['bg'] }} border border-white p-6 rounded-[2.5rem] shadow-[0_10px_20px_-10px_rgba(0,0,0,0.05)] transition-all duration-300 hover:-translate-y-2 hover:shadow-xl group">
+            <span class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 group-hover:text-slate-500 block mb-2 transition-colors">
+                {{ $s['label'] }}
+            </span>
+            <span class="text-4xl font-black {{ $s['color'] }} tracking-tighter italic block">
+                {{ $s['val'] }}
+            </span>
+        </div>
+        @endforeach
+    </div>
 
-            <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm text-gray-600">Produk</p>
-                        <p class="text-xl font-bold text-gray-800">Rp {{ number_format($revenueByType['products'] ?? 0, 0, ',', '.') }}</p>
-                        <p class="text-xs text-gray-500 mt-1">Bulan ini</p>
+    {{-- Type Bar Section --}}
+    <div class="mt-12 pt-10 border-t border-slate-50">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+            @foreach(['local' => 'Local Member', 'foreign' => 'Foreign Member'] as $k => $l)
+            <div class="space-y-4">
+                <div class="flex justify-between items-end">
+                    <div class="flex flex-col">
+                        <span class="text-xs font-black text-slate-900 uppercase tracking-widest">{{ $l }}</span>
+                        <span class="text-[9px] font-bold text-slate-400 uppercase italic">Database Distribution</span>
                     </div>
-                    <div class="bg-green-100 p-3 rounded-full">
-                        <i class="fas fa-shopping-bag text-warna-700"></i>
+                    <span class="text-xl font-black text-slate-900 italic">{{ $membershipDistribution[$k] ?? 0 }}</span>
+                </div>
+                <div class="h-4 w-full bg-slate-100 rounded-full overflow-hidden p-1 border border-slate-200/50 shadow-inner">
+                    <div class="h-full bg-warna-500 rounded-full transition-all duration-1000 shadow-[0_0_10px_rgba(16,185,129,0.3)]" 
+                         style="width: {{ $totalMembers > 0 ? (($membershipDistribution[$k] ?? 0) / $totalMembers * 100) : 0 }}%">
                     </div>
                 </div>
             </div>
+            @endforeach
         </div>
     </div>
 
-    <!-- ✅ KATEGORI 2: RINGKASAN MEMBER -->
-    <div class="space-y-4">
-        <h2 class="text-xl font-bold text-gray-800 flex items-center">
-            <i class="fas fa-users text-blue-600 mr-3"></i>
-            Ringkasan Member
-        </h2>
+    <div class="absolute -right-10 -top-10 w-40 h-40 bg-warna-500/5 rounded-full blur-3xl"></div>
+    </div>
+
+   <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+    @foreach([
+        ['label' => 'Total Visitor', 'val' => $totalVisitorsToday, 'icon' => 'fa-door-open'],
+        ['label' => 'Member Absensi', 'val' => $memberAttendanceToday, 'icon' => 'fa-id-badge'],
+        ['label' => 'Daily Pass', 'val' => $dailyVisitorsToday, 'icon' => 'fa-walking'],
+        ['label' => 'Mingguan', 'val' => $thisWeekAttendance, 'icon' => 'fa-calendar-week'],
+    ] as $act)
+    <div class="bg-white border border-white p-7 rounded-[2.5rem] shadow-[0_10px_25px_-10px_rgba(0,0,0,0.08)] transition-all duration-300 hover:-translate-y-2 hover:shadow-xl group relative overflow-hidden">
         
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-            {{-- Total Member --}}
-            <div class="bg-gradient-to-r from-gray-500 to-gray-400 text-white p-6 rounded-xl shadow-lg">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm text-gray-100">Total Member</p>
-                        <p class="text-2xl font-bold">{{ $totalMembers }}</p>
-                    </div>
-                    <div class="bg-white/20 p-3 rounded-full">
-                        <i class="fas fa-users text-xl"></i>
-                    </div>
-                </div>
+        <div class="relative z-10 flex items-center justify-between mb-5">
+            <div class="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center transition-colors group-hover:bg-warna-500/10">
+                <i class="fas {{ $act['icon'] }} text-xl text-slate-400 group-hover:text-slate-800 transition-colors"></i>
             </div>
-
-            {{-- Member Aktif --}}
-            <div class="bg-gradient-to-r from-green-500 to-green-400 text-white p-6 rounded-xl shadow-lg">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm text-green-100">Member Aktif</p>
-                        <p class="text-2xl font-bold">{{ $totalActive }}</p>
-                    </div>
-                    <div class="bg-white/20 p-3 rounded-full">
-                        <i class="fas fa-user-check text-xl"></i>
-                    </div>
-                </div>
-            </div>
-
-            {{-- Member Frozen --}}
-            <div class="bg-gradient-to-r from-yellow-500 to-yellow-400 text-white p-6 rounded-xl shadow-lg">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm text-yellow-100">Member Frozen</p>
-                        <p class="text-2xl font-bold">{{ $totalFrozen }}</p>
-                    </div>
-                    <div class="bg-white/20 p-3 rounded-full">
-                        <i class="fas fa-snowflake text-xl"></i>
-                    </div>
-                </div>
-            </div>
-
-            {{-- Member Inactive --}}
-            <div class="bg-gradient-to-r from-red-500 to-red-400 text-white p-6 rounded-xl shadow-lg">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm text-red-100">Member Inactive</p>
-                        <p class="text-2xl font-bold">{{ $totalInactive }}</p>
-                    </div>
-                    <div class="bg-white/20 p-3 rounded-full">
-                        <i class="fas fa-user-times text-xl"></i>
-                    </div>
-                </div>
-            </div>
-
-            {{-- Pending Verifikasi --}}
-            <div class="bg-gradient-to-r from-orange-500 to-orange-400 text-white p-6 rounded-xl shadow-lg">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm text-orange-100">Pending Verifikasi</p>
-                        <p class="text-2xl font-bold">{{ $totalPendingAdmin }}</p>
-                    </div>
-                    <div class="bg-white/20 p-3 rounded-full">
-                        <i class="fas fa-user-shield text-xl"></i>
-                    </div>
-                </div>
-            </div>
+            <span class="text-[10px] font-black text-slate-200 group-hover:text-slate-800/20 transition-colors uppercase italic">Live Data</span>
+        </div>
+        
+        <div class="relative z-10">
+            <p class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-1">
+                {{ $act['label'] }}
+            </p>
+            <p class="text-4xl font-black text-[#0F172A] tracking-tighter italic">
+                {{ $act['val'] }}
+            </p>
         </div>
 
-        <!-- Member Additional Info -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {{-- Member Type Distribution --}}
-            <div class="bg-white rounded-xl shadow-lg p-6 border border-gray-200">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">Distribusi Tipe Member</h3>
-                <div class="space-y-4">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-4 h-4 bg-blue-500 rounded-full"></div>
-                            <span class="font-medium">Local Member</span>
-                        </div>
-                        <span class="font-bold text-blue-600">{{ $membershipDistribution['local'] ?? 0 }}</span>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-4 h-4 bg-green-500 rounded-full"></div>
-                            <span class="font-medium">Foreign Member</span>
-                        </div>
-                        <span class="font-bold text-green-600">{{ $membershipDistribution['foreign'] ?? 0 }}</span>
-                    </div>
-                </div>
-            </div>
+        <i class="fas {{ $act['icon'] }} absolute -right-4 -bottom-4 text-6xl opacity-[0.02] text-[#0F172A] -rotate-12 transition-transform group-hover:scale-125 group-hover:opacity-[0.05]"></i>
+        
+        <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-1 bg-warna-500 rounded-full group-hover:w-16 transition-all duration-500"></div>
+    </div>
+    @endforeach
+</div>
 
-            {{-- Expiring Soon --}}
-            <div class="bg-white rounded-xl shadow-lg p-6 border border-gray-200">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">Member Akan Expired</h3>
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-3">
-                        <div class="bg-red-100 p-3 rounded-full">
-                            <i class="fas fa-exclamation-triangle text-red-600"></i>
-                        </div>
-                        <div>
-                            <span class="font-medium text-gray-800">Dalam 7 Hari</span>
-                            <p class="text-sm text-gray-500">Perlu perpanjangan segera</p>
-                        </div>
-                    </div>
-                    <span class="text-2xl font-bold text-red-600">{{ $expiringSoon }}</span>
-                </div>
+   <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+    <div class="lg:col-span-3 bg-white p-8 rounded-[3rem] border border-white shadow-[0_20px_50px_-20px_rgba(0,0,0,0.1)] transition-all duration-300 hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.12)]">
+        <div class="flex items-center justify-between mb-8">
+            <div class="flex items-center">
+                <div class="w-1.5 h-6 bg-warna-500 rounded-full mr-3"></div>
+                <h3 class="text-lg font-black text-[#0F172A] uppercase tracking-tighter italic">Statistik <span class="text-warna-500">Pendapatan</span></h3>
             </div>
+            <div class="flex gap-2">
+                <div class="w-2 h-2 rounded-full bg-warna-500"></div>
+                <div class="w-2 h-2 rounded-full bg-slate-200"></div>
+            </div>
+        </div>
+        <div wire:ignore class="h-[350px] relative">
+            <canvas id="monthlyRevenueChart"></canvas>
         </div>
     </div>
 
-    <!-- ✅ KATEGORI 3: RINGKASAN AKTIVITAS GYM -->
-    <div class="space-y-4">
-        <h2 class="text-xl font-bold text-gray-800 flex items-center">
-            <i class="fas fa-dumbbell text-warna-600 mr-3"></i>
-            Ringkasan Aktivitas Gym
-        </h2>
-        
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-            {{-- Total Pengunjung Hari Ini --}}
-            <div class="bg-gradient-to-r from-warna-600 to-blue-500 text-white p-6 rounded-xl shadow-lg">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm text-blue-100">Total Pengunjung Hari Ini</p>
-                        <p class="text-2xl font-bold">{{ $totalVisitorsToday }}</p>
-                        <p class="text-xs text-blue-200 mt-1">Member + Daily Visit</p>
-                    </div>
-                    <div class="bg-white/20 p-3 rounded-full">
-                        <i class="fas fa-door-open text-xl"></i>
-                    </div>
-                </div>
-            </div>
-
-            {{-- Absensi Member Hari Ini --}}
-            <div class="bg-gradient-to-r from-warna-600 to-blue-500 text-white p-6 rounded-xl shadow-lg">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm text-blue-100">Absensi Member</p>
-                        <p class="text-2xl font-bold">{{ $memberAttendanceToday }}</p>
-                        <p class="text-xs text-blue-200 mt-1">Hari ini</p>
-                    </div>
-                    <div class="bg-white/20 p-3 rounded-full">
-                        <i class="fas fa-clipboard-check text-xl"></i>
-                    </div>
-                </div>
-            </div>
-
-            {{-- Pengunjung Harian --}}
-            <div class="bg-gradient-to-r from-warna-600 to-blue-500 text-white p-6 rounded-xl shadow-lg">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm text-blue-100">Pengunjung Harian</p>
-                        <p class="text-2xl font-bold">{{ $dailyVisitorsToday }}</p>
-                        <p class="text-xs text-blue-200 mt-1">Hari ini</p>
-                    </div>
-                    <div class="bg-white/20 p-3 rounded-full">
-                        <i class="fas fa-walking text-xl"></i>
-                    </div>
-                </div>
-            </div>
-
-            {{-- Absensi Minggu Ini --}}
-            <div class="bg-gradient-to-r from-warna-600 to-blue-500 text-white p-6 rounded-xl shadow-lg">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm text-blue-100">Absensi Minggu Ini</p>
-                        <p class="text-2xl font-bold">{{ $thisWeekAttendance }}</p>
-                        <p class="text-xs text-blue-200 mt-1">Total member</p>
-                    </div>
-                    <div class="bg-white/20 p-3 rounded-full">
-                        <i class="fas fa-calendar-week text-xl"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ✅ CHARTS & ADDITIONAL INFO -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {{-- Chart: Monthly Revenue --}}
-        <div class="bg-white rounded-xl shadow-lg p-6">
-            <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-                <i class="fas fa-chart-line text-warna-400 mr-2"></i>
-                Pendapatan Bulanan {{ date('Y') }}
+    <div class="lg:col-span-2 bg-white rounded-[3rem] p-8 relative overflow-hidden shadow-[0_20px_50px_-20px_rgba(0,0,0,0.1)] border border-white transition-all duration-300 hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.12)]">
+        <div class="flex items-center justify-between mb-8 relative z-10">
+            <h3 class="text-lg font-black text-[#0F172A] tracking-tighter uppercase italic">
+                Top <span class="text-warna-500">Products</span>
             </h3>
-            <div wire:ignore class="relative w-full" style="height: 300px;"> 
-                <canvas id="monthlyRevenueChart" class="w-full h-full"></canvas>
+            <div class="bg-slate-900 text-white px-5 py-2 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] shadow-lg shadow-slate-900/20">
+                Terlaris
             </div>
         </div>
 
-        {{-- Top Products --}}
-        <div class="bg-white rounded-xl shadow-lg p-6">
-            <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-                <i class="fas fa-trophy text-warna-400 mr-2"></i>
-                Produk Terlaris Bulan Ini
-            </h3>
-            <div class="overflow-hidden">
-                @if($topProducts && $topProducts->count() > 0)
-                    <div class="space-y-3">
-                        @foreach($topProducts as $index => $product)
-                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                                <div class="flex items-center space-x-3">
-                                    <div class="w-8 h-8 bg-warna-500 text-white rounded-full flex items-center justify-center text-sm font-bold">
-                                        {{ $index + 1 }}
-                                    </div>
-                                    <span class="font-medium text-gray-800">{{ $product->name }}</span>
-                                </div>
-                                <span class="text-sm font-semibold text-warna-600">{{ $product->total_sold }} terjual</span>
-                            </div>
-                        @endforeach
+        <div class="space-y-4 relative z-10">
+            @forelse($topProducts as $index => $product)
+            <div class="group flex items-center justify-between bg-slate-50 hover:bg-[#0F172A] p-5 rounded-[2rem] transition-all duration-500 border border-slate-100 hover:border-[#0F172A] hover:translate-x-2 shadow-sm hover:shadow-xl hover:shadow-slate-900/20">
+                <div class="flex items-center gap-5">
+                    <span class="text-2xl font-black italic text-slate-200 group-hover:text-warna-500/30 transition-colors">
+                        {{ sprintf('%02d', $index + 1) }}
+                    </span>
+                    <div class="flex flex-col">
+                        <span class="text-sm font-black uppercase tracking-tight text-[#0F172A] group-hover:text-white transition-colors">
+                            {{ $product->name }}
+                        </span>
+                        <span class="text-[9px] font-bold text-slate-400 group-hover:text-warna-500 uppercase tracking-widest transition-colors">
+                            Arena Inventory
+                        </span>
                     </div>
-                @else
-                    <div class="text-center py-8 text-gray-500">
-                        <i class="fas fa-box-open text-4xl mb-2"></i>
-                        <p>Belum ada produk terjual bulan ini</p>
+                </div>
+                
+                <div class="flex flex-col items-end">
+                    <div class="bg-white group-hover:bg-warna-500 px-4 py-1.5 rounded-xl shadow-sm transition-all duration-500">
+                        <span class="text-sm font-black text-[#0F172A] group-hover:text-slate-900">
+                            {{ $product->total_sold }}
+                        </span>
+                        <span class="text-[9px] font-bold text-slate-400 group-hover:text-slate-800 uppercase ml-1">Sold</span>
                     </div>
-                @endif
+                </div>
             </div>
+            @empty
+            <div class="flex flex-col items-center justify-center py-16 opacity-20">
+                <i class="fas fa-box-open text-5xl mb-4"></i>
+                <p class="text-xs font-black uppercase tracking-[0.3em]">No Data Available</p>
+            </div>
+            @endforelse
         </div>
-    </div>
 
-    <!-- ✅ QUICK ACTIONS -->
-    <div class="bg-white rounded-xl shadow-lg p-6">
-        <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-            <i class="fas fa-bolt text-yellow-600 mr-2"></i>
-            Quick Actions
-        </h3>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-            <a href="{{ route('kelola.pendapatan') }}" 
-               class="flex flex-col items-center p-4 bg-white hover:bg-gray-50 rounded-lg transition-colors border border-gray-200 shadow-sm">
-                <i class="fas fa-plus-circle text-2xl text-warna-400 mb-2"></i>
-                <span class="text-sm font-medium text-gray-700">Transaksi Baru</span>
-            </a>
-            <a href="{{ route('kelola.member') }}" 
-               class="flex flex-col items-center p-4 bg-white hover:bg-gray-50 rounded-lg transition-colors border border-gray-200 shadow-sm">
-                <i class="fas fa-users text-2xl text-warna-400 mb-2"></i>
-                <span class="text-sm font-medium text-gray-700">Kelola Member</span>
-            </a>
-            <a href="{{ route('pengaturan.harga') }}" 
-               class="flex flex-col items-center p-4 bg-white hover:bg-gray-50 rounded-lg transition-colors border border-gray-200 shadow-sm">
-                <i class="fas fa-cog text-2xl text-warna-400 mb-2"></i>
-                <span class="text-sm font-medium text-gray-700">Pengaturan</span>
-            </a>
-            <a href="{{ route('laporan.pendapatan') }}" 
-               class="flex flex-col items-center p-4 bg-white hover:bg-gray-50 rounded-lg transition-colors border border-gray-200 shadow-sm">
-                <i class="fas fa-chart-bar text-2xl text-warna-400 mb-2"></i>
-                <span class="text-sm font-medium text-gray-700">Laporan</span>
-            </a>
-        </div>
+        <i class="fas fa-trophy absolute -right-12 -bottom-12 text-[15rem] text-slate-50 -rotate-12 z-0 opacity-50"></i>
     </div>
 </div>
+
+<div class="bg-white rounded-[3rem] border border-white shadow-[0_20px_50px_-20px_rgba(0,0,0,0.1)] transition-all duration-300">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+        @foreach([
+            ['Transaksi Baru', 'fa-cash-register', 'kelola.pendapatan', 'bg-[#0F172A]', 'shadow-slate-900/40'],
+            ['Kelola Member', 'fa-user-plus', 'kelola.member', 'bg-[#0F172A]', 'shadow-slate-900/40'],
+            ['Settings System', 'fa-gears', 'pengaturan.harga', 'bg-[#0F172A]', 'shadow-slate-900/40'],
+            ['Rekap Laporan', 'fa-chart-pie', 'laporan.pendapatan', 'bg-[#0F172A]', 'shadow-slate-900/40'],
+        ] as $action)
+        <a href="{{ route($action[2]) }}" class="group relative flex flex-col items-center p-8 rounded-[2.5rem] transition-all duration-500 hover:-translate-y-4 hover:bg-slate-50 border border-transparent hover:border-slate-100">
+            <div class="relative z-10 w-24 h-24 {{ $action[3] }} rounded-[2.5rem] flex items-center justify-center shadow-2xl {{ $action[4] }} group-hover:rotate-[10deg] transition-all duration-500 border border-white/10 group-hover:scale-110">
+                <i class="fas {{ $action[1] }} text-3xl text-white group-hover:text-warna-500 transition-colors duration-500"></i>
+            </div>
+            
+            <div class="relative z-10 mt-6 text-center">
+                <p class="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400 group-hover:text-[#0F172A] transition-colors duration-300">
+                    {{ $action[0] }}
+                </p>
+                <div class="h-1.5 w-0 bg-warna-500 mx-auto mt-2 rounded-full group-hover:w-8 transition-all duration-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]"></div>
+            </div>
+        </a>
+        @endforeach
+    </div>
+</div> 
 
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -361,7 +246,7 @@
             datasets: [{
                 label: 'Pendapatan per Bulan',
                 data: {!! json_encode($monthlyRevenue) !!},
-                backgroundColor: '#f48801',
+                backgroundColor: '#C2E600',
                 borderRadius: 6
             }]
         },

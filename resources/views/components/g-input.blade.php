@@ -24,7 +24,7 @@
         <textarea
             id="{{ $id ?? $name }}"
             name="{{ $name }}"
-            class="block w-full px-3 py-2 md:py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-warna-400 focus:border-warna-400 sm:text-sm peer {{ $class }}"
+            class="block w-full px-3 py-2 md:py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm peer {{ $class }}"
             placeholder=" "
             wire:model="{{ $wireModel ?? $name }}"
             {{ $attributes }}
@@ -32,7 +32,7 @@
         ></textarea>
         <label
             for="{{ $id ?? $name }}"
-            class="absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-warna-400 peer-focus:dark:text-indigo-400 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 left-3"
+            class="absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-slate-800 peer-focus:dark:text-indigo-400 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 left-3"
         >
             {{ $label }}
         </label>
@@ -125,7 +125,7 @@
         <!-- Input Display Button -->
         <button @click="open = !open" 
                 type="button"
-                class="block w-full px-3 py-2 md:py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-warna-400 focus:border-warna-400 sm:text-sm peer text-left {{ $class }}"
+                class="block w-full px-3 py-2 md:py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm peer text-left {{ $class }}"
                 :class="selected ? 'text-gray-900' : 'text-gray-500'">
             <span x-text="selectedText" class="block truncate pr-8"></span>
             
@@ -148,8 +148,8 @@
         <!-- Floating Label -->
         <label
             for="{{ $id ?? $name }}"
-            class="absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-warna-400 peer-focus:dark:text-indigo-400 left-3"
-            :class="open || selected ? 'scale-75 -translate-y-6 text-warna-400' : 'scale-100 translate-y-0'"
+            class="absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-slate-800 peer-focus:dark:text-indigo-400 left-3"
+            :class="open || selected ? 'scale-75 -translate-y-6 text-slate-800' : 'scale-100 translate-y-0'"
         >
             {{ $label }}
         </label>
@@ -172,7 +172,7 @@
                            x-ref="searchInput"
                            @keydown.escape="open = false"
                            placeholder="{{ $searchPlaceholder }}"
-                           class="w-full px-3 py-2 pl-9 border border-gray-300 rounded-md focus:ring-2 focus:ring-warna-400 focus:border-warna-400 text-sm">
+                           class="w-full px-3 py-2 pl-9 border border-gray-300 rounded-md focus:ring-2 focus:ring-slate-800 focus:border-slate-800 text-sm">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <i class="fas fa-search text-gray-400 text-sm"></i>
                     </div>
@@ -237,7 +237,7 @@
             id="{{ $id ?? $name }}"
             name="{{ $name }}"
             wire:model="{{ $wireModel ?? $name }}"
-            class="block w-full px-3 py-2 md:py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-warna-400 focus:border-warna-400 sm:text-sm  {{ $class }}"
+            class="block w-full px-3 py-2 md:py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm  {{ $class }}"
             {{ $attributes }}
         >
             <option value="" disabled selected>Pilih {{ $label }}</option>
@@ -259,13 +259,13 @@
             type="date"
             id="{{ $id ?? $name }}"
             name="{{ $name }}"
-            class="block w-full px-3 py-2 md:py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-warna-400 focus:border-warna-400 sm:text-sm  peer {{ $class }}"
+            class="block w-full px-3 py-2 md:py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm  peer {{ $class }}"
             wire:model="{{ $wireModel ?? $name }}"
             {{ $attributes }}
         />
         <label
             for="{{ $id ?? $name }}"
-            class="absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-warna-400 peer-focus:dark:text-indigo-400 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 left-3"
+            class="absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-slate-800 peer-focus:dark:text-indigo-400 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 left-3"
         >
             {{ $label }}
         </label>
@@ -277,14 +277,14 @@
             :type="showPassword ? 'text' : 'password'"
             id="{{ $id ?? $name }}"
             name="{{ $name }}"
-            class="block w-full px-3 py-2 md:py-3 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-warna-400 focus:border-warna-400 sm:text-sm peer {{ $class }}"
+            class="block w-full px-3 py-2 md:py-3 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm peer {{ $class }}"
             placeholder=" "
             wire:model="{{ $wireModel ?? $name }}"
             {{ $attributes }}
         />
         <label
             for="{{ $id ?? $name }}"
-            class="absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-warna-400 peer-focus:dark:text-indigo-400 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 left-3"
+            class="absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-slate-800 peer-focus:dark:text-indigo-400 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 left-3"
         >
             {{ $label }}
         </label>
@@ -303,14 +303,14 @@
             type="{{ $type }}"
             id="{{ $id ?? $name }}"
             name="{{ $name }}"
-            class="block w-full px-3 py-2 md:py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-warna-400 focus:border-warna-400 sm:text-sm  peer {{ $class }}"
+            class="block w-full px-3 py-2 md:py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm  peer {{ $class }}"
             placeholder=" "
             wire:model="{{ $wireModel ?? $name }}"
             {{ $attributes }}
         />
         <label
             for="{{ $id ?? $name }}"
-            class="absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-warna-400 peer-focus:dark:text-indigo-400 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 left-3"
+            class="absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-slate-800 peer-focus:dark:text-indigo-400 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 left-3"
         >
             {{ $label }}
         </label>

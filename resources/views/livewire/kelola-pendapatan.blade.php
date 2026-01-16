@@ -1,6 +1,6 @@
 <div class="">
     <div class="flex gap-3">
-        <div class="w-full xl:w-[70%] p-6 bg-white rounded-lg">
+        <div class="w-full xl:w-[70%] p-6 bg-white rounded-[1rem]">
             <div class="flex items-center justify-between mb-8">
                 <p class="text-lg lg:text-xl font-semibold ">Tambah Data Transaksi</p>
                 {{-- @if($isNotificationModalOpen)
@@ -192,7 +192,7 @@
                 <button type="submit" 
                         wire:loading.attr="disabled"
                         wire:loading.class="opacity-50"
-                        class="mt-4 w-full bg-warna-400 text-white font-semibold py-2 md:py-3 px-4 rounded-lg hover:bg-warna-500 transition-colors duration-200">
+                        class="mt-4 w-full bg-warna-300 text-white font-semibold py-2 md:py-3 px-4 rounded-lg hover:bg-warna-500 hover:text-slate-800 transition-colors duration-200">
                     <span wire:loading.remove>Simpan</span>
                     <span wire:loading>Menyimpan...</span>
                 </button>
@@ -200,7 +200,7 @@
             
         </div>
 
-        <div class="hidden xl:block w-full lg:w-1/3 bg-white rounded-lg p-6">
+        <div class="hidden xl:block w-full lg:w-1/3 bg-white rounded-[1rem] p-6">
             <p class="text-lg lg:text-xl font-semibold mb-8">Detail Transaksi</p>
             
             @if($transaction_type === 'additional_items_sale' && !empty($selectedProducts))
@@ -366,234 +366,184 @@
 
     </div>
 
-    <div class="hidden lg:block mt-10 h-full p-6 bg-white rounded-lg">
+    <div class="hidden lg:block mt-10 h-full rounded-lg">
         <!-- Total Transaksi Hari Ini -->
-        <div class="mb-8">
-            <h3 class="text-lg font-semibold mb-6 ">Total Transaksi Hari Ini</h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Total Keseluruhan -->
-                <div class="bg-gradient-to-r from-warna-400 to-warna-500 text-white p-6 rounded-xl shadow-lg">
-                    <div class="flex items-center justify-between">
+        <div class="mb-12">
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                @php
+                    $transactionStats = [
+                        [
+                            'label' => 'Total Keseluruhan',
+                            'amount' => $totalToday,
+                            'icon' => 'fa-chart-line',
+                            'bg_icon' => 'bg-[#0F172A]',
+                            'text_icon' => 'text-warna-500'
+                        ],
+                        [
+                            'label' => 'Membership',
+                            'amount' => $membershipToday,
+                            'icon' => 'fa-users',
+                            'bg_icon' => 'bg-white',
+                            'text_icon' => 'text-slate-400'
+                        ],
+                        [
+                            'label' => 'Produk',
+                            'amount' => $otherToday,
+                            'icon' => 'fa-shopping-cart',
+                            'bg_icon' => 'bg-white',
+                            'text_icon' => 'text-slate-400'
+                        ],
+                    ];
+                @endphp
+
+                @foreach($transactionStats as $stat)
+                <div class="group bg-white border border-slate-100 p-8 rounded-[1rem] shadow-[0_15px_40px_-12px_rgba(0,0,0,0.1)] transition-all duration-500 hover:-translate-y-3 hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.15)] relative overflow-hidden">
+                    
+                    <div class="relative z-10 flex items-center justify-between">
                         <div>
-                            <p class="text-warna-100 text-sm font-medium">Total Keseluruhan</p>
-                            <p class="text-2xl font-bold">Rp {{ number_format($totalToday ?? 0, 0, ',', '.') }}</p>
+                            <p class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2 group-hover:text-warna-500 transition-colors">
+                                {{ $stat['label'] }}
+                            </p>
+                            <p class="text-3xl font-black text-[#0F172A] tracking-tighter italic">
+                                <span class="text-sm font-bold not-italic mr-1 text-slate-300">Rp</span>{{ number_format($stat['amount'] ?? 0, 0, ',', '.') }}
+                            </p>
                         </div>
-                        <div class="bg-white/20 p-3 rounded-full">
-                            <i class="fas fa-chart-line text-xl"></i>
+                        
+                        <div class="w-16 h-16 {{ $stat['bg_icon'] }} rounded-2xl flex items-center justify-center shadow-[6px_6px_15px_rgba(0,0,0,0.05),-6px_-6px_15px_rgba(255,255,255,0.8)] border border-slate-50 transition-all duration-500 group-hover:scale-110 group-hover:rotate-6">
+                            <i class="fas {{ $stat['icon'] }} {{ $stat['text_icon'] }} text-2xl"></i>
                         </div>
                     </div>
-                </div>
 
-                <!-- Total Membership -->
-                <div class="bg-gradient-to-r from-blue-400 to-blue-500 text-white p-6 rounded-xl shadow-lg">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-blue-100 text-sm font-medium">Membership</p>
-                            <p class="text-2xl font-bold">Rp {{ number_format($membershipToday ?? 0, 0, ',', '.') }}</p>
-                        </div>
-                        <div class="bg-white/20 p-3 rounded-full">
-                            <i class="fas fa-users text-xl"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Total Produk & Harian -->
-                <div class="bg-gradient-to-r from-green-400 to-green-500 text-white p-6 rounded-xl shadow-lg">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-green-100 text-sm font-medium">Produk & Harian</p>
-                            <p class="text-2xl font-bold">Rp {{ number_format($otherToday ?? 0, 0, ',', '.') }}</p>
-                        </div>
-                        <div class="bg-white/20 p-3 rounded-full">
-                            <i class="fas fa-shopping-cart text-xl"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Riwayat Transaksi Hari Ini -->
-        <div>
-        <div class="flex items-center justify-between mb-6">
-            <h3 class="text-lg font-semibold">Riwayat Transaksi Hari Ini</h3>
-            <div class="flex items-center gap-4">
-                <!-- Items per page selector -->
-                <div class="flex items-center gap-2">
-                    <label class="text-sm text-gray-600">Show:</label>
-                    <select wire:model.live="perPage" 
-                            class="text-sm border w-16 border-gray-300 rounded px-2 py-1 focus:ring-2 focus:ring-warna-400 focus:border-warna-400">
-                        <option value="5">5</option>
-                        <option value="10">10</option>
-                        <option value="15">15</option>
-                        <option value="25">25</option>
-                    </select>
-                    <span class="text-sm text-gray-600">per page</span>
-                </div>
                 
-                <div class="text-sm text-gray-600">
-                    Total: {{ count($todayTransactions ?? []) }} transaksi
                 </div>
+                @endforeach
             </div>
         </div>
-        
-        <div class="bg-white overflow-hidden">
+        <!-- Riwayat Transaksi Hari Ini -->
+        <div class="bg-white rounded-[1rem] border border-white shadow-[0_20px_50px_-20px_rgba(0,0,0,0.1)] overflow-hidden transition-all duration-300">
+            <div class="p-8 border-b border-slate-50 flex flex-col md:flex-row md:items-center justify-between gap-4">
+               
+                 <div class="flex items-center mb-8">
+                <div class="w-1.5 h-6 bg-warna-500 rounded-full mr-3 shadow-[0_0_10px_rgba(16,185,129,0.5)]"></div>
+                <h3 class="text-lg font-black text-[#0F172A] uppercase tracking-tighter italic">
+                    Revenue <span class="text-warna-500">Today</span>
+                </h3>
+            </div>
+                <div class="flex flex-wrap items-center gap-4">
+                    <div class="flex items-center bg-slate-50 px-4 py-2 rounded-2xl border border-slate-100 shadow-sm">
+                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 mr-2">Show</label>
+                        
+                        <div class="relative flex items-center">
+                            <select wire:model.live="perPage" 
+                                    class="bg-transparent bg-none appearance-none [-webkit-appearance:none] [-moz-appearance:none] text-sm font-black text-[#0F172A] border-none focus:ring-0 focus:outline-none cursor-pointer py-0 pl-0 pr-6 z-10 relative">
+                                <option value="5">05</option>
+                                <option value="10">10</option>
+                                <option value="15">15</option>
+                                <option value="25">25</option>
+                            </select>
+                            
+                            <i class="fa-solid fa-chevron-down text-[9px] text-slate-400 absolute right-0 pointer-events-none"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-slate-800 px-4 py-2 rounded-2xl">
+                        <span class="text-[10px] font-black uppercase tracking-widest text-white">
+                            Total: {{ count($todayTransactions ?? []) }} Transaksi
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
             <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-warna-200">
-                    <thead class="w-full text-xs">
-                        <tr>
-                            <th class="px-4 py-3 text-left font-semibold text-gray-700 uppercase">Waktu</th>
-                            <th class="px-4 py-3 text-left font-semibold text-gray-700 uppercase">Tipe Transaksi</th>
-                            <th class="px-4 py-3 text-left font-semibold text-gray-700 uppercase">Deskripsi</th>
-                            <th class="px-4 py-3 text-left font-semibold text-gray-700 uppercase">Pembayaran</th>
-                            <th class="px-4 py-3 text-right font-semibold text-gray-700 uppercase">Jumlah</th>
-                            <th class="px-4 py-3 text-center font-semibold text-gray-700 uppercase">Aksi</th>
+                <table class="min-w-full">
+                    <thead>
+                        <tr class="bg-slate-50/50">
+                            <th class="px-6 py-4 text-left text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Waktu</th>
+                            <th class="px-6 py-4 text-left text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Kategori</th>
+                            <th class="px-6 py-4 text-left text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Deskripsi</th>
+                            <th class="px-6 py-4 text-left text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Metode</th>
+                            <th class="px-6 py-4 text-right text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Nominal</th>
+                            <th class="px-6 py-4 text-center text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-gray-200">
+                    <tbody class="divide-y divide-slate-50">
                         @forelse($todayTransactions ?? [] as $transaction)
-                            <tr class="hover:bg-gray-50 transition-colors">
-                                <td class="px-4 py-3 text-gray-900">
-                                    {{ $transaction->transaction_datetime->format('H:i') }}
-                                </td>
-                                <td class="px-4 py-3">
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-                                        {{ $transaction->transaction_type === 'membership_payment' ? 'bg-blue-100 text-blue-800' : 
-                                           ($transaction->transaction_type === 'daily_visit_fee' ? 'bg-green-100 text-green-800' : 'bg-purple-100 text-purple-800') }}">
-                                        @switch($transaction->transaction_type)
-                                            @case('membership_payment')
-                                                <i class="fas fa-users mr-1"></i>
-                                                Membership
-                                                @break
-                                            @case('daily_visit_fee')
-                                                <i class="fas fa-clock mr-1"></i>
-                                                Harian
-                                                @break
-                                            @case('additional_items_sale')
-                                                <i class="fas fa-shopping-cart mr-1"></i>
-                                                Produk
-                                                @break
-                                            @default
-                                                {{ ucfirst(str_replace('_', ' ', $transaction->transaction_type)) }}
-                                        @endswitch
+                            <tr class="group hover:bg-slate-50 transition-all duration-300">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="text-sm font-black text-[#0F172A] italic">
+                                        {{ $transaction->transaction_datetime->format('H:i') }}
                                     </span>
                                 </td>
-                                <td class="px-4 py-3 text-xs text-gray-600">
-                                    @if($transaction->description)
-                                        {{ Str::limit($transaction->description, 50) }}
-                                    @else
-                                        <span class="italic text-gray-400">-</span>
-                                    @endif
-                                </td>
-                                <td class="px-4 py-3">
-                                    <span class="inline-flex items-center px-2 py-1 rounded text-xs
-                                        {{ $transaction->payment_method === 'cash' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700' }}">
-                                        @if($transaction->payment_method === 'cash')
-                                            <i class="fas fa-money-bill mr-1"></i>
-                                            Tunai
-                                        @else
-                                            <i class="fas fa-qrcode mr-1"></i>
-                                            QRIS
-                                        @endif
+                                <td class="px-6 py-4">
+                                    @php
+                                        $typeClasses = [
+                                            'membership_payment' => 'bg-slate-900 text-white',
+                                            'daily_visit_fee' => 'bg-warna-500 text-slate-800',
+                                            'additional_items_sale' => 'bg-slate-100 text-slate-600'
+                                        ];
+                                        $currentClass = $typeClasses[$transaction->transaction_type] ?? 'bg-slate-100 text-slate-600';
+                                    @endphp
+                                    <span class="inline-flex items-center px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest {{ $currentClass }} shadow-sm">
+                                        <i class="fas {{ $transaction->transaction_type === 'membership_payment' ? 'fa-users' : ($transaction->transaction_type === 'daily_visit_fee' ? 'fa-clock' : 'fa-shopping-cart') }} mr-2 opacity-70"></i>
+                                        {{ $transaction->transaction_type === 'membership_payment' ? 'Membership' : ($transaction->transaction_type === 'daily_visit_fee' ? 'Harian' : 'Produk') }}
                                     </span>
                                 </td>
-                                <td class="px-4 py-3 text-right font-semibold text-warna-600">
-                                    Rp {{ number_format($transaction->total_amount, 0, ',', '.') }}
+                                <td class="px-6 py-4">
+                                    <p class="text-xs font-bold text-slate-500 truncate max-w-[200px]">
+                                        {{ $transaction->description ?: 'Tanpa keterangan' }}
+                                    </p>
                                 </td>
-                                <td class="px-4 py-3 text-center">
-                                    <button 
-                                        wire:click="confirmDeleteTransaction({{ $transaction->id }})"
-                                        class="inline-flex items-center px-2 py-1 bg-red-100 hover:bg-red-200 text-red-600 text-xs font-medium rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-red-500"
-                                        title="Hapus Transaksi"
-                                    >
-                                        <i class="fas fa-trash text-xs"></i>
-                                        <span class="ml-1 hidden sm:inline">Hapus</span>
+                                <td class="px-6 py-4 text-center">
+                                    <span class="text-[10px] font-black uppercase tracking-widest {{ $transaction->payment_method === 'cash' ? 'text-emerald-500' : 'text-blue-500' }}">
+                                        <i class="fas {{ $transaction->payment_method === 'cash' ? 'fa-money-bill' : 'fa-qrcode' }} mr-1"></i>
+                                        {{ $transaction->payment_method }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <span class="text-sm font-black text-[#0F172A] italic">
+                                        Rp {{ number_format($transaction->total_amount, 0, ',', '.') }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    <button wire:click="confirmDeleteTransaction({{ $transaction->id }})" class="w-10 h-10 bg-rose-50 hover:bg-rose-500 text-rose-500 hover:text-white rounded-xl transition-all duration-300 flex items-center justify-center group/btn shadow-sm">
+                                        <i class="fas fa-trash-alt text-xs group-hover/btn:scale-110 transition-transform"></i>
                                     </button>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="px-4 py-8 text-center text-gray-500">
-                                    <i class="fas fa-inbox text-3xl mb-3 block text-gray-300"></i>
-                                    <p>Belum ada transaksi hari ini</p>
-                                    <p class="text-xs mt-1">Transaksi akan muncul setelah Anda melakukan penjualan</p>
+                                <td colspan="6" class="px-6 py-20 text-center">
+                                    <div class="flex flex-col items-center opacity-20">
+                                        <i class="fas fa-receipt text-6xl mb-4"></i>
+                                        <p class="text-xs font-black uppercase tracking-[0.3em]">Belum Ada Transaksi</p>
+                                    </div>
                                 </td>
                             </tr>
                         @endforelse
                     </tbody>
                 </table>
             </div>
-            
-            <!-- Pagination Controls -->
-            @if($this->todayTransactions->hasPages())
-                <div class="bg-gray-50 px-4 py-3 border-t">
-                    <div class="flex items-center justify-between">
-                        <!-- Pagination Info -->
-                        <div class="text-sm text-gray-600">
-                            Showing {{ $this->todayTransactions->firstItem() }} to {{ $this->todayTransactions->lastItem() }} 
-                            of {{ $this->todayTransactions->total() }} results
-                        </div>
-                        
-                        <!-- Pagination Links -->
-                        <div class="flex items-center space-x-2">
-                            <!-- Previous Button -->
-                            @if ($this->todayTransactions->onFirstPage())
-                                <span class="px-3 py-1 text-sm text-gray-400 bg-gray-100 rounded cursor-not-allowed">
-                                    <i class="fas fa-chevron-left mr-1"></i>Previous
-                                </span>
-                            @else
-                                <button wire:click="previousPage" 
-                                        class="px-3 py-1 text-sm text-gray-600 bg-white border border-gray-300 rounded hover:bg-gray-50 transition-colors">
-                                    <i class="fas fa-chevron-left mr-1"></i>Previous
-                                </button>
-                            @endif
-                            
-                            <!-- Page Numbers -->
-                            @if($this->todayTransactions->lastPage() > 1)
-                                @for($i = 1; $i <= $this->todayTransactions->lastPage(); $i++)
-                                    @if($i == $this->todayTransactions->currentPage())
-                                        <span class="px-3 py-1 text-sm bg-warna-500 text-white rounded font-medium">
-                                            {{ $i }}
-                                        </span>
-                                    @else
-                                        <button wire:click="gotoPage({{ $i }})" 
-                                                class="px-3 py-1 text-sm text-gray-600 bg-white border border-gray-300 rounded hover:bg-gray-50 transition-colors">
-                                            {{ $i }}
-                                        </button>
-                                    @endif
-                                @endfor
-                            @endif
-                            
-                            <!-- Next Button -->
-                            @if ($this->todayTransactions->hasMorePages())
-                                <button wire:click="nextPage" 
-                                        class="px-3 py-1 text-sm text-gray-600 bg-white border border-gray-300 rounded hover:bg-gray-50 transition-colors">
-                                    Next<i class="fas fa-chevron-right ml-1"></i>
-                                </button>
-                            @else
-                                <span class="px-3 py-1 text-sm text-gray-400 bg-gray-100 rounded cursor-not-allowed">
-                                    Next<i class="fas fa-chevron-right ml-1"></i>
-                                </span>
-                            @endif
-                        </div>
-                    </div>
+
+            <div class="p-8 bg-slate-50/50 border-t border-slate-50 flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
+                    Halaman {{ $todayTransactions->currentPage() }} Dari {{ $todayTransactions->lastPage() }}
                 </div>
-            @endif
-            
-            <!-- Summary Footer -->
-            @if($todayTransactions->count() > 0)
-                <div class="bg-gray-50 px-4 py-3 border-t">
-                    <div class="flex justify-between items-center text-sm">
-                        <span class="text-gray-600">
-                            Page {{ $todayTransactions->currentPage() }} of {{ $todayTransactions->lastPage() }}
-                        </span>
-                        <span class="font-bold text-warna-600">
-                            Total Hari Ini: Rp {{ number_format($totalToday ?? 0, 0, ',', '.') }}
-                        </span>
+                
+                <div class="flex items-center gap-2">
+                    {{-- Tombol Navigasi Manual atau Menggunakan $todayTransactions->links() --}}
+                    <button wire:click="previousPage" class="p-3 bg-white border border-slate-100 rounded-xl text-slate-400 hover:text-warna-500 shadow-sm transition-all disabled:opacity-30" {{ $todayTransactions->onFirstPage() ? 'disabled' : '' }}>
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <div class="px-4 py-2 bg-[#0F172A] rounded-xl text-xs font-black text-white italic">
+                        {{ $todayTransactions->currentPage() }}
                     </div>
+                    <button wire:click="nextPage" class="p-3 bg-white border border-slate-100 rounded-xl text-slate-400 hover:text-warna-500 shadow-sm transition-all disabled:opacity-30" {{ !$todayTransactions->hasMorePages() ? 'disabled' : '' }}>
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
                 </div>
-            @endif
+            </div>
         </div>
-    </div>
     </div>
 
     @if($isNotificationModalOpen)
@@ -849,43 +799,59 @@
             <!-- Table Content -->
             <div class="p-4 md:p-6 max-h-96 overflow-y-auto">
                 <!-- Total Transaksi Hari Ini -->
-                <div class="mb-6">
-                    <h3 class="text-lg font-semibold mb-4 text-warna-700">Total Transaksi Hari Ini</h3>
-                    <div class="grid grid-cols-1 gap-3">
-                        <!-- Total Keseluruhan -->
-                        <div class="bg-gradient-to-r from-warna-400 to-warna-500 text-white p-4 rounded-lg shadow">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-warna-100 text-xs font-medium">Total Keseluruhan</p>
-                                    <p class="text-lg font-bold">Rp {{ number_format($totalToday ?? 0, 0, ',', '.') }}</p>
+                <div class="mb-8 px-2 lg:hidden"> <div class="flex items-center mb-6">
+                        <div class="w-1 h-5 bg-warna-500 rounded-full mr-3 shadow-[0_0_8px_rgba(16,185,129,0.4)]"></div>
+                        <h3 class="text-sm font-black text-[#0F172A] uppercase tracking-tighter italic">
+                            Revenue <span class="text-warna-500">Today</span>
+                        </h3>
+                    </div>
+
+                    <div class="flex flex-col gap-4">
+                        <div class="group bg-white border border-slate-100 p-5 rounded-[2rem] shadow-[0_10px_25px_-10px_rgba(0,0,0,0.1)] active:scale-95 transition-all duration-300 relative overflow-hidden">
+                            <div class="relative z-10 flex items-center justify-between">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-12 h-12 bg-[#0F172A] rounded-2xl flex items-center justify-center shadow-lg shadow-slate-900/20">
+                                        <i class="fas fa-chart-line text-warna-500 text-lg"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-[9px] font-black uppercase tracking-widest text-slate-400">Total Keseluruhan</p>
+                                        <p class="text-xl font-black text-[#0F172A] italic">
+                                            <span class="text-[10px] not-italic mr-0.5 opacity-50 font-bold">Rp</span>{{ number_format($totalToday ?? 0, 0, ',', '.') }}
+                                        </p>
+                                    </div>
                                 </div>
-                                <div class="bg-white/20 p-2 rounded-full">
-                                    <i class="fas fa-chart-line text-sm"></i>
-                                </div>
+                                <i class="fas fa-chevron-right text-slate-200 text-xs"></i>
                             </div>
+                            <div class="absolute -right-4 -bottom-4 w-16 h-16 bg-warna-500/5 rounded-full blur-xl"></div>
                         </div>
 
-                        <!-- Membership & Lainnya dalam satu baris -->
-                        <div class="grid grid-cols-2 gap-3">
-                            <div class="bg-gradient-to-r from-blue-400 to-blue-500 text-white p-4 rounded-lg shadow">
-                                <div class="text-center">
-                                    <p class="text-blue-100 text-xs font-medium">Membership</p>
-                                    <p class="text-sm font-bold">Rp {{ number_format($membershipToday ?? 0, 0, ',', '.') }}</p>
-                                    <i class="fas fa-users text-xs mt-1"></i>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-white border border-slate-100 p-5 rounded-[2rem] shadow-[0_10px_25px_-10px_rgba(0,0,0,0.1)] active:scale-95 transition-all">
+                                <div class="flex flex-col items-center text-center">
+                                    <div class="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center mb-3">
+                                        <i class="fas fa-users text-slate-400 text-sm"></i>
+                                    </div>
+                                    <p class="text-[8px] font-black uppercase tracking-widest text-slate-400 mb-1">Membership</p>
+                                    <p class="text-sm font-black text-[#0F172A] italic">
+                                        {{ number_format($membershipToday ?? 0, 0, ',', '.') }}
+                                    </p>
                                 </div>
                             </div>
 
-                            <div class="bg-gradient-to-r from-green-400 to-green-500 text-white p-4 rounded-lg shadow">
-                                <div class="text-center">
-                                    <p class="text-green-100 text-xs font-medium">Produk & Harian</p>
-                                    <p class="text-sm font-bold">Rp {{ number_format($otherToday ?? 0, 0, ',', '.') }}</p>
-                                    <i class="fas fa-shopping-cart text-xs mt-1"></i>
+                            <div class="bg-white border border-slate-100 p-5 rounded-[2rem] shadow-[0_10px_25px_-10px_rgba(0,0,0,0.1)] active:scale-95 transition-all">
+                                <div class="flex flex-col items-center text-center">
+                                    <div class="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center mb-3">
+                                        <i class="fas fa-shopping-cart text-slate-400 text-sm"></i>
+                                    </div>
+                                    <p class="text-[8px] font-black uppercase tracking-widest text-slate-400 mb-1">Produk & Harian</p>
+                                    <p class="text-sm font-black text-[#0F172A] italic">
+                                        {{ number_format($otherToday ?? 0, 0, ',', '.') }}
+                                    </p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
                 <!-- Riwayat Transaksi -->
                 <div>
                     <div class="flex items-center justify-between mb-4">

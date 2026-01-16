@@ -36,132 +36,134 @@
 <body class="bg-gray-100 font-poppins text-warna-300 overflow-x-hidden" x-data="{ sidebarOpen: false, showLogoutModal: false }" x-init="showLogoutModal = false">
     <div class="min-h-screen bg-gray-100">
         <!-- Navigation -->
-        <nav class="fixed top-0 left-0 right-0 z-40 h-16 bg-warna-50 border-b border-warna-100 shadow-sm">
-            <div class="h-16 px-4 sm:px-6 lg:px-8">
-                <div class="flex items-center justify-between h-16">
-                    <!-- Logo -->
-                    <div class="hidden lg:flex items-center flex-shrink-0">
-                        <img src="/logo.png" alt="Logo" class="h-10 w-10 mr-3">
-                        <a href="{{ route('dashboard') }}"
-                            class="text-xl font-bold text-warna-300 hover:text-warna-400 transition-colors">
-                            GYMYANKARTA
-                        </a>
-                    </div>
+        <nav class="fixed top-0 left-0 right-0 z-40 h-16 bg-white border-b border-slate-100 shadow-sm">
+    <div class="h-16 px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+            <!-- Logo -->
+            <div class="hidden lg:flex items-center flex-shrink-0">
+                <div class="h-10 w-10 bg-[#0F172A] rounded-xl flex items-center justify-center shadow-lg shadow-slate-200 mr-3 group transition-transform hover:rotate-6">
+                    <span class="text-warna-500 font-black text-2xl italic tracking-tighter">A</span>
+                </div>
+                
+                <a href="{{ route('dashboard') }}" class="flex flex-col leading-none">
+                    <span class="text-xl font-black text-[#0F172A] tracking-tighter uppercase italic">
+                        ARENA <span class="text-warna-500">FITNESS</span>
+                    </span>
+                    <span class="text-[9px] font-bold text-slate-400 tracking-[0.3em] uppercase">Center Management</span>
+                </a>
+            </div>
 
-                    <!-- Mobile Menu Button -->
-                    <div class="flex lg:hidden">
-                        <button @click="sidebarOpen = !sidebarOpen"
-                            class="text-warna-300 hover:text-warna-400 focus:outline-none focus:text-warna-400 text-xl px-3 py-1 rounded-lg border border-warna-100"
-                            aria-label="Toggle Sidebar">
-                            <i class="fa-solid fa-bars"></i>
-                        </button>
-                    </div>
-
-                    <!-- User Info -->
-                    <div class="flex items-center flex-shrink-0">
-                        <p class="font-medium text-warna-300 truncate">Halo, {{ Auth::user()->name }}</p>
-                        {{-- <p class="font-medium text-warna-300 truncate">Tanggal, {{ now()->format('d M Y') }}</p> --}}
-                    </div>
+            <div class="flex lg:hidden items-center gap-3">
+                <button @click="sidebarOpen = !sidebarOpen"
+                    class="text-[#0F172A] hover:bg-slate-50 focus:outline-none h-10 w-10 flex items-center justify-center rounded-xl border border-slate-100 transition-all"
+                    aria-label="Toggle Sidebar">
+                    <i class="fa-solid fa-bars-staggered"></i>
+                </button>
+                <div class="h-8 w-8 bg-[#0F172A] rounded-lg flex items-center justify-center">
+                    <span class="text-warna-500 font-black text-lg italic">A</span>
                 </div>
             </div>
-        </nav>
+
+            <div class="flex items-center gap-4">
+                <div class="hidden sm:flex flex-col items-end leading-none">
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Authenticated Admin</p>
+                    <p class="font-black text-[#0F172A] uppercase italic text-sm">
+                        {{ Auth::user()->name }}
+                    </p>
+                </div>
+                
+                <div class="h-10 w-10 rounded-full bg-slate-100 border-2 border-white shadow-sm flex items-center justify-center text-[#0F172A]">
+                    <i class="fa-solid fa-user-shield text-lg"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
 
         <!-- Main Layout -->
         <div class="flex pt-16">
             <!-- Desktop Sidebar -->
-            <aside
-                class="hidden lg:block fixed left-0 top-16 h-[calc(100vh-4rem)] w-60 xl:w-72 bg-warna-300 shadow-lg overflow-y-auto z-30 flex-shrink-0">
-                <div class="p-4 mt-3">
-                    <nav class="space-y-3">
-                        <!-- Main Navigation -->
-                        <a href="{{ route('dashboard') }}"
-                            class="flex items-center px-4 py-3 text-white hover:bg-warna-400 rounded-lg transition-colors {{ request()->routeIs('dashboard') ? 'bg-warna-400' : '' }}">
-                            <i class="fa-solid fa-house mr-3 flex-shrink-0"></i>
-                            <span class="truncate">Dashboard</span>
-                        </a>
+<aside class="hidden lg:block fixed left-0 top-16 h-[calc(100vh-4rem)] w-60 xl:w-72 bg-zinc-900 shadow-2xl overflow-y-auto z-30 flex-shrink-0 border-r border-white/5">
+    <div class="p-4 mt-3">
+        <nav class="space-y-2">
+            
+            @php
+                // Helper function untuk class menu agar tidak menulis ulang
+                $baseClass = "flex items-center px-4 py-3 rounded-xl transition-all duration-300 group font-bold uppercase italic text-xs tracking-widest";
+                $activeClass = "bg-warna-400 text-black shadow-[0_0_20px_rgba(217,255,0,0.3)] scale-[1.02]";
+                $inactiveClass = "text-slate-200 hover:bg-white/5 hover:text-warna-400";
+            @endphp
 
-                        <a href="{{ route('kelola.pendapatan') }}"
-                            class="flex items-center px-4 py-3 text-white hover:bg-warna-400 rounded-lg transition-colors {{ request()->routeIs('kelola.pendapatan') ? 'bg-warna-400' : '' }}">
-                            <i class="fa-solid fa-money-bill-trend-up mr-3 flex-shrink-0"></i>
-                            <span class="truncate">Kasir</span>
-                        </a>
+            <a href="{{ route('dashboard') }}"
+                class="{{ $baseClass }} {{ request()->routeIs('dashboard') ? $activeClass : $inactiveClass }}">
+                <i class="fa-solid fa-house mr-3 w-5 text-center"></i>
+                <span class="truncate">Dashboard</span>
+            </a>
 
-                        <a href="{{ route('kelola.member') }}"
-                            class="flex items-center px-4 py-3 text-white hover:bg-warna-400 rounded-lg transition-colors {{ request()->routeIs('kelola.member') ? 'bg-warna-400' : '' }}">
-                            <i class="fa-solid fa-user mr-3 flex-shrink-0"></i>
-                            <span class="truncate">Kelola Member</span>
-                        </a>
+            <a href="{{ route('kelola.pendapatan') }}"
+                class="{{ $baseClass }} {{ request()->routeIs('kelola.pendapatan') ? $activeClass : $inactiveClass }}">
+                <i class="fa-solid fa-money-bill-trend-up mr-3 w-5 text-center"></i>
+                <span class="truncate">Kasir</span>
+            </a>
 
-                        <!-- Divider -->
-                        <div class="border-t border-warna-200 my-4"></div>
+            <a href="{{ route('kelola.member') }}"
+                class="{{ $baseClass }} {{ request()->routeIs('kelola.member') ? $activeClass : $inactiveClass }}">
+                <i class="fa-solid fa-user mr-3 w-5 text-center"></i>
+                <span class="truncate">Kelola Member</span>
+            </a>
 
-                        <!-- Tools Section -->
-                        <a target="_blank" href="{{ route('qr.attendance') }}"
-                            class="flex items-center px-4 py-3 text-white hover:bg-warna-400 rounded-lg transition-colors {{ request()->routeIs('qr.generate') ? 'bg-warna-400' : '' }}">
-                            <i class="fa-solid fa-qrcode mr-3 flex-shrink-0"></i>
-                            <span class="truncate">QR Absen</span>
-                        </a>
+            <div class="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent my-6"></div>
 
-                        <a href="{{ route('pengaturan.harga') }}"
-                            class="flex items-center px-4 py-3 text-white hover:bg-warna-400 rounded-lg transition-colors {{ request()->routeIs('pengaturan.harga') ? 'bg-warna-400' : '' }}">
-                            <i class="fa-solid fa-gear mr-3 flex-shrink-0"></i>
-                            <span class="truncate">Pengaturan Harga</span>
-                        </a>
+            <a target="_blank" href="{{ route('qr.attendance') }}"
+                class="{{ $baseClass }} {{ request()->routeIs('qr.generate') ? $activeClass : $inactiveClass }}">
+                <i class="fa-solid fa-qrcode mr-3 w-5 text-center"></i>
+                <span class="truncate">QR Absen</span>
+            </a>
 
-                        @php
-                            $isLaporanActive =
-                                request()->routeIs('laporan.member') || request()->routeIs('laporan.pendapatan');
-                        @endphp
+            <a href="{{ route('pengaturan.harga') }}"
+                class="{{ $baseClass }} {{ request()->routeIs('pengaturan.harga') ? $activeClass : $inactiveClass }}">
+                <i class="fa-solid fa-gear mr-3 w-5 text-center"></i>
+                <span class="truncate">Pengaturan Harga</span>
+            </a>
 
-                        <div class="relative" x-data="{ dropdownOpen: {{ $isLaporanActive ? 'true' : 'false' }} }">
-                            <button @click="dropdownOpen = !dropdownOpen"
-                                class="flex items-center w-full px-4 py-3 text-white hover:bg-warna-400 rounded-lg transition-colors">
-                                <i class="fa-solid fa-chart-line mr-3 flex-shrink-0"></i>
-                                <span class="truncate">Laporan</span>
-                                <i class="fa-solid fa-chevron-down ml-auto transition-transform flex-shrink-0"
-                                    :class="{ 'rotate-180': dropdownOpen }"></i>
-                            </button>
+            @php $isLaporanActive = request()->routeIs('laporan.*'); @endphp
+            <div class="relative" x-data="{ dropdownOpen: {{ $isLaporanActive ? 'true' : 'false' }} }">
+                <button @click="dropdownOpen = !dropdownOpen"
+                    class="{{ $baseClass }} w-full {{ $isLaporanActive ? 'bg-white/5 text-warna-400' : 'text-slate-200 hover:bg-white/5 hover:text-warna-400' }}">
+                    <i class="fa-solid fa-chart-line mr-3 w-5 text-center"></i>
+                    <span class="truncate">Laporan</span>
+                    <i class="fa-solid fa-chevron-down ml-auto transition-transform text-[10px]"
+                        :class="{ 'rotate-180': dropdownOpen }"></i>
+                </button>
 
-                            <div x-show="dropdownOpen" x-cloak x-transition:enter="transition ease-out duration-200"
-                                x-transition:enter-start="opacity-0 transform scale-95"
-                                x-transition:enter-end="opacity-100 transform scale-100"
-                                x-transition:leave="transition ease-in duration-75"
-                                x-transition:leave-start="transform opacity-100 scale-100"
-                                x-transition:leave-end="opacity-0 transform scale-95" class="ml-6 mt-2 space-y-2">
-
-                                <a href="{{ route('laporan.member') }}"
-                                    class="flex items-center px-4 py-2 text-white hover:bg-warna-400 rounded-lg transition-colors text-sm {{ request()->routeIs('laporan.member') ? 'bg-warna-400' : '' }}">
-                                    <i class="fa-solid fa-users mr-3 flex-shrink-0"></i>
-                                    <span class="truncate">Laporan Member</span>
-                                </a>
-
-                                <a href="{{ route('laporan.pendapatan') }}"
-                                    class="flex items-center px-4 py-2 text-white hover:bg-warna-400 rounded-lg transition-colors text-sm {{ request()->routeIs('laporan.pendapatan') ? 'bg-warna-400' : '' }}">
-                                    <i class="fa-solid fa-dollar-sign mr-3 flex-shrink-0"></i>
-                                    <span class="truncate">Laporan Pendapatan</span>
-                                </a>
-
-                            </div>
-                        </div>
-
-                        <!-- Divider -->
-                        <div class="border-t border-warna-200 my-4"></div>
-
-                        <!-- Account Section -->
-                        <a href="{{ route('reset.password') }}"
-                            class="flex items-center px-4 py-3 text-white hover:bg-warna-400 rounded-lg transition-colors {{ request()->routeIs('reset.password') ? 'bg-warna-400' : '' }}">
-                            <i class="fa-solid fa-key mr-3 flex-shrink-0"></i>
-                            <span class="truncate">Reset Password</span>
-                        </a>
-
-                        <a href="#" @click="showLogoutModal = true"
-                            class="flex items-center px-4 py-3 text-white hover:bg-warna-400 rounded-lg transition-colors">
-                            <i class="fa-solid fa-right-from-bracket mr-3 flex-shrink-0"></i>
-                            <span class="truncate">Logout</span>
-                        </a>
-                    </nav>
+                <div x-show="dropdownOpen" x-cloak class="mt-2 space-y-1 ml-4 border-l-2 border-white/5">
+                    <a href="{{ route('laporan.member') }}"
+                        class="flex items-center px-4 py-2 rounded-lg transition-all text-[10px] font-black uppercase tracking-widest {{ request()->routeIs('laporan.member') ? 'text-warna-400' : 'text-slate-500 hover:text-white' }}">
+                        Laporan Member
+                    </a>
+                    <a href="{{ route('laporan.pendapatan') }}"
+                        class="flex items-center px-4 py-2 rounded-lg transition-all text-[10px] font-black uppercase tracking-widest {{ request()->routeIs('laporan.pendapatan') ? 'text-warna-400' : 'text-slate-500 hover:text-white' }}">
+                        Laporan Pendapatan
+                    </a>
                 </div>
-            </aside>
+            </div>
+
+            <div class="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent my-6"></div>
+
+            <a href="{{ route('reset.password') }}"
+                class="{{ $baseClass }} {{ request()->routeIs('reset.password') ? $activeClass : $inactiveClass }}">
+                <i class="fa-solid fa-key mr-3 w-5 text-center"></i>
+                <span class="truncate">Reset Password</span>
+            </a>
+
+            <a href="#" @click="showLogoutModal = true"
+                class="{{ $baseClass }} text-red-500 hover:bg-red-500/10 transition-all mt-10">
+                <i class="fa-solid fa-right-from-bracket mr-3 w-5 text-center"></i>
+                <span class="truncate">Logout</span>
+            </a>
+        </nav>
+    </div>
+</aside>
 
             <!-- Main Content -->
             <main class="flex-1 lg:ml-60 xl:ml-72 min-w-0">

@@ -39,16 +39,21 @@
     --color-zinc-900: #171717;
     --color-zinc-950: #0a0a0a;
 
-    --color-warna-50: #f8f9fa;
-    --color-warna-100: #dee2e6;
-    --color-warna-200: #6c757d;
-    --color-warna-300: #273f4f;
-    --color-warna-400: #f48801;
-    --color-warna-500: #faa93a;
-    --color-warna-600: #3498db;
-    --color-warna-700: #4caf50;
-    --color-warna-800: #ffc107;
-    --color-warna-900: #f44336;
+    /* Dasar & Background (Gunakan Zinc/Slate untuk kesan modern) */
+    --color-warna-50: #F8FAFC;  /* Light Mode Background */
+    --color-warna-100: #E2E8F0; /* Border ringan */
+    --color-warna-200: #94A3B8; /* Teks sekunder / muted */
+    --color-warna-300: #0F172A; /* Sidebar / Dark Mode Background (Navy Dark) */
+    
+    /* Warna Aksen (Lime Neon - Gunakan dengan hemat) */
+    --color-warna-400: #D9FF00; /* Main Accent (Neon) */
+    --color-warna-500: #C2E600; /* Hover state dari warna neon */
+    
+    /* Warna Status (Gunakan saturasi yang seimbang) */
+    --color-warna-600: #38BDF8; /* Info / Biru Muda */
+    --color-warna-700: #22C55E; /* Success / Member Aktif (Emerald) */
+    --color-warna-800: #F59E0B; /* Warning / Member Frozen (Amber) */
+    --color-warna-900: #EF4444; /* Danger / Expired / Error */
 
     --color-accent: var(--color-neutral-800);
     --color-accent-content: var(--color-neutral-800);
