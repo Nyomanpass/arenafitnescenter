@@ -30,24 +30,13 @@
         }
     </style>
 </head>
-<body class="font-poppins antialiased bg-[#050505] text-white overflow-x-hidden">
-    
-    <div class="fixed inset-0 z-0">
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,_rgba(250,204,21,0.08)_0%,_rgba(0,0,0,1)_100%)]"></div>
-        <div class="absolute inset-0 bg-texture"></div>
-    </div>
+<body class="font-poppins antialiased bg-[#F8FAFC] text-white overflow-x-hidden">
 
     <main class="relative z-10 min-h-[100dvh] flex items-center justify-center p-4">
         <div class="w-full transition-all duration-500 ease-in-out">
             {{ $slot }}
         </div>
     </main>
-
-    <footer class="absolute bottom-6 w-full text-center z-10">
-        <p class="text-[10px] tracking-[0.5em] text-zinc-600 uppercase">
-            Built for Champions • Arena Fitness
-        </p>
-    </footer>
 
     @livewireScripts
 </body>
