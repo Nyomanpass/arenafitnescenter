@@ -2,7 +2,16 @@
     <div class="flex gap-3">
         <div class="w-full xl:w-[70%] p-6 bg-white rounded-[1rem]">
             <div class="flex items-center justify-between mb-8">
-                <p class="text-lg lg:text-xl font-semibold ">Tambah Data Transaksi</p>
+                  <div class="flex items-center gap-3">
+                    <div class="w-2 h-8 bg-[#0F172A] rounded-full"></div>
+                    <div>
+                        <h2 class="text-2xl font-black text-[#0F172A] uppercase italic tracking-tighter leading-none">
+                            Tambah Data <span class="text-warna-500">Transaksi</span>
+                        </h2>
+                       
+                    </div>
+                </div>
+
                 {{-- @if($isNotificationModalOpen)
                     <div>
                         <p>{{ session('message.description') }}</p>

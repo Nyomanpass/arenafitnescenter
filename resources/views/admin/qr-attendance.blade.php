@@ -12,267 +12,199 @@
 </head>
 <body class="font-poppins bg-gray-100 min-h-screen overflow-hidden">
     <div 
-        x-data="{
-            currentTime: '',
-            showInstructions: false,
+    x-data="{
+        currentTime: '',
+        showInstructions: false,
+        progress: 0,
+        
+        init() {
+            this.updateTime();
+            setInterval(() => this.updateTime(), 1000);
+            this.startProgress();
+        },
+        
+        updateTime() {
+            this.currentTime = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        },
+
+        startProgress() {
+            setInterval(() => {
+                if(this.progress >= 100) {
+                    this.progress = 0;
+                    refreshQrCode();
+                } else {
+                    this.progress += (100/30);
+                }
+            }, 1000);
+        }
+    }"
+    x-init="init()"
+    class="min-h-screen flex items-center justify-center bg-[#F8FAFC] font-sans p-4"
+>
+    <div class="hidden md:flex w-full max-w-6xl h-[700px] bg-white rounded-[3rem] shadow-[0_40px_100px_-20px_rgba(15,23,42,0.15)] overflow-hidden border border-slate-100">
+        
+        <div class="w-[35%] bg-[#0F172A] p-12 flex flex-col relative overflow-hidden">
+            <div class="absolute -top-20 -left-20 w-64 h-64 bg-warna-500/10 rounded-full blur-3xl"></div>
             
-            init() {
-                this.updateTime();
-                setInterval(() => this.updateTime(), 1000);
-            },
-            
-            updateTime() {
-                this.currentTime = new Date().toLocaleTimeString('id-ID');
-            }
-        }"
-        x-init="init()"
-        class="h-screen flex items-center justify-center "
-    >
-        <!-- Desktop Layout -->
-        <div class="hidden md:flex w-full max-w-5xl max-h-[80vh] mx-4 bg-white rounded-2xl shadow-2xl overflow-hidden my-4">
-            <!-- Left Sidebar -->
-            <div class="w-1/3 bg-warna-300 p-8 flex flex-col">
-                <!-- Logo & Title -->
-                <div class="mb-4">
-                    <div class="flex items-center mb-6">
-                        <div class="w-14 h-14 bg-orange-500 rounded-full flex items-center justify-center mr-4">
-                            <img src="{{ asset('logo.png') }}" alt="" class="w-12 h-12 object-cover">
-                        </div>
-                        <div>
-                            <h1 class="text-white text-xl font-bold">YANKARTA</h1>
-                            <h2 class="text-orange-400 text-lg font-semibold">GYM</h2>
-                        </div>
+            <div class="relative z-10">
+                <div class="flex items-center gap-4 mb-10">
+                    <div class="w-16 h-16 bg-warna-500 rounded-2xl flex items-center justify-center rotate-3 shadow-lg shadow-warna-500/20">
+                        <i class="fas fa-dumbbell text-[#0F172A] text-3xl"></i>
                     </div>
-                    <div class="w-full h-px bg-slate-500 mb-6"></div>
-                </div>
-                
-                <!-- Menu Item -->
-                <div class="flex-1">
-                    <div class="flex items-center text-white bg-slate-600/50 rounded-lg p-4">
-                        <div class="w-3 h-3 bg-orange-500 rounded-full mr-4"></div>
-                        <span class="font-medium">Cara Melakukan Absensi</span>
-                    </div>
-                    
-                    <!-- Instructions -->
-                    <div class="mt-6 space-y-4 text-slate-300 text-sm">
-                        <div class="flex items-start">
-                            <div class="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center text-white text-xs font-bold mr-3 mt-0.5 flex-shrink-0">1</div>
-                            <span>Buka aplikasi member di smartphone Anda</span>
-                        </div>
-                        <div class="flex items-start">
-                            <div class="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center text-white text-xs font-bold mr-3 mt-0.5 flex-shrink-0">2</div>
-                            <span>Tekan tombol "Scan QR" di dashboard aplikasi</span>
-                        </div>
-                        <div class="flex items-start">
-                            <div class="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center text-white text-xs font-bold mr-3 mt-0.5 flex-shrink-0">3</div>
-                            <span>Arahkan kamera ke QR Code di sebelah kanan</span>
-                        </div>
-                        <div class="flex items-start">
-                            <div class="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center text-white text-xs font-bold mr-3 mt-0.5 flex-shrink-0">4</div>
-                            <span>Tunggu konfirmasi absensi berhasil</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Right Content -->
-            <div class="flex-1 p-8 flex flex-col items-center justify-center bg-gray-50">
-                <!-- Header -->
-                <div class="text-center mb-8">
-                    <h2 class="text-3xl font-bold text-gray-800 mb-2">Scan QR Code</h2>
-                    <p class="text-gray-600">Scan QR Code ini untuk melakukan absensi</p>
-                </div>
-                
-                <!-- QR Code Container -->
-                <div class="relative">
-                    <!-- QR Code Box -->
-                    <div class="md:size-56 lg:size-72 bg-white rounded-2xl shadow-lg border-2 border-gray-200 flex items-center justify-center relative overflow-hidden">
-                        <!-- Loading State -->
-                        <div id="qr-loading" class="absolute inset-0 flex items-center justify-center bg-white z-20 transition-all duration-500">
-                            <div class="text-center">
-                                <div class="w-16 h-16 border-4 border-gray-200 border-t-orange-500 rounded-full animate-spin mx-auto mb-4"></div>
-                                <p class="text-gray-600 font-medium">Memuat QR Code...</p>
-                            </div>
-                        </div>
-                        
-                        <!-- QR Code Display -->
-                        <div id="qr-display" class="absolute inset-0 flex items-center justify-center p-3 opacity-0 z-10 transition-all duration-500">
-                            <object id="qr-object" 
-                                    data="{{ route('qr.generate') }}?t={{ time() }}"
-                                    type="image/svg+xml"
-                                    class="w-full h-full">
-                                <embed src="{{ route('qr.generate') }}?t={{ time() }}"
-                                       type="image/svg+xml" 
-                                       class="w-full h-full" />
-                            </object>
-                        </div>
-                        
-                        <!-- Error State -->
-                        <div id="qr-error" class="absolute inset-0 flex items-center justify-center bg-white opacity-0 z-10 transition-all duration-500">
-                            <div class="text-center text-red-500 p-6">
-                                <div class="w-16 h-16 mx-auto mb-4 bg-red-100 rounded-full flex items-center justify-center">
-                                    <i class="fas fa-exclamation-triangle text-2xl"></i>
-                                </div>
-                                <p class="font-medium mb-2">QR Code Error</p>
-                                <p class="text-sm text-gray-500 mb-4">Gagal memuat QR Code</p>
-                                <button onclick="refreshQrCode()" class="px-6 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors text-sm font-medium">
-                                    <i class="fas fa-redo mr-2"></i>Coba Lagi
-                                </button>
-                            </div>
-                        </div>
+                    <div>
+                        <h1 class="text-2xl font-black text-white italic tracking-tighter leading-none uppercase">Arena</h1>
+                        <h2 class="text-warna-500 text-sm font-black italic tracking-[0.3em] uppercase">Fitness</h2>
                     </div>
                 </div>
 
-                <!-- Footer Info -->
-                <div class="mt-4 mb-6 text-center text-xs text-gray-500">
-                    <p>Terakhir diperbarui: <span id="last-updated" x-text="currentTime" class="font-medium">{{ now()->format('H:i:s') }}</span></p>
-                </div>
-                
-                <!-- Progress Bar -->
-                <div class="w-[90%] lg:w-[70%] mb-6">
-                    <p class="text-center text-sm text-warna-300 mb-2">QR Code akan diperbarui otomatis setiap <span class="font-semibold">30 detik</span></p>
-                    <div class="w-full bg-gray-200 rounded-full h-2">
-                        <div id="refresh-progress" class="bg-orange-500 h-2 rounded-full transition-all duration-1000" style="width: 0%"></div>
+                <div class="h-[2px] w-12 bg-warna-500 mb-10"></div>
+
+                <h3 class="text-white text-xl font-black italic uppercase tracking-tight mb-8">
+                    Self <span class="text-warna-500">Check-in</span> Guide
+                </h3>
+
+                <div class="space-y-8">
+                    @foreach([
+                        ['1', 'Open Member App', 'Buka aplikasi member di smartphone Anda'],
+                        ['2', 'Tap Scan QR', 'Tekan tombol Scan QR pada dashboard'],
+                        ['3', 'Align Camera', 'Arahkan kamera ke kode QR di layar ini'],
+                        ['4', 'Success!', 'Tunggu hingga konfirmasi berhasil muncul']
+                    ] as $step)
+                    <div class="flex items-start gap-5 group">
+                        <div class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-warna-500 text-xs font-black italic border border-slate-700 group-hover:bg-warna-500 group-hover:text-[#0F172A] transition-all duration-300">
+                            {{ $step[0] }}
+                        </div>
+                        <div>
+                            <p class="text-white text-[11px] font-black uppercase tracking-widest mb-1 italic">{{ $step[1] }}</p>
+                            <p class="text-slate-400 text-xs font-medium leading-relaxed">{{ $step[2] }}</p>
+                        </div>
                     </div>
+                    @endforeach
                 </div>
-                
-                <!-- Manual Refresh Button -->
-                <button onclick="refreshQrCode()" 
-                        class="px-8 py-3 bg-white border-2 border-warna-400 text-warna-400 hover:bg-warna-400 hover:text-white rounded-xl font-medium transition-all duration-300 transform">
-                    <i class="fas fa-redo mr-2"></i>
-                    Refresh Manual
-                </button>
-                
-                
+            </div>
+
+            <div class="mt-auto relative z-10">
+                <div class="p-4 bg-slate-900/50 rounded-2xl border border-slate-800">
+                    <p class="text-slate-500 text-[9px] font-black uppercase tracking-[0.2em] mb-1 italic text-center">Current Terminal Time</p>
+                    <p class="text-white text-2xl font-black italic text-center tracking-widest" x-text="currentTime"></p>
+                </div>
             </div>
         </div>
         
-        <!-- Mobile Layout -->
-        <div class="md:hidden flex flex-col w-full h-screen bg-gray-50">
-            <!-- Mobile Header -->
-            <div class="bg-warna-300 px-6 py-4">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center">
-                        <div class="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center mr-3">
-                            <img src="{{ asset('logo.png') }}" alt="" class="w-8 h-8 object-cover">
-                        </div>
-                        <div>
-                            <h1 class="text-white text-lg font-bold">YANKARTA</h1>
-                            <h2 class="text-orange-400 text-sm font-semibold">GYM</h2>
-                        </div>
-                    </div>
-                    <a href="{{ route('dashboard') }}" class="text-white p-2">
-                        <i class="fas fa-angle-left text-xl"></i>
-                    </a>
+        <div class="flex-1 bg-white p-12 flex flex-col items-center justify-center relative">
+            <div class="text-center mb-10">
+                <div class="inline-block px-4 py-1.5 bg-warna-500/10 rounded-full mb-4 border border-warna-500/20">
+                    <span class="text-[10px] font-black text-warna-600 uppercase tracking-[0.2em] italic">Secure Access Control</span>
                 </div>
+                <h2 class="text-4xl font-black text-[#0F172A] uppercase italic tracking-tighter mb-2">Scan <span class="text-warna-500">QR Code</span></h2>
+                <p class="text-slate-400 text-sm font-medium">Arahkan smartphone Anda untuk melakukan absensi otomatis</p>
             </div>
             
-            <!-- Mobile Content -->
-            <div class="flex-1 flex flex-col items-center justify-center px-6 py-8">
-                <!-- Title -->
-                <div class="text-center mb-6">
-                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Scan QR Code</h2>
-                    <p class="text-gray-600 text-sm">Scan QR Code ini untuk melakukan absensi</p>
-                </div>
-                
-                <!-- QR Code Container Mobile -->
-                <div class="w-72 h-72 bg-white rounded-2xl shadow border-2 border-gray-200 flex items-center justify-center relative overflow-hidden mb-6">
-                    <!-- Loading State Mobile -->
-                    <div id="qr-loading-mobile" class="absolute inset-0 flex items-center justify-center bg-white z-20 transition-all duration-500">
-                        <div class="text-center">
-                            <div class="w-12 h-12 border-4 border-gray-200 border-t-orange-500 rounded-full animate-spin mx-auto mb-3"></div>
-                            <p class="text-gray-600 font-medium text-sm">Memuat QR Code...</p>
-                        </div>
+            <div class="relative group">
+                <div class="absolute -top-4 -left-4 w-12 h-12 border-t-4 border-l-4 border-warna-500 rounded-tl-2xl"></div>
+                <div class="absolute -top-4 -right-4 w-12 h-12 border-t-4 border-r-4 border-warna-500 rounded-tr-2xl"></div>
+                <div class="absolute -bottom-4 -left-4 w-12 h-12 border-b-4 border-l-4 border-warna-500 rounded-bl-2xl"></div>
+                <div class="absolute -bottom-4 -right-4 w-12 h-12 border-b-4 border-r-4 border-warna-500 rounded-br-2xl"></div>
+
+                <div class="size-64 lg:size-80 bg-white rounded-3xl shadow-[0_25px_60px_-15px_rgba(0,0,0,0.1)] flex items-center justify-center relative overflow-hidden p-6 border border-slate-50 transition-transform duration-500 group-hover:scale-[1.02]">
+                    <div id="qr-loading" class="absolute inset-0 flex flex-col items-center justify-center bg-white z-20">
+                        <div class="w-12 h-12 border-[6px] border-slate-100 border-t-warna-500 rounded-full animate-spin mb-4"></div>
+                        <p class="text-[10px] font-black text-slate-400 uppercase italic">Generating Secure Key...</p>
                     </div>
                     
-                    <!-- QR Code Display Mobile -->
-                    <div id="qr-display-mobile" class="absolute inset-0 flex items-center justify-center p-3 opacity-0 z-10 transition-all duration-500">
-                        <object id="qr-object-mobile" 
-                                data="{{ route('qr.generate') }}?t={{ time() }}"
-                                type="image/svg+xml"
-                                class="w-full h-full">
-                            <embed src="{{ route('qr.generate') }}?t={{ time() }}"
-                                   type="image/svg+xml" 
-                                   class="w-full h-full" />
+                    <div id="qr-display" class="absolute inset-0 flex items-center justify-center p-8 opacity-0 z-10">
+                        <object id="qr-object" data="{{ route('qr.generate') }}?t={{ time() }}" type="image/svg+xml" class="w-full h-full">
+                            <embed src="{{ route('qr.generate') }}?t={{ time() }}" type="image/svg+xml" class="w-full h-full" />
                         </object>
                     </div>
-                    
-                    <!-- Error State Mobile -->
-                    <div id="qr-error-mobile" class="absolute inset-0 flex items-center justify-center bg-white opacity-0 z-10 transition-all duration-500">
-                        <div class="text-center text-red-500 p-4">
-                            <div class="w-12 h-12 mx-auto mb-3 bg-red-100 rounded-full flex items-center justify-center">
-                                <i class="fas fa-exclamation-triangle text-lg"></i>
-                            </div>
-                            <p class="font-medium mb-2 text-sm">QR Code Error</p>
-                            <p class="text-xs text-gray-500 mb-3">Gagal memuat QR Code</p>
-                            <button onclick="refreshQrCode()" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors text-xs font-medium">
-                                <i class="fas fa-redo mr-1"></i>Coba Lagi
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Progress Bar Mobile -->
-                <div class="w-72 mb-6">
-                    <div class="flex items-center justify-between text-xs text-gray-600 mb-2">
-                        <span>Auto refresh setiap</span>
-                        <span class="font-semibold">30 detik</span>
-                    </div>
-                    <div class="w-full bg-gray-200 rounded-full h-1.5">
-                        <div id="refresh-progress-mobile" class="bg-orange-500 h-1.5 rounded-full transition-all duration-1000" style="width: 0%"></div>
-                    </div>
-                </div>
-                
-                <!-- Action Button Mobile -->
-                <button onclick="refreshQrCode()" 
-                        class="w-full max-w-xs px-6 py-3 text-warna-400 border-2 border-warna-400 active:text-white active:bg-warna-400 rounded-xl font-medium transition-all duration-300">
-                    <i class="fas fa-redo mr-2"></i>
-                    Refresh Manual
-                </button>
-                
-                <!-- Footer Info Mobile -->
-                <div class="mt-6 text-center text-xs text-gray-500">
-                    <p>Terakhir diperbarui: <span x-text="currentTime" class="font-medium"></span></p>
-                </div>
-            </div>
-            
-            <!-- Mobile Instructions (Collapsible) -->
-            <div class="bg-white border-t border-gray-200 px-6 py-4">
-                <button @click="showInstructions = !showInstructions" 
-                        class="w-full flex items-center justify-between text-gray-700 font-medium">
-                    <span>Cara Melakukan Absensi</span>
-                    <i class="fas fa-chevron-down transition-transform duration-200" 
-                       :class="showInstructions ? 'rotate-180' : ''"></i>
-                </button>
-                
-                <div x-show="showInstructions" 
-                     x-transition:enter="transition ease-out duration-200"
-                     x-transition:enter-start="opacity-0 -translate-y-2"
-                     x-transition:enter-end="opacity-100 translate-y-0"
-                     x-transition:leave="transition ease-in duration-150"
-                     x-transition:leave-start="opacity-100 translate-y-0"
-                     x-transition:leave-end="opacity-0 -translate-y-2"
-                     class="mt-4 space-y-3">
-                    <div class="flex items-start">
-                        <div class="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center text-white text-xs font-bold mr-3 mt-0.5 flex-shrink-0">1</div>
-                        <span class="text-sm text-gray-600">Buka aplikasi member di smartphone</span>
-                    </div>
-                    <div class="flex items-start">
-                        <div class="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center text-white text-xs font-bold mr-3 mt-0.5 flex-shrink-0">2</div>
-                        <span class="text-sm text-gray-600">Tekan tombol "Scan QR" di dashboard</span>
-                    </div>
-                    <div class="flex items-start">
-                        <div class="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center text-white text-xs font-bold mr-3 mt-0.5 flex-shrink-0">3</div>
-                        <span class="text-sm text-gray-600">Arahkan kamera ke QR Code di atas</span>
-                    </div>
-                    <div class="flex items-start">
-                        <div class="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center text-white text-xs font-bold mr-3 mt-0.5 flex-shrink-0">4</div>
-                        <span class="text-sm text-gray-600">Tunggu konfirmasi absensi berhasil</span>
+
+                    <div id="qr-error" class="absolute inset-0 flex flex-col items-center justify-center bg-white opacity-0 z-10 p-8 text-center">
+                        <i class="fas fa-exclamation-triangle text-rose-500 text-4xl mb-4"></i>
+                        <p class="text-xs font-black text-slate-800 uppercase italic">Sync Failed</p>
+                        <button onclick="refreshQrCode()" class="mt-4 text-[10px] font-black text-warna-500 underline uppercase italic">Try Re-Sync</button>
                     </div>
                 </div>
             </div>
+
+            <div class="mt-16 w-full max-w-sm">
+                <div class="flex justify-between items-center mb-3 px-2">
+                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest italic">Security Refresh</span>
+                    <span class="text-[10px] font-black text-[#0F172A] italic uppercase" x-text="'30 SEC INTERVAL'"></span>
+                </div>
+                <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden border border-slate-200/50">
+                    <div class="bg-warna-500 h-full transition-all duration-1000 ease-linear shadow-[0_0_15px_rgba(163,230,53,0.5)]" :style="`width: ${progress}%` text-warna-500"></div>
+                </div>
+            </div>
+
+            <button onclick="refreshQrCode()" class="mt-8 flex items-center gap-3 px-8 py-3 bg-[#0F172A] text-warna-500 rounded-2xl font-black text-[10px] uppercase italic tracking-[0.2em] hover:bg-[#1e293b] transition-all active:scale-95 shadow-xl shadow-slate-200">
+                <i class="fas fa-sync-alt animate-spin-slow"></i>
+                Manual Refresh Key
+            </button>
         </div>
     </div>
+
+    <div class="md:hidden flex flex-col w-full h-screen bg-white">
+        <div class="bg-[#0F172A] px-8 py-6 flex items-center justify-between rounded-b-[2rem] shadow-xl">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-warna-500 rounded-xl flex items-center justify-center rotate-3">
+                    <i class="fas fa-dumbbell text-[#0F172A] text-xl"></i>
+                </div>
+                <h1 class="text-white text-lg font-black italic uppercase tracking-tighter">Arena <span class="text-warna-500">Scan</span></h1>
+            </div>
+            <a href="{{ route('dashboard') }}" class="text-slate-400 hover:text-white"><i class="fas fa-times text-xl"></i></a>
+        </div>
+        
+        <div class="flex-1 flex flex-col items-center justify-center px-8">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-black text-[#0F172A] uppercase italic tracking-tighter">Check-In</h2>
+                <p class="text-slate-400 text-xs font-medium mt-2">Pindai kode untuk masuk area gym</p>
+            </div>
+
+            <div class="relative mb-10">
+                <div class="absolute -top-3 -left-3 w-8 h-8 border-t-4 border-l-4 border-warna-500"></div>
+                <div class="absolute -bottom-3 -right-3 w-8 h-8 border-b-4 border-r-4 border-warna-500"></div>
+                
+                <div class="size-64 bg-white rounded-3xl shadow-2xl flex items-center justify-center relative overflow-hidden border border-slate-100 p-4">
+                     <div id="qr-loading-mobile" class="absolute inset-0 flex flex-col items-center justify-center bg-white z-20">
+                        <div class="w-8 h-8 border-4 border-slate-100 border-t-warna-500 rounded-full animate-spin mb-2"></div>
+                    </div>
+                    <div id="qr-display-mobile" class="absolute inset-0 flex items-center justify-center p-6 opacity-0 z-10">
+                         <object id="qr-object-mobile" data="{{ route('qr.generate') }}?t={{ time() }}" type="image/svg+xml" class="w-full h-full">
+                            <embed src="{{ route('qr.generate') }}?t={{ time() }}" type="image/svg+xml" class="w-full h-full" />
+                        </object>
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-64 mb-10">
+                <div class="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                    <div class="bg-warna-500 h-full transition-all duration-1000 ease-linear" :style="`width: ${progress}%` text-warna-500"></div>
+                </div>
+            </div>
+
+            <button onclick="refreshQrCode()" class="w-full py-4 bg-[#0F172A] text-warna-500 rounded-2xl font-black text-xs uppercase italic tracking-widest shadow-lg">
+                <i class="fas fa-sync-alt mr-2"></i> Refresh Key
+            </button>
+        </div>
+
+        <div class="p-6 bg-slate-50 border-t border-slate-100">
+             <button @click="showInstructions = !showInstructions" class="w-full flex justify-between items-center text-[10px] font-black text-[#0F172A] uppercase tracking-widest italic">
+                <span>Panduan Absensi</span>
+                <i class="fas" :class="showInstructions ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+             </button>
+             <div x-show="showInstructions" x-collapse class="mt-4 space-y-3">
+                <p class="text-[11px] text-slate-500 font-medium">1. Buka aplikasi di HP</p>
+                <p class="text-[11px] text-slate-500 font-medium">2. Tekan Scan QR di Dashboard</p>
+                <p class="text-[11px] text-slate-500 font-medium">3. Scan kode di atas</p>
+             </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .animate-spin-slow { animation: spin 3s linear infinite; }
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+</style>
 
     <script>
         // QR State Management (menggunakan script native yang sudah ada)
