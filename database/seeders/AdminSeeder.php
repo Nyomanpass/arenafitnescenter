@@ -15,7 +15,7 @@ class AdminSeeder extends Seeder
         User::truncate();
 
         User::create([
-            'name' => 'Admin GymYakarta',
+            'name' => 'Admin Arena Fitnes Center',
             'username' => 'admin',
             'email' => 'admin@admin.com',
             'email_verified_at' => now(),
