@@ -302,7 +302,7 @@ class DashboardMember extends Component
             }
 
             // Check if gym_id matches
-            if (isset($decodedData['gym_id']) && $decodedData['gym_id'] !== config('app.gym_id', 'gymyankarta')) {
+            if (isset($decodedData['gym_id']) && $decodedData['gym_id'] !== config('app.gym_id', 'arena_fitness_center')) {
                 throw new \Exception('QR Code tidak valid untuk gym ini');
             }
 

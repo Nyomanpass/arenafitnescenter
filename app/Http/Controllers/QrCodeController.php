@@ -16,7 +16,7 @@ class QrCodeController extends Controller
             // Create QR data
             $qrData = [
                 'type' => 'attendance',
-                'gym_id' => 'gymyankarta',
+                'gym_id' => 'arena_fitness_center',
                 'token' => Str::random(32),
                 'expires_at' => Carbon::now()->addMinutes(30)->timestamp,
                 'created_at' => Carbon::now()->timestamp,
