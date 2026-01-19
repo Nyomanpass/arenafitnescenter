@@ -25,7 +25,7 @@ class EmailVerification extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Email Verification - GYMYANKARTA',
+            subject: 'Email Verification - ARENA FITNES CENTER',
         );
     }
 
