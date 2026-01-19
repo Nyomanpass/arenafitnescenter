@@ -182,109 +182,107 @@
         </div>
 
         <!-- Mobile Sidebar -->
-        <div x-show="sidebarOpen" x-cloak x-transition:enter="transition ease-in-out duration-200 transform"
-            x-transition:enter-start="-translate-x-full" x-transition:enter-end="translate-x-0"
-            x-transition:leave="transition ease-in-out duration-200 transform" x-transition:leave-start="translate-x-0"
-            x-transition:leave-end="-translate-x-full"
-            class="lg:hidden fixed top-0 left-0 z-50 h-full w-64 bg-warna-300 shadow-lg transform overflow-y-auto">
-
-            <!-- Mobile Sidebar Header -->
-            <div class="flex items-center justify-between px-4 py-6 border-b border-warna-100 mb-3">
-                <div class="flex items-center min-w-0">
-                    <img src="/logo.png" alt="Logo" class="h-8 w-8 mr-2 flex-shrink-0">
-                    <span class="text-white font-bold truncate">GYMYANKARTA</span>
+     <div x-show="sidebarOpen" x-cloak 
+    x-transition:enter="transition ease-in-out duration-300 transform"
+    x-transition:enter-start="-translate-x-full" 
+    x-transition:enter-end="translate-x-0"
+    x-transition:leave="transition ease-in-out duration-300 transform" 
+    x-transition:leave-start="translate-x-0"
+    x-transition:leave-end="-translate-x-full"
+    class="lg:hidden fixed top-0 left-0 z-50 h-full w-72 bg-[#0F172A] shadow-2xl overflow-y-auto border-r border-slate-800"
+>
+    <div class="px-6 py-8 border-b border-slate-800 mb-4 relative overflow-hidden">
+        <div class="absolute -top-10 -left-10 w-32 h-32 bg-warna-500/10 rounded-full blur-3xl"></div>
+        
+        <div class="flex items-center justify-between relative z-10">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-warna-500 rounded-xl flex items-center justify-center rotate-3 shadow-lg shadow-warna-500/20">
+                    <i class="fas fa-dumbbell text-[#0F172A] text-xl"></i>
                 </div>
-                <button @click="sidebarOpen = false" class="text-white hover:text-gray-300 flex-shrink-0">
-                    <i class="fa-solid fa-times text-xl"></i>
-                </button>
+                <div>
+                    <h1 class="text-white text-lg font-black italic leading-none tracking-tighter uppercase">Arena</h1>
+                    <h2 class="text-warna-500 text-[10px] font-black italic tracking-[0.2em] uppercase">Fitness Center</h2>
+                </div>
             </div>
-
-            <!-- Mobile Sidebar Navigation -->
-            <nav class="p-4 space-y-3">
-                <!-- Main Navigation -->
-                <a href="{{ route('dashboard') }}" @click="sidebarOpen = false"
-                    class="flex items-center px-4 py-3 text-white hover:bg-warna-400 rounded-lg transition-colors {{ request()->routeIs('dashboard') ? 'bg-warna-400' : '' }}">
-                    <i class="fa-solid fa-house mr-3 flex-shrink-0"></i>
-                    <span class="truncate">Dashboard</span>
-                </a>
-
-                <a href="{{ route('kelola.pendapatan') }}" @click="sidebarOpen = false"
-                    class="flex items-center px-4 py-3 text-white hover:bg-warna-400 rounded-lg transition-colors {{ request()->routeIs('kelola.pendapatan') ? 'bg-warna-400' : '' }}">
-                    <i class="fa-solid fa-money-bill-trend-up mr-3 flex-shrink-0"></i>
-                    <span class="truncate">Kasir</span>
-                </a>
-
-                <a href="{{ route('kelola.member') }}" @click="sidebarOpen = false"
-                    class="flex items-center px-4 py-3 text-white hover:bg-warna-400 rounded-lg transition-colors {{ request()->routeIs('kelola.member') ? 'bg-warna-400' : '' }}">
-                    <i class="fa-solid fa-user mr-3 flex-shrink-0"></i>
-                    <span class="truncate">Kelola Member</span>
-                </a>
-
-                <!-- Divider -->
-                <div class="border-t border-warna-200 my-4"></div>
-
-                <!-- Tools Section -->
-                <a target="_blank" href="{{ route('qr.attendance') }}" @click="sidebarOpen = false"
-                    class="flex items-center px-4 py-3 text-white hover:bg-warna-400 rounded-lg transition-colors {{ request()->routeIs('qr.generate') ? 'bg-warna-400' : '' }}">
-                    <i class="fa-solid fa-qrcode mr-3 flex-shrink-0"></i>
-                    <span class="truncate">QR Absen</span>
-                </a>
-
-                <a href="{{ route('pengaturan.harga') }}" @click="sidebarOpen = false"
-                    class="flex items-center px-4 py-3 text-white hover:bg-warna-400 rounded-lg transition-colors {{ request()->routeIs('pengaturan.harga') ? 'bg-warna-400' : '' }}">
-                    <i class="fa-solid fa-gear mr-3 flex-shrink-0"></i>
-                    <span class="truncate">Pengaturan Harga</span>
-                </a>
-
-                @php
-                    $isLaporanActive = request()->routeIs('laporan.member') || request()->routeIs('laporan.pendapatan');
-                @endphp
-
-                <div class="relative" x-data="{ dropdownOpen: {{ $isLaporanActive ? 'true' : 'false' }} }">
-                    <button @click="dropdownOpen = !dropdownOpen"
-                        class="flex items-center w-full px-4 py-3 text-white hover:bg-warna-400 rounded-lg transition-colors">
-                        <i class="fa-solid fa-chart-line mr-3 flex-shrink-0"></i>
-                        <span class="truncate">Laporan</span>
-                        <i class="fa-solid fa-chevron-down ml-auto transition-transform flex-shrink-0"
-                            :class="{ 'rotate-180': dropdownOpen }"></i>
-                    </button>
-
-                    <div x-show="dropdownOpen" x-cloak x-transition:enter="transition ease-out duration-200"
-                        x-transition:enter-start="opacity-0 transform scale-95"
-                        x-transition:enter-end="opacity-100 transform scale-100"
-                        x-transition:leave="transition ease-in duration-75"
-                        x-transition:leave-start="opacity-100 transform scale-100"
-                        x-transition:leave-end="opacity-0 transform scale-95" class="ml-6 mt-2 space-y-2">
-                        <a href="{{ route('laporan.member') }}" @click="sidebarOpen = false"
-                            class="flex items-center px-4 py-2 text-white hover:bg-warna-400 rounded-lg transition-colors text-sm {{ request()->routeIs('laporan.member') ? 'bg-warna-400' : '' }}">
-                            <i class="fa-solid fa-users mr-3 flex-shrink-0"></i>
-                            <span class="truncate">Laporan Member</span>
-                        </a>
-                        <a href="{{ route('laporan.pendapatan') }}" @click="sidebarOpen = false"
-                            class="flex items-center px-4 py-2 text-white hover:bg-warna-400 rounded-lg transition-colors text-sm {{ request()->routeIs('laporan.pendapatan') ? 'bg-warna-400' : '' }}">
-                            <i class="fa-solid fa-dollar-sign mr-3 flex-shrink-0"></i>
-                            <span class="truncate">Laporan Pendapatan</span>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Divider -->
-                <div class="border-t border-warna-200 my-4"></div>
-
-                <!-- Account Section -->
-                <a href="{{ route('reset.password') }}" @click="sidebarOpen = false"
-                    class="flex items-center px-4 py-3 text-white hover:bg-warna-400 rounded-lg transition-colors {{ request()->routeIs('reset.password') ? 'bg-warna-400' : '' }}">
-                    <i class="fa-solid fa-key mr-3 flex-shrink-0"></i>
-                    <span class="truncate">Reset Password</span>
-                </a>
-
-                <a href="#" @click="showLogoutModal = true; sidebarOpen = false"
-                    class="flex items-center px-4 py-3 text-white hover:bg-warna-400 rounded-lg transition-colors">
-                    <i class="fa-solid fa-right-from-bracket mr-3 flex-shrink-0"></i>
-                    <span class="truncate">Logout</span>
-                </a>
-            </nav>
+            <button @click="sidebarOpen = false" class="text-slate-400 hover:text-white transition-colors">
+                <i class="fa-solid fa-xmark text-2xl"></i>
+            </button>
         </div>
+    </div>
+
+    <nav class="px-4 pb-10 space-y-2">
+        
+        <p class="px-4 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4 italic">Main Menu</p>
+
+        <a href="{{ route('dashboard') }}" @click="sidebarOpen = false"
+            class="flex items-center px-4 py-3.5 rounded-2xl transition-all duration-300 group {{ request()->routeIs('dashboard') ? 'bg-warna-500 text-[#0F172A] shadow-lg shadow-warna-500/20' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+            <i class="fa-solid fa-house mr-3 w-5 text-center {{ request()->routeIs('dashboard') ? '' : 'group-hover:text-warna-500' }}"></i>
+            <span class="font-black italic uppercase text-xs tracking-widest">Dashboard</span>
+        </a>
+
+        <a href="{{ route('kelola.pendapatan') }}" @click="sidebarOpen = false"
+            class="flex items-center px-4 py-3.5 rounded-2xl transition-all duration-300 group {{ request()->routeIs('kelola.pendapatan') ? 'bg-warna-500 text-[#0F172A] shadow-lg shadow-warna-500/20' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+            <i class="fa-solid fa-cash-register mr-3 w-5 text-center {{ request()->routeIs('kelola.pendapatan') ? '' : 'group-hover:text-warna-500' }}"></i>
+            <span class="font-black italic uppercase text-xs tracking-widest">Point of Sale</span>
+        </a>
+
+        <a href="{{ route('kelola.member') }}" @click="sidebarOpen = false"
+            class="flex items-center px-4 py-3.5 rounded-2xl transition-all duration-300 group {{ request()->routeIs('kelola.member') ? 'bg-warna-500 text-[#0F172A] shadow-lg shadow-warna-500/20' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+            <i class="fa-solid fa-users-gear mr-3 w-5 text-center {{ request()->routeIs('kelola.member') ? '' : 'group-hover:text-warna-500' }}"></i>
+            <span class="font-black italic uppercase text-xs tracking-widest">Manage Member</span>
+        </a>
+
+        <div class="h-[1px] bg-slate-800 mx-4 my-6"></div>
+        <p class="px-4 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4 italic">System Tools</p>
+
+        <a target="_blank" href="{{ route('qr.attendance') }}" @click="sidebarOpen = false"
+            class="flex items-center px-4 py-3.5 rounded-2xl transition-all duration-300 group {{ request()->routeIs('qr.attendance') ? 'bg-warna-500 text-[#0F172A] shadow-lg shadow-warna-500/20' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+            <i class="fa-solid fa-qrcode mr-3 w-5 text-center {{ request()->routeIs('qr.attendance') ? '' : 'group-hover:text-warna-500' }}"></i>
+            <span class="font-black italic uppercase text-xs tracking-widest">QR Attendance</span>
+        </a>
+
+        <a href="{{ route('pengaturan.harga') }}" @click="sidebarOpen = false"
+            class="flex items-center px-4 py-3.5 rounded-2xl transition-all duration-300 group {{ request()->routeIs('pengaturan.harga') ? 'bg-warna-500 text-[#0F172A] shadow-lg shadow-warna-500/20' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+            <i class="fa-solid fa-gears mr-3 w-5 text-center {{ request()->routeIs('pengaturan.harga') ? '' : 'group-hover:text-warna-500' }}"></i>
+            <span class="font-black italic uppercase text-xs tracking-widest">Price Settings</span>
+        </a>
+
+        @php $isLaporanActive = request()->routeIs('laporan.*'); @endphp
+        <div x-data="{ dropdownOpen: {{ $isLaporanActive ? 'true' : 'false' }} }">
+            <button @click="dropdownOpen = !dropdownOpen"
+                class="flex items-center w-full px-4 py-3.5 text-slate-400 hover:text-white hover:bg-slate-800/50 rounded-2xl transition-all duration-300 group">
+                <i class="fa-solid fa-chart-line mr-3 w-5 text-center group-hover:text-warna-500"></i>
+                <span class="font-black italic uppercase text-xs tracking-widest text-left">Reports</span>
+                <i class="fa-solid fa-chevron-down ml-auto text-[10px] transition-transform" :class="{ 'rotate-180': dropdownOpen }"></i>
+            </button>
+
+            <div x-show="dropdownOpen" x-cloak x-collapse class="ml-6 mt-2 space-y-1 border-l border-slate-800">
+                <a href="{{ route('laporan.member') }}" @click="sidebarOpen = false"
+                    class="block px-6 py-2.5 text-[11px] font-black italic uppercase tracking-widest {{ request()->routeIs('laporan.member') ? 'text-warna-500' : 'text-slate-500 hover:text-white' }}">
+                    Member Reports
+                </a>
+                <a href="{{ route('laporan.pendapatan') }}" @click="sidebarOpen = false"
+                    class="block px-6 py-2.5 text-[11px] font-black italic uppercase tracking-widest {{ request()->routeIs('laporan.pendapatan') ? 'text-warna-500' : 'text-slate-500 hover:text-white' }}">
+                    Income Reports
+                </a>
+            </div>
+        </div>
+
+        <div class="h-[1px] bg-slate-800 mx-4 my-6"></div>
+
+        <a href="{{ route('reset.password') }}" @click="sidebarOpen = false"
+            class="flex items-center px-4 py-3.5 rounded-2xl text-slate-400 hover:text-white hover:bg-slate-800/50 transition-all duration-300">
+            <i class="fa-solid fa-shield-halved mr-3 w-5 text-center"></i>
+            <span class="font-black italic uppercase text-[10px] tracking-widest">Security</span>
+        </a>
+
+        <button @click="showLogoutModal = true; sidebarOpen = false"
+            class="w-full flex items-center px-4 py-3.5 rounded-2xl text-rose-500 hover:bg-rose-500/10 transition-all duration-300">
+            <i class="fa-solid fa-power-off mr-3 w-5 text-center"></i>
+            <span class="font-black italic uppercase text-[10px] tracking-widest">Sign Out</span>
+        </button>
+    </nav>
+</div>
     </div>
 
     <!-- Logout Modal -->

@@ -28,63 +28,93 @@
     </div>
     @endif
 
-    <form wire:submit.prevent="resetPassword" class="space-y-7">
-        <div class="group">
-            <div class="relative">
-                <input type="password" id="old_password" wire:model.defer="old_password" 
-                       class="block w-full px-5 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:outline-none focus:border-warna-500 focus:bg-white text-sm font-bold text-[#0F172A] transition-all peer" placeholder=" " />
-                
-                <label for="old_password" 
-                       class="absolute text-[10px] font-black uppercase tracking-widest text-slate-400 italic duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-transparent px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-4 peer-placeholder-shown:text-sm peer-focus:px-2 peer-focus:text-warna-600 peer-focus:italic peer-focus:font-black peer-focus:scale-75 peer-focus:-translate-y-4 left-4 pointer-events-none transition-all">
-                    Current Password
-                </label>
+   <form wire:submit.prevent="resetPassword" class="space-y-6">
+    
+    <div class="relative group mt-4">
+        <input type="password" id="old_password" wire:model.defer="old_password" 
+            class="block w-full pl-12 pr-14 py-4 bg-white border-2 border-slate-200 rounded-2xl text-[#0F172A] font-black italic text-sm transition-all focus:outline-none focus:border-warna-500 focus:ring-0 peer placeholder-transparent" 
+            placeholder="Current Password" required/>
+        
+        <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-slate-400 peer-focus:text-warna-500 transition-colors">
+            <i class="fa-solid fa-lock-open text-sm"></i>
+        </div>
 
-                <button type="button" onclick="togglePassword('old_password', 'eyeOld')" class="absolute inset-y-0 right-4 flex items-center text-slate-300 hover:text-warna-600 transition-colors">
-                    <span id="eyeOld"><i class="fa-solid fa-eye-slash text-xs"></i></span>
-                </button>
+        <label for="old_password" 
+            class="absolute left-10 -top-2.5 px-2 bg-white text-[10px] font-black text-warna-500 uppercase tracking-widest italic transition-all 
+            peer-placeholder-shown:text-sm peer-placeholder-shown:text-slate-400 peer-placeholder-shown:top-4 peer-placeholder-shown:left-12 peer-placeholder-shown:font-bold
+            peer-focus:-top-2.5 peer-focus:left-10 peer-focus:text-[10px] peer-focus:text-warna-500 peer-focus:font-black
+            pointer-events-none">
+            Current Password
+        </label>
+
+        <button type="button" onclick="togglePassword('old_password', 'eyeOld')" 
+            class="absolute inset-y-0 right-0 pr-5 flex items-center text-slate-300 hover:text-warna-500 transition-colors">
+            <span id="eyeOld"><i class="fa-solid fa-eye-slash text-sm"></i></span>
+        </button>
+
+        @error('old_password') 
+            <span class="text-rose-600 text-[9px] font-black uppercase italic mt-1 ml-4 tracking-widest block">{{ $message }}</span> 
+        @enderror
+    </div>
+
+    <div class="relative group mt-2">
+        <input type="password" id="new_password" wire:model.defer="new_password" 
+            class="block w-full pl-12 pr-14 py-4 bg-white border-2 border-slate-200 rounded-2xl text-[#0F172A] font-black italic text-sm transition-all focus:outline-none focus:border-warna-500 focus:ring-0 peer placeholder-transparent" 
+            placeholder="New Password" required/>
+        
+        <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-slate-400 peer-focus:text-warna-500 transition-colors">
+            <i class="fa-solid fa-key text-sm"></i>
+        </div>
+
+        <label for="new_password" 
+            class="absolute left-10 -top-2.5 px-2 bg-white text-[10px] font-black text-warna-500 uppercase tracking-widest italic transition-all 
+            peer-placeholder-shown:text-sm peer-placeholder-shown:text-slate-400 peer-placeholder-shown:top-4 peer-placeholder-shown:left-12 peer-placeholder-shown:font-bold
+            peer-focus:-top-2.5 peer-focus:left-10 peer-focus:text-[10px] peer-focus:text-warna-500 peer-focus:font-black
+            pointer-events-none">
+            New Password
+        </label>
+
+        <button type="button" onclick="togglePassword('new_password', 'eyeNew')" 
+            class="absolute inset-y-0 right-0 pr-5 flex items-center text-slate-300 hover:text-warna-500 transition-colors">
+            <span id="eyeNew"><i class="fa-solid fa-eye-slash text-sm"></i></span>
+        </button>
+
+        @error('new_password') 
+            <span class="text-rose-600 text-[9px] font-black uppercase italic mt-1 ml-4 tracking-widest block">{{ $message }}</span> 
+        @enderror
+    </div>
+
+    <div class="relative group mt-2">
+        <input type="password" id="new_password_confirmation" wire:model.defer="new_password_confirmation" 
+            class="block w-full pl-12 pr-14 py-4 bg-white border-2 border-slate-200 rounded-2xl text-[#0F172A] font-black italic text-sm transition-all focus:outline-none focus:border-warna-500 focus:ring-0 peer placeholder-transparent" 
+            placeholder="Confirm Password" required/>
+        
+           <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-slate-400 peer-focus:text-warna-500 transition-colors">
+                <i class="fa-solid fa-shield-halved text-sm"></i>
             </div>
-            @error('old_password') <span class="text-rose-500 text-[9px] font-black uppercase italic mt-2 ml-2 tracking-widest block">{{ $message }}</span> @enderror
-        </div>
 
-        <div class="group">
-            <div class="relative">
-                <input type="password" id="new_password" wire:model.defer="new_password" 
-                       class="block w-full px-5 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:outline-none focus:border-warna-500 focus:bg-white text-sm font-bold text-[#0F172A] transition-all peer" placeholder=" " />
-                
-                <label for="new_password" 
-                       class="absolute text-[10px] font-black uppercase tracking-widest text-slate-400 italic duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-transparent px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-4 peer-placeholder-shown:text-sm peer-focus:px-2 peer-focus:text-warna-600 peer-focus:italic peer-focus:font-black peer-focus:scale-75 peer-focus:-translate-y-4 left-4 pointer-events-none transition-all">
-                    New Password
-                </label>
+        <label for="new_password_confirmation" 
+            class="absolute left-10 -top-2.5 px-2 bg-white text-[10px] font-black text-warna-500 uppercase tracking-widest italic transition-all 
+            peer-placeholder-shown:text-sm peer-placeholder-shown:text-slate-400 peer-placeholder-shown:top-4 peer-placeholder-shown:left-12 peer-placeholder-shown:font-bold
+            peer-focus:-top-2.5 peer-focus:left-10 peer-focus:text-[10px] peer-focus:text-warna-500 peer-focus:font-black
+            pointer-events-none">
+            Confirm Password
+        </label>
 
-                <button type="button" onclick="togglePassword('new_password', 'eyeNew')" class="absolute inset-y-0 right-4 flex items-center text-slate-300 hover:text-warna-600 transition-colors">
-                    <span id="eyeNew"><i class="fa-solid fa-eye-slash text-xs"></i></span>
-                </button>
-            </div>
-            @error('new_password') <span class="text-rose-500 text-[9px] font-black uppercase italic mt-2 ml-2 tracking-widest block">{{ $message }}</span> @enderror
-        </div>
+        <button type="button" onclick="togglePassword('new_password_confirmation', 'eyeConfirm')" 
+            class="absolute inset-y-0 right-0 pr-5 flex items-center text-slate-300 hover:text-warna-500 transition-colors">
+            <span id="eyeConfirm"><i class="fa-solid fa-eye-slash text-sm"></i></span>
+        </button>
+    </div>
 
-        <div class="relative">
-            <input type="password" id="new_password_confirmation" wire:model.defer="new_password_confirmation" 
-                   class="block w-full px-5 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:outline-none focus:border-warna-500 focus:bg-white text-sm font-bold text-[#0F172A] transition-all peer" placeholder=" " />
-            
-            <label for="new_password_confirmation" 
-                   class="absolute text-[10px] font-black uppercase tracking-widest text-slate-400 italic duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-transparent px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-4 peer-placeholder-shown:text-sm peer-focus:px-2 peer-focus:text-warna-600 peer-focus:italic peer-focus:font-black peer-focus:scale-75 peer-focus:-translate-y-4 left-4 pointer-events-none transition-all">
-                Confirm New Password
-            </label>
-
-            <button type="button" onclick="togglePassword('new_password_confirmation', 'eyeConfirm')" class="absolute inset-y-0 right-4 flex items-center text-slate-300 hover:text-warna-600 transition-colors">
-                <span id="eyeConfirm"><i class="fa-solid fa-eye-slash text-xs"></i></span>
-            </button>
-        </div>
-
-        <div class="pt-4">
-            <button type="submit" 
-                    class="w-full py-4 bg-[#0F172A] text-warna-500 rounded-2xl font-black text-xs uppercase tracking-[0.2em] italic hover:bg-slate-800 transition-all active:scale-[0.98] shadow-xl shadow-slate-200 flex items-center justify-center gap-3">
-                <i class="fas fa-key text-[10px]"></i>
-                Update Password
-            </button>
-        </div>
-    </form>
+    <div class="pt-4">
+        <button type="submit" 
+            class="group relative w-full py-5 bg-[#0F172A] text-warna-500 font-black uppercase tracking-[0.3em] text-[10px] italic rounded-2xl overflow-hidden transition-all duration-300 hover:bg-slate-800 shadow-[0_10px_30px_rgba(15,23,42,0.3)] active:scale-[0.97] flex items-center justify-center gap-3">
+            <i class="fas fa-lock text-[10px]"></i>
+            UPDATE SECURITY KEY
+        </button>
+    </div>
+</form>
 </div>
 
 

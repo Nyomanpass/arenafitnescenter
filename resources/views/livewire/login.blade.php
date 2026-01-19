@@ -3,7 +3,7 @@
     <div class="w-full max-w-[480px] z-10">
         <div class="bg-white p-10 md:p-14 rounded-[3rem] shadow-xl relative overflow-hidden">
             
-            <div class="absolute top-0 right-0 w-24 h-24 bg-warna-500/5 rounded-bl-full"></div>
+            
 
             <div class="mb-12 text-center">
                 <div class="inline-flex flex-col items-center group mb-6">
@@ -36,55 +36,75 @@
                 </div>
             @endif
 
-            <form wire:submit.prevent="login" class="space-y-6">          
-                
-                <div class="relative group">
-                    <input type="text" id="username" wire:model="username" 
-                        class="block w-full px-5 py-4 bg-slate-50 border-2 border-transparent rounded-2xl text-[#0F172A] font-bold italic focus:outline-none focus:border-warna-500 focus:bg-white transition-all peer placeholder-transparent" 
-                        placeholder="Warrior ID" required/>
-                    <label for="username" 
-                        class="absolute text-[10px] font-black text-slate-400 uppercase tracking-widest italic duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-transparent px-2 peer-focus:text-warna-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-4 peer-placeholder-shown:text-sm peer-focus:scale-75 peer-focus:-translate-y-4 left-4 pointer-events-none transition-all">
-                        Warrior ID / Username
-                    </label>
-                </div>
-
-                <div class="relative group">
-                    <input type="password" id="password" wire:model="password" 
-                        class="block w-full px-5 py-4 bg-slate-50 border-2 border-transparent rounded-2xl text-[#0F172A] font-bold italic focus:outline-none focus:border-warna-500 focus:bg-white transition-all peer placeholder-transparent" 
-                        placeholder="Secret Access" required/>
-                    <label for="password" 
-                        class="absolute text-[10px] font-black text-slate-400 uppercase tracking-widest italic duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-transparent px-2 peer-focus:text-warna-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-4 peer-placeholder-shown:text-sm peer-focus:scale-75 peer-focus:-translate-y-4 left-4 pointer-events-none transition-all">
-                        Secret Access Key
-                    </label>
-                    <button type="button" onclick="togglePassword()" class="absolute inset-y-0 right-4 flex items-center text-slate-300 hover:text-warna-600 transition-colors">
-                        <span id="eyeIcon"><i class="fa-solid fa-eye text-xs"></i></span>
-                    </button>
-                </div>
-
-                <div class="pt-4">
-                    <button type="submit" wire:loading.attr="disabled"
-                            class="w-full py-5 bg-[#0F172A] text-warna-500 font-black uppercase tracking-[0.3em] text-xs italic rounded-2xl hover:bg-slate-800 shadow-2xl shadow-slate-200 transition-all duration-300 active:scale-[0.98] flex items-center justify-center gap-3">
-                        <span wire:loading.remove class="flex items-center gap-2">
-                            <i class="fas fa-sign-in-alt text-[10px]"></i> Enter the Arena
-                        </span>
-                        <span wire:loading class="flex items-center justify-center">
-                            <i class="fas fa-circle-notch fa-spin mr-2"></i> Verifying...
-                        </span>
-                    </button>
-                </div>
-
-                <div class="text-center pt-4">
-                    <p class="text-slate-400 text-[11px] font-bold uppercase italic tracking-widest">
-                        Belum punya akun? 
-                        <a href="{{ route('register') }}" class="text-warna-600 hover:text-[#0F172A] transition-colors border-b border-warna-500/30 hover:border-[#0F172A] ml-1">Daftar Sekarang</a>
-                    </p>
-                </div>
-            </form>
+<form wire:submit.prevent="login" class="space-y-5">
+    <div class="relative mt-4"> <input type="text" id="username" wire:model="username" autocomplete="off"
+            class="block w-full pl-12 pr-5 py-4 bg-white border-2 border-slate-200 rounded-2xl text-[#0F172A] font-black italic text-sm transition-all focus:outline-none focus:border-warna-500 focus:ring-0 peer placeholder-transparent" 
+            placeholder="Warrior ID" required/>
+        
+        <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-slate-400 peer-focus:text-warna-500 transition-colors">
+            <i class="fa-solid fa-user-ninja text-sm"></i>
         </div>
 
-        <p class="text-center mt-10 text-[9px] font-black text-slate-500 uppercase tracking-[0.4em] italic opacity-50">
-            Arena Management System v2.0
+        <label for="username" 
+            class="absolute left-10 -top-2.5 px-2 bg-white text-[10px] font-black text-warna-500 uppercase tracking-widest italic transition-all 
+            peer-placeholder-shown:text-sm peer-placeholder-shown:text-slate-400 peer-placeholder-shown:top-4 peer-placeholder-shown:left-12 peer-placeholder-shown:font-bold
+            peer-focus:-top-2.5 peer-focus:left-10 peer-focus:text-[10px] peer-focus:text-warna-500 peer-focus:font-black
+            pointer-events-none">
+            Username
+        </label>
+    </div>
+
+    <div class="relative mt-4">
+        <input type="password" id="password" wire:model="password" 
+            class="block w-full pl-12 pr-14 py-4 bg-white border-2 border-slate-200 rounded-2xl text-[#0F172A] font-black italic text-sm transition-all focus:outline-none focus:border-warna-500 focus:ring-0 peer placeholder-transparent" 
+            placeholder="Secret Access" required/>
+        
+        <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-slate-400 peer-focus:text-warna-500 transition-colors">
+            <i class="fa-solid fa-shield-halved text-sm"></i>
+        </div>
+
+        <label for="password" 
+            class="absolute left-10 -top-2.5 px-2 bg-white text-[10px] font-black text-warna-500 uppercase tracking-widest italic transition-all 
+            peer-placeholder-shown:text-sm peer-placeholder-shown:text-slate-400 peer-placeholder-shown:top-4 peer-placeholder-shown:left-12 peer-placeholder-shown:font-bold
+            peer-focus:-top-2.5 peer-focus:left-10 peer-focus:text-[10px] peer-focus:text-warna-500 peer-focus:font-black
+            pointer-events-none">
+            Password
+        </label>
+        
+        <button type="button" onclick="togglePassword()" 
+            class="absolute inset-y-0 right-0 pr-5 flex items-center text-slate-300 hover:text-warna-500 transition-colors">
+            <span id="eyeIcon"><i class="fa-solid fa-eye text-sm"></i></span>
+        </button>
+    </div>
+
+    <div class="pt-6">
+        <button type="submit" wire:loading.attr="disabled"
+            class="group relative w-full py-5 bg-[#0F172A] text-warna-500 font-black uppercase tracking-[0.3em] text-[10px] italic rounded-2xl overflow-hidden transition-all duration-300 hover:bg-slate-800 shadow-[0_10px_30px_rgba(15,23,42,0.3)] active:scale-[0.97] flex items-center justify-center gap-3">
+            
+            <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+
+            <span wire:loading.remove class="flex items-center gap-3 relative z-10">
+                ENTER THE ARENA <i class="fas fa-bolt-lightning animate-pulse"></i>
+            </span>
+            
+            <span wire:loading class="flex items-center justify-center relative z-10">
+                <i class="fas fa-circle-notch fa-spin mr-3"></i> VERIFYING...
+            </span>
+        </button>
+    </div>
+
+    <div class="text-center pt-6">
+        <p class="text-slate-400 text-[10px] font-black uppercase italic tracking-[0.1em]">
+            Belum terdaftar di sistem? 
+            <a href="{{ route('register') }}" class="text-[#0F172A] hover:text-warna-500 transition-all font-black border-b-2 border-warna-500/20 hover:border-warna-500 pb-0.5 ml-1">
+                DAFTAR  SEKARANG
+            </a>
         </p>
+    </div>
+</form>
+        </div>
+
+
     </div>
 
     <script>

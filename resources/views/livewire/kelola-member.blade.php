@@ -555,12 +555,14 @@
                                     
                                     {{ $day['day'] }}
 
-                                    @if($day['isMembershipActive'] && !$day['isAttended'] && $day['isCurrentMonth'])
-                                        <span class="text-[6px] absolute bottom-1.5 font-black text-warna-500 tracking-tighter uppercase italic">Aktif</span>
+                                  @if($day['isMembershipActive'] && !$day['isAttended'] && $day['isCurrentMonth'])
+                                        <span class="hidden md:block text-[6px] absolute bottom-1.5 font-black text-warna-500 tracking-tighter uppercase italic">
+                                            Aktif
+                                        </span>
                                     @endif
 
                                     @if($day['isAttended'])
-                                        <div class="absolute top-1.5 right-1.5 w-2 h-2 bg-warna-500 rounded-full shadow-[0_0_8px_rgba(var(--warna-500),0.8)] border-2 border-[#0F172A]"></div>
+                                        <div class="hidden md:block absolute top-1.5 right-1.5 w-2 h-2 bg-warna-500 rounded-full shadow-[0_0_8px_rgba(var(--warna-500),0.8)] border-2 border-[#0F172A]"></div>
                                     @endif
                                 </div>
                             @endforeach

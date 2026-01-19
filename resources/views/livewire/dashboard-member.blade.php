@@ -1,255 +1,169 @@
 <div class="min-h-screen select-none">
     <!---mobile-->
-    <div class="w-full max-w-lg mx-auto lg:hidden ">
-        <div class="mb-8 flex items-center justify-start ">
-            <div x-data="{ sidebarOpen: false }">
-                <!-- Avatar Trigger -->
-                <i @click="sidebarOpen = true"
-                    class="mr-4 fa-solid fa-circle-user text-4xl cursor-pointer text-warna-300 active:scale-95 transition-all hover:text-warna-400"></i>
+  <div class="w-full max-w-lg mx-auto lg:hidden pb-12 custom-scrollbar">
+    
+    <div class="flex items-center justify-between mb-8">
+        <div class="flex items-center gap-3">
+            <div class="w-1.5 h-6 bg-warna-500 rounded-full shadow-[0_0_10px_rgba(var(--warna-500),0.5)]"></div>
+            <span class="text-base font-black text-[#0F172A] uppercase italic tracking-wider">Member <span class="text-warna-500">Area</span></span>
+        </div>
+        
+        <div x-data="{ sidebarOpen: false }">
+            <div @click="sidebarOpen = true" class="w-10 h-10 bg-[#0F172A] rounded-xl flex items-center justify-center shadow-lg shadow-warna-500/20 border border-warna-500/20 cursor-pointer active:scale-90 transition-all">
+                <i class="fa-solid fa-user-ninja text-warna-500 text-lg"></i>
+            </div>
 
-                <!-- Overlay -->
-                <div x-show="sidebarOpen" x-cloak @click="sidebarOpen = false"
-                    x-transition:enter="transition-opacity ease-linear duration-300" x-transition:enter-start="opacity-0"
-                    x-transition:enter-end="opacity-100"
-                    x-transition:leave="transition-opacity ease-linear duration-300"
-                    x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
-                    class="fixed inset-0 z-40 bg-warna-300/50">
+            <div x-show="sidebarOpen" x-cloak @click="sidebarOpen = false"
+                x-transition:enter="transition-opacity duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                class="fixed inset-0 z-40 bg-[#0F172A]/80 backdrop-blur-sm">
+            </div>
+
+            <div x-show="sidebarOpen" x-cloak 
+                x-transition:enter="transition ease-out duration-300 transform" x-transition:enter-start="-translate-x-full" x-transition:enter-end="translate-x-0"
+                class="fixed top-0 left-0 z-50 h-full w-[85%] bg-white shadow-2xl overflow-hidden flex flex-col">
+                
+                <div class="bg-[#0F172A] p-8 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-warna-500 opacity-10 rounded-full -mr-12 -mt-12 blur-2xl"></div>
+                    <div class="flex flex-col items-center text-center relative z-10">
+                        <div class="w-20 h-20 bg-warna-500 rounded-[2rem] flex items-center justify-center shadow-lg shadow-warna-500/30 transform -rotate-6 mb-4 border-4 border-[#0F172A]">
+                            <i class="fa-solid fa-user-tie text-[#0F172A] text-3xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-black text-white uppercase italic tracking-tight">{{ Auth::user()->name }}</h3>
+                            <div class="inline-block px-3 py-1 bg-warna-500/10 border border-warna-500/20 rounded-full mt-1">
+                                <p class="text-warna-500 text-[9px] font-black tracking-[0.2em] uppercase italic">{{ Auth::user()->role }}</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Sidebar Panel -->
-                <div x-show="sidebarOpen" x-cloak x-transition:enter="transition ease-in-out duration-300 transform"
-                    x-transition:enter-start="-translate-x-full" x-transition:enter-end="translate-x-0"
-                    x-transition:leave="transition ease-in-out duration-300 transform"
-                    x-transition:leave-start="translate-x-0" x-transition:leave-end="-translate-x-full"
-                    class="fixed top-0 left-0 z-50 h-full w-full md:w-1/2 bg-white shadow-lg">
+                <div class="flex-1 overflow-y-auto p-6 space-y-6">
+                    <div class="space-y-4">
+                        <x-g-input label="Nama Lengkap" type="text" :disabled="!$isEditMode" wire:model.live="name"
+                            class="w-full text-[11px] font-bold border-slate-100 focus:ring-warna-500" />
+                        <x-g-input label="Email" type="email" :disabled="!$isEditMode" wire:model.live="email"
+                            class="w-full text-[11px] font-bold border-slate-100 focus:ring-warna-500" />
+                        <x-g-input label="No. Telepon" type="text" :disabled="!$isEditMode" wire:model.live="nomor_telepon"
+                            class="w-full text-[11px] font-bold border-slate-100 focus:ring-warna-500" />
+                    </div>
 
-                    <!-- Header -->
-                    <div class="flex items-center justify-between p-4 border-b border-gray-200">
-                        <div class="flex items-center space-x-3">
-                            <button @click="sidebarOpen = false" class="text-warna-300 hover:text-gray-600">
-                                <i class="fa-solid fa-angle-left text-xl"></i>
+                    <div class="pt-6 border-t border-slate-100 space-y-3">
+                        @if (!$isEditMode)
+                            <button wire:click="toggleEditMode" class="w-full py-4 bg-warna-500 text-[#0F172A] font-black text-[10px] uppercase italic rounded-2xl shadow-lg shadow-warna-500/20 active:scale-95 transition-all">
+                                <i class="fa-solid fa-user-pen mr-2"></i> Edit Profil
                             </button>
-                            <h3 class="text-lg font-semibold text-warna-300">User Profile</h3>
-                        </div>
-                    </div>
-
-                    <!-- Content - AREA LIVEWIRE -->
-                    <div class="overflow-y-auto h-full pb-20">
-                        <div class="bg-white px-6 py-10 w-full flex flex-col items-center">
-
-                            <!-- Avatar -->
-                            <div
-                                class="w-28 h-28 rounded-full bg-warna-400 font-semibold text-[#0F172A] flex items-center justify-center">
-                                {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
-                            </div>
-
-                            <!-- User Info -->
-                            <p class="text-2xl font-bold mt-6 text-center">{{ Auth::user()->name }}</p>
-                            <div class="bg-warna-700/30 text-warna-700 px-2 py-1 rounded-full text-sm mt-4">
-                                {{ Auth::user()->role }}</div>
-
-                            <!-- Profile Form - PURE LIVEWIRE AREA -->
-                            <div class="w-full mt-10 space-y-6">
-                                <x-g-input label="Nama Lengkap" type="text" :disabled="!$isEditMode"
-                                    value="{{ Auth::user()->name }}" wire:model.live="name"
-                                    class="w-full disabled:bg-gray-100 disabled:text-gray-500 disabled:cursor-not-allowed {{ $isEditMode ? 'focus:ring-2 focus:ring-warna-400' : '' }}" />
-                                <x-g-input label="Username" type="text" :disabled="!$isEditMode"
-                                    value="{{ Auth::user()->username }}" wire:model.live="username"
-                                    class="w-full disabled:bg-gray-100 disabled:text-gray-500 disabled:cursor-not-allowed {{ $isEditMode ? 'focus:ring-2 focus:ring-warna-400' : '' }}" />
-                                <x-g-input label="Email" type="email" :disabled="!$isEditMode"
-                                    value="{{ Auth::user()->email }}" wire:model.live="email"
-                                    class="w-full disabled:bg-gray-100 disabled:text-gray-500 disabled:cursor-not-allowed {{ $isEditMode ? 'focus:ring-2 focus:ring-warna-400' : '' }}" />
-                                <x-g-input label="No. Telepon" type="text" :disabled="!$isEditMode"
-                                    value="{{ Auth::user()->nomor_telepon }}" wire:model.live="nomor_telepon"
-                                    class="w-full disabled:bg-gray-100 disabled:text-gray-500 disabled:cursor-not-allowed {{ $isEditMode ? 'focus:ring-2 focus:ring-warna-400' : '' }}" />
-                            </div>
-
-                            <!-- Action Buttons - PURE LIVEWIRE -->
-                            <div class="w-full mt-6 space-y-3">
-                                @if (!$isEditMode)
-                                    <!-- Edit Button -->
-                                    <button wire:click="toggleEditMode"
-                                        class="w-full bg-warna-400 hover:bg-warna-400/80 text-[#0F172A] font-semibold py-3 px-4 rounded-lg transition-all active:scale-95">
-                                        Edit Profil
-                                    </button>
-
-                                    <!-- Change Password Button -->
-                                    <button wire:click="toggleChangePasswordModal"
-                                        class="w-full bg-warna-400 border border-warna-400 hover:bg-warna-400 text-[#0F172A] hover:text-white font-semibold py-3 px-4 rounded-lg transition-all active:scale-95">
-                                        Ganti Password
-                                    </button>
-
-                                    <a href="{{ route('logout') }}"
-                                        class="mt-12 w-full text-warna-900 font-semibold py-3 px-4 rounded-lg transition-all active:scale-95 block text-center">
-                                        <i class="fa-solid fa-right-from-bracket mr-2"></i> Logout
-                                    </a>
-                                @else
-                                    <!-- Save & Cancel Buttons -->
-                                    <div class="grid grid-cols-2 gap-3">
-                                        <button wire:click="toggleEditMode"
-                                            class="border-2 border-warna-400 text-[#0F172A] hover:text-[#0F172A] hover:bg-warna-400 font-semibold py-3 px-4 rounded-lg transition-all active:scale-95">
-                                            Batal
-                                        </button>
-                                        <button wire:click="updateProfile" wire:loading.attr="disabled"
-                                            wire:target="updateProfile"
-                                            class="bg-warna-400 hover:bg-warna-400/80 disabled:opacity-50 disabled:cursor-not-allowed text-[#0F172A] font-semibold py-3 px-4 rounded-lg transition-all active:scale-95">
-                                            <span wire:loading.remove wire:target="updateProfile">Simpan</span>
-                                            <span wire:loading wire:target="updateProfile">Menyimpan...</span>
-                                        </button>
-                                    </div>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <h3 class="text-sm font-medium">Selamat Datang Kembali,</h3>
-                <h1 class="text-xl font-bold text-warna-300">{{ Auth::user()->name }}
-                    <span
-                        class="text-xs font-medium rounded-full px-2 py-1 
-                        {{ Auth::user()->status === 'active' ? 'bg-warna-500/30 text-[#0F172A]' : 'bg-warna-900/20 text-warna-900' }}">
-                        {{ Auth::user()->status }}
-                    </span>
-                </h1>
-            </div>
-        </div>
-        <div class="mt-6 bg-white px-6 py-5 rounded-lg w-full shadow-md">
-            <div class="flex w-full items-center justify-between">
-                <div>
-                    <h2 class="text-lg font-semibold">Absensi Hari Ini</h2>
-                    <p class="text-sm text-warna-200/80">{{ now()->format('d F Y') }}</p>
-                </div>
-                <div
-                    class="w-14 h-14 {{ $isAttendedToday ? 'bg-warna-700' : 'bg-warna-900' }} rounded-lg flex items-center justify-center">
-                    <i
-                        class="fas {{ $isAttendedToday ? 'fa-calendar-check' : 'fa-calendar-xmark' }} text-3xl text-warna-50"></i>
-                </div>
-            </div>
-        </div>
-        <div class="mt-6 w-full grid grid-cols-3 gap-3">
-            <div
-                class="bg-white px-3 py-4 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center justify-center text-center">
-                <div class="w-8 h-8 bg-warna-700/30 rounded-full flex items-center justify-center mb-2">
-                    <i class="fas fa-check text-warna-700"></i>
-                </div>
-                <h3 class="text-xs font-medium text-gray-500 mb-1">Hadir</h3>
-                <p class="text-xl font-bold text-gray-800">{{ $totalHadir }}</p>
-            </div>
-            <div
-                class="bg-white px-3 py-4 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center justify-center text-center">
-                <div class="w-8 h-8 bg-warna-900/30 rounded-full flex items-center justify-center mb-2">
-                    <i class="fas fa-times text-sm text-warna-900"></i>
-                </div>
-                <h3 class="text-xs font-medium text-gray-500 mb-1">Tidak Hadir</h3>
-                <p class="text-xl font-bold text-gray-800">{{ $totalTidakHadir }}</p>
-            </div>
-            <div
-                class="bg-white px-3 py-4 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center justify-center text-center">
-                <div class="w-8 h-8 bg-warna-600/30 rounded-full flex items-center justify-center mb-2">
-                    <i class="fas fa-calendar text-sm text-warna-600"></i>
-                </div>
-                <h3 class="text-xs font-medium text-gray-500 mb-1">Masa Aktif</h3>
-                <p class="text-xl font-bold text-gray-800">{{ $sisaHariAktif }}</p>
-            </div>
-        </div>
-
-        <!--kalender riwayat absensi-->
-        <div class="mt-6 bg-white px-4 py-5 rounded-lg w-full shadow-md">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="text-lg font-semibold">Riwayat Absensi</h3>
-                <span class="text-sm text-warna-600 font-medium">{{ $persentaseKehadiran }}%</span>
-            </div>
-
-            <!-- Month/Year Selector -->
-            <div class="flex gap-3 mb-4">
-                <div class="flex-1">
-                    <select wire:model.live="selectedMonth"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-warna-500 focus:border-transparent">
-                        @foreach ($monthOptions as $value => $label)
-                            <option value="{{ $value }}">{{ $label }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="flex-1">
-                    <select wire:model.live="selectedYear"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-warna-500 focus:border-transparent">
-                        @foreach ($yearOptions as $value => $label)
-                            <option value="{{ $value }}">{{ $label }}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-
-            <!-- Header Hari -->
-            <div class="grid grid-cols-7 gap-1 mb-2">
-                @foreach (['S', 'S', 'R', 'K', 'J', 'S', 'M'] as $day)
-                    <div class="text-center text-xs font-medium text-gray-500 py-1">{{ $day }}</div>
-                @endforeach
-            </div>
-
-            <!-- Kalender Grid Mobile -->
-            <div class="grid grid-cols-7 gap-1 mb-6">
-                @foreach ($calendarDays as $day)
-                    <div
-                        class="relative h-10 flex items-center justify-center text-sm border border-gray-200 rounded
-                        {{ !$day['isCurrentMonth'] ? 'bg-gray-50 text-gray-400' : 'bg-white' }}
-                        {{ $day['isToday'] ? 'ring-2 ring-warna-500' : '' }}
-                        {{ $day['isAttended'] ? 'bg-green-100' : '' }}
-                        {{ $day['isMembershipActive'] && !$day['isAttended'] ? 'bg-blue-50 border-blue-200' : '' }}">
-
-                        <span
-                            class="
-                            {{ $day['isAttended'] ? 'text-blue-400 font-semibold' : '' }}
-                            {{ $day['isMembershipActive'] && !$day['isAttended'] ? 'text-blue-400' : '' }}
-                            {{ !$day['isMembershipActive'] && $day['isCurrentMonth'] ? 'text-gray-700' : '' }}
-                            {{ !$day['isCurrentMonth'] ? 'text-gray-400' : '' }}">
-                            {{ $day['day'] }}
-                        </span>
-
-                        @if ($day['isAttended'])
-                            <div class="absolute top-0 right-0 -mt-1 -mr-1">
-                                <div class="w-4 h-4 bg-green-500 rounded-full flex items-center justify-center">
-                                    <i class="fas fa-check text-white text-xs"></i>
-                                </div>
+                            <button wire:click="toggleChangePasswordModal" class="w-full py-4 bg-white border-2 border-slate-100 text-slate-600 font-black text-[10px] uppercase italic rounded-2xl">
+                                <i class="fa-solid fa-shield-halved mr-2"></i> Ganti Password
+                            </button>
+                            <a href="{{ route('logout') }}" class="flex items-center justify-center w-full py-4 text-rose-500 font-black text-[10px] uppercase italic">
+                                <i class="fa-solid fa-power-off mr-2"></i> Logout
+                            </a>
+                        @else
+                            <div class="grid grid-cols-2 gap-3">
+                                <button wire:click="toggleEditMode" class="py-4 border-2 border-slate-100 font-black text-[10px] uppercase italic rounded-2xl text-slate-500">Batal</button>
+                                <button wire:click="updateProfile" class="py-4 bg-[#0F172A] text-warna-500 font-black text-[10px] uppercase italic rounded-2xl shadow-lg">Simpan</button>
                             </div>
                         @endif
                     </div>
-                @endforeach
-            </div>
-
-            <!-- keterangan kalendar Mobile -->
-            <div class="grid grid-cols-2 gap-2 text-xs">
-                <div class="flex items-center gap-1.5">
-                    <div class="w-3 h-3 bg-green-100 border border-green-200 rounded flex items-center justify-center">
-                        <i class="fas fa-check text-green-600 text-xs"></i>
-                    </div>
-                    <span class="text-gray-600">Hadir</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                    <div
-                        class="w-3 h-3 bg-blue-50 border border-blue-200 rounded flex items-center justify-center text-blue-400 text-xs font-semibold">
-                        1
-                    </div>
-                    <span class="text-gray-600">Membership Aktif</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                    <div
-                        class="w-3 h-3 bg-white border border-gray-200 rounded flex items-center justify-center text-gray-700 text-xs">
-                        1
-                    </div>
-                    <span class="text-gray-600">Membership Tidak Aktif</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                    <div class="w-3 h-3 bg-white border-2 border-warna-500 rounded"></div>
-                    <span class="text-gray-600">Hari Ini</span>
                 </div>
             </div>
-
         </div>
-
     </div>
 
+    <div class="bg-[#0F172A] rounded-[2.5rem] p-7 mb-8 shadow-2xl relative overflow-hidden border border-white/5">
+        <div class="absolute top-0 right-0 w-40 h-40 bg-warna-500 opacity-10 rounded-full -mr-20 -mt-20 blur-3xl"></div>
+        <div class="flex items-center justify-between relative z-10">
+            <div>
+                <p class="text-warna-500 text-[10px] font-black uppercase tracking-[0.3em] italic mb-1">Status Kehadiran</p>
+                <h2 class="text-white text-3xl font-black uppercase italic leading-none">HARI INI</h2>
+                <div class="flex items-center gap-2 mt-3">
+                    <div class="w-2 h-2 rounded-full {{ $isAttendedToday ? 'bg-green-500 animate-pulse' : 'bg-rose-500' }}"></div>
+                    <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest">{{ now()->translatedFormat('l, d F Y') }}</p>
+                </div>
+            </div>
+            <div class="w-16 h-16 {{ $isAttendedToday ? 'bg-warna-500 shadow-warna-500/40' : 'bg-slate-800 border border-white/10' }} rounded-2xl flex items-center justify-center shadow-2xl transform rotate-6 transition-all duration-500">
+                <i class="fas {{ $isAttendedToday ? 'fa-user-check text-[#0F172A]' : 'fa-fingerprint text-warna-500' }} text-3xl"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-3 gap-4 mb-8">
+        <div class="bg-white border-2 border-slate-100 p-5 rounded-[2rem] shadow-sm text-center relative overflow-hidden group">
+            <i class="fa-solid fa-users text-[40px] absolute -bottom-2 -right-2 opacity-5 text-[#0F172A] group-hover:scale-110 transition-transform"></i>
+            <div class="text-2xl font-black text-[#0F172A] italic leading-none relative z-10">{{ $totalHadir }}</div>
+            <div class="text-[8px] font-black text-slate-400 uppercase mt-2 tracking-widest relative z-10">Hadir</div>
+        </div>
+        <div class="bg-white border-2 border-slate-100 p-5 rounded-[2rem] shadow-sm text-center relative overflow-hidden group">
+             <i class="fa-solid fa-user-slash text-[40px] absolute -bottom-2 -right-2 opacity-5 text-rose-500"></i>
+            <div class="text-2xl font-black text-rose-500 italic leading-none relative z-10">{{ $totalTidakHadir }}</div>
+            <div class="text-[8px] font-black text-slate-400 uppercase mt-2 tracking-widest relative z-10">Tidak Hadir</div>
+        </div>
+        <div class="bg-warna-500 p-5 rounded-[2rem] shadow-lg shadow-warna-500/20 text-center relative overflow-hidden group">
+            <i class="fa-solid fa-user-clock text-[40px] absolute -bottom-2 -right-2 opacity-10 text-[#0F172A]"></i>
+            <div class="text-2xl font-black text-[#0F172A] italic leading-none relative z-10">{{ $sisaHariAktif }}</div>
+            <div class="text-[8px] font-black text-[#0F172A] uppercase mt-2 tracking-widest opacity-80 relative z-10">Aktif</div>
+        </div>
+    </div>
+
+    <div class="bg-white border-2 border-slate-100 rounded-[2.5rem] p-6 shadow-sm mb-6">
+        <div class="flex items-center justify-between mb-8">
+            <h4 class="text-[11px] font-black text-[#0F172A] uppercase italic tracking-widest flex items-center">
+                <i class="fa-solid fa-calendar-days text-warna-500 mr-2 text-sm"></i>
+                Histori Absensi
+            </h4>
+            <div class="px-4 py-1.5 bg-[#0F172A] rounded-full text-[10px] font-black text-warna-500 italic shadow-lg">
+                {{ $persentaseKehadiran }}% SCORE
+            </div>
+        </div>
+
+        <div class="flex gap-2 mb-6 bg-slate-100 p-2 rounded-2xl border border-slate-200 shadow-inner">
+            <select wire:model.live="selectedMonth" class="flex-1 bg-white border-none text-[10px] font-black uppercase text-[#0F172A] rounded-xl py-2 shadow-sm">
+                @foreach($monthOptions as $value => $label) <option value="{{ $value }}">{{ $label }}</option> @endforeach
+            </select>
+            <select wire:model.live="selectedYear" class="flex-1 bg-white border-none text-[10px] font-black uppercase text-[#0F172A] rounded-xl py-2 shadow-sm">
+                @foreach($yearOptions as $value => $label) <option value="{{ $value }}">{{ $label }}</option> @endforeach
+            </select>
+        </div>
+
+        <div class="grid grid-cols-7 gap-2 mb-8">
+            @foreach(['S', 'S', 'R', 'K', 'J', 'S', 'M'] as $dayName)
+                <div class="text-center text-[9px] font-black text-slate-300 uppercase py-2 tracking-widest">{{ $dayName }}</div>
+            @endforeach
+            
+            @foreach($calendarDays as $day)
+                <div class="aspect-square relative flex flex-col items-center justify-center text-[11px] font-black rounded-xl border-2 transition-all duration-300
+                    {{ !$day['isCurrentMonth'] ? 'bg-slate-50 text-slate-200 border-transparent opacity-40' : '' }}
+                    {{ $day['isCurrentMonth'] && !$day['isMembershipActive'] ? 'bg-slate-50 text-slate-400 border-slate-100' : '' }}
+                    {{ $day['isCurrentMonth'] && $day['isMembershipActive'] && !$day['isAttended'] ? 'bg-white text-slate-800 border-warna-500/10 shadow-sm' : '' }}
+                    {{ $day['isAttended'] ? 'bg-[#0F172A] text-white border-warna-500 shadow-xl scale-[1.05] z-10' : '' }}
+                    {{ $day['isToday'] && !$day['isAttended'] ? 'ring-2 ring-warna-500 ring-offset-2 border-transparent' : '' }}">
+                    
+                    {{ $day['day'] }}
+
+                    @if($day['isMembershipActive'] && !$day['isAttended'] && $day['isCurrentMonth'])
+                        <div class="absolute bottom-1.5 w-1 h-1 bg-warna-500 rounded-full"></div>
+                    @endif
+
+                    @if($day['isAttended'])
+                        <div class="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-warna-500 rounded-full border border-[#0F172A] shadow-[0_0_5px_rgba(var(--warna-500),0.8)]"></div>
+                    @endif
+                </div>
+            @endforeach
+        </div>
+
+        <div class="bg-slate-50 rounded-3xl p-5 border border-slate-100 flex flex-wrap gap-5 justify-center">
+            <div class="flex items-center gap-2 text-[8px] font-black text-[#0F172A] uppercase italic">
+                <div class="w-3.5 h-3.5 bg-[#0F172A] rounded-lg border border-warna-500/30"></div> HADIR
+            </div>
+            <div class="flex items-center gap-2 text-[8px] font-black text-warna-500 uppercase italic">
+                <div class="w-3.5 h-3.5 bg-white border-2 border-warna-500/30 rounded-lg"></div> AKTIF
+            </div>
+            <div class="flex items-center gap-2 text-[8px] font-black text-warna-500 uppercase italic">
+                <div class="w-3.5 h-3.5 ring-2 ring-warna-500 rounded-lg ring-offset-1"></div> HARI INI
+            </div>
+        </div>
+    </div>
+</div>
     <!--floating button for absense-->
     <div class="fixed bottom-4 right-4 z-30 lg:hidden">
         <button wire:click="openQrScanner"
@@ -262,284 +176,210 @@
     </div>
 
     <!--desktop-->
-    <div class="hidden lg:block">
-        <div class="max-w-7xl mx-auto px-4 py-10">
-            <div class="flex items-start gap-5 h-max">
-                <div class="bg-white shadow-md rounded-lg px-6 py-10 w-1/3 flex flex-col items-center h-full">
+  <div class="hidden lg:block bg-slate-50/50">
+    <div class="max-w-7xl mx-auto px-6 py-10">
+        <div class="flex items-start gap-8">
+            
+            <div class="w-1/3 sticky top-10">
+                <div class="bg-white rounded-[2.5rem] shadow-xl shadow-slate-200/60 overflow-hidden border border-slate-100">
+                    <div class="bg-[#0F172A] p-10 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-warna-500 opacity-10 rounded-full -mr-16 -mt-16 blur-3xl"></div>
+                        <div class="flex flex-col items-center relative z-10">
+                            <div class="w-24 h-24 bg-warna-500 rounded-[2rem] flex items-center justify-center shadow-lg shadow-warna-500/40 transform -rotate-6 border-4 border-[#0F172A]">
+                                <i class="fa-solid fa-user-ninja text-[#0F172A] text-4xl"></i>
+                            </div>
+                            <h2 class="text-2xl font-black text-white mt-6 uppercase italic tracking-tight text-center">{{ Auth::user()->name }}</h2>
+                            <span class="px-4 py-1 bg-warna-500/20 border border-warna-500/30 rounded-full text-[10px] font-black uppercase text-warna-500 italic mt-2 tracking-widest">
+                                {{ Auth::user()->role }}
+                            </span>
+                        </div>
+                    </div>
 
-                    <div
-                        class="w-28 h-28 rounded-full bg-warna-400 font-semibold text-white flex items-center justify-center">
-                        {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
+                    <div class="p-8 space-y-5">
+                        <div class="space-y-4">
+                            <x-g-input label="Nama Lengkap" type="text" :disabled="!$isEditMode" wire:model.live="name"
+                                class="w-full text-sm font-bold border-slate-100 focus:ring-warna-500 rounded-xl" />
+                            <x-g-input label="Username" type="text" :disabled="!$isEditMode" wire:model.live="username"
+                                class="w-full text-sm font-bold border-slate-100 focus:ring-warna-500 rounded-xl" />
+                            <x-g-input label="Email" type="email" :disabled="!$isEditMode" wire:model.live="email"
+                                class="w-full text-sm font-bold border-slate-100 focus:ring-warna-500 rounded-xl" />
+                            <x-g-input label="No. Telepon" type="text" :disabled="!$isEditMode" wire:model.live="nomor_telepon"
+                                class="w-full text-sm font-bold border-slate-100 focus:ring-warna-500 rounded-xl" />
+                        </div>
+
+                        <div class="pt-6 space-y-3">
+                            <div class="flex gap-3">
+                                <button wire:click="toggleEditMode"
+                                    class="{{ $isEditMode ? 'w-1/2' : 'w-full' }} py-4 font-black text-[11px] uppercase italic rounded-2xl transition-all active:scale-95 shadow-lg {{ $isEditMode ? 'border-2 border-slate-200 text-slate-500' : 'bg-warna-500 text-[#0F172A] shadow-warna-500/20' }}">
+                                    <i class="fa-solid {{ $isEditMode ? 'fa-xmark' : 'fa-user-pen' }} mr-2"></i>
+                                    {{ $isEditMode ? 'Batal' : 'Edit Profile' }}
+                                </button>
+                                @if ($isEditMode)
+                                    <button wire:click="updateProfile" wire:loading.attr="disabled"
+                                        class="w-1/2 bg-[#0F172A] text-warna-500 font-black text-[11px] uppercase italic py-4 rounded-2xl shadow-xl active:scale-95 flex items-center justify-center gap-2">
+                                        <span wire:loading.remove>Simpan</span>
+                                        <span wire:loading>Menyimpan...</span>
+                                    </button>
+                                @endif
+                            </div>
+                            
+                            @if (!$isEditMode)
+                                <button wire:click="toggleChangePasswordModal"
+                                    class="w-full bg-white border-2 border-slate-100 text-slate-600 font-black text-[11px] uppercase italic py-4 rounded-2xl hover:bg-slate-50 transition-all">
+                                    <i class="fa-solid fa-shield-halved mr-2"></i> Ganti Password
+                                </button>
+                            @endif
+                        </div>
                     </div>
-                    <p class="text-2xl font-bold mt-6 text-center">{{ Auth::user()->name }}</p>
-                    <div class="bg-warna-700/30 text-warna-700 px-2 py-1 rounded-full text-sm mt-4">
-                        {{ Auth::user()->role }}</div>
-                    <div class="w-full mt-10 space-y-6">
-                        <x-g-input label="Nama Lengkap" type="text" value="{{ Auth::user()->name }}"
-                            :disabled="!$isEditMode" wire:model.live="name"
-                            class="w-full disabled:bg-gray-100 disabled:text-gray-500 disabled:cursor-not-allowed {{ $isEditMode ? 'focus:ring-2 focus:ring-warna-400' : '' }}" />
-                        <x-g-input label="Username" type="text" value="{{ Auth::user()->username }}"
-                            :disabled="!$isEditMode" wire:model.live="username"
-                            class="w-full disabled:bg-gray-100 disabled:text-gray-500 disabled:cursor-not-allowed {{ $isEditMode ? 'border-warna-400' : '' }}" />
-                        <x-g-input label="Email" type="email" value="{{ Auth::user()->email }}" :disabled="!$isEditMode"
-                            wire:model.live="email"
-                            class="w-full disabled:bg-gray-100 disabled:text-gray-500 disabled:cursor-not-allowed {{ $isEditMode ? 'border-warna-400' : '' }}" />
-                        <x-g-input label="No. Telepon" type="text" value="{{ Auth::user()->phone }}"
-                            :disabled="!$isEditMode" wire:model.live="nomor_telepon"
-                            class="w-full disabled:bg-gray-100 disabled:text-gray-500 disabled:cursor-not-allowed {{ $isEditMode ? 'border-warna-400' : '' }}" />
+                </div>
+            </div>
+
+            <div class="w-2/3 space-y-8">
+                
+                <div class="grid grid-cols-3 gap-6">
+                    <div class="bg-white rounded-[2rem] p-6 shadow-sm border-2 border-slate-100 relative overflow-hidden group">
+                        <i class="fa-solid fa-users text-6xl absolute -bottom-4 -right-4 opacity-5 text-[#0F172A] group-hover:scale-110 transition-transform"></i>
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 bg-green-50 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-check text-green-500"></i>
+                            </div>
+                            <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest italic">Total Hadir</h3>
+                        </div>
+                        <div class="relative z-10">
+                            <p class="text-4xl font-black text-[#0F172A] italic">{{ $totalHadir }} <span class="text-xs font-bold text-slate-400 uppercase not-italic">Hari</span></p>
+                            <div class="w-full bg-slate-100 h-1.5 rounded-full mt-4">
+                                <div class="bg-green-500 h-1.5 rounded-full" style="width: {{ min(100, $persentaseKehadiran) }}%"></div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="w-full mt-10 flex gap-2">
-                        <button wire:click="toggleEditMode"
-                            class="{{ $isEditMode ? 'w-1/2' : 'w-full' }}  font-semibold py-3 px-4 rounded-lg transition-all active:scale-95 {{ $isEditMode ? 'border-2 border-warna-400 text-[#0F172A] hover:text-[#0F172A] hover:bg-warna-400' : 'text-[#0F172A] bg-warna-400 hover:bg-warna-400/80' }}">
-                            {{ $isEditMode ? 'Batal' : 'Edit Profile' }}
-                        </button>
-                        @if ($isEditMode)
-                            <button wire:click="updateProfile" wire:loading.attr="disabled"
-                                wire:target="updateProfile"
-                                class="w-1/2 bg-warna-400 hover:bg-warna-400/80 disabled:bg-warna-400/50 disabled:cursor-not-allowed text-[#0F172A] font-semibold py-3 px-4 rounded-lg transition-all active:scale-95 flex items-center justify-center gap-2">
-                                <span wire:loading.remove wire:target="updateProfile">Simpan</span>
-                                <span wire:loading wire:target="updateProfile" class="flex items-center gap-2">
-                                    Menyimpan...
-                                </span>
-                            </button>
-                        @endif
+
+                    <div class="bg-white rounded-[2rem] p-6 shadow-sm border-2 border-slate-100 relative overflow-hidden group">
+                        <i class="fa-solid fa-user-slash text-6xl absolute -bottom-4 -right-4 opacity-5 text-rose-500 group-hover:scale-110 transition-transform"></i>
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 bg-rose-50 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-times text-rose-500"></i>
+                            </div>
+                            <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest italic">Tidak Hadir</h3>
+                        </div>
+                        <div class="relative z-10">
+                            <p class="text-4xl font-black text-rose-500 italic">{{ $totalTidakHadir }} <span class="text-xs font-bold text-slate-400 uppercase not-italic">Hari</span></p>
+                            @php
+                                $absentPercentage = ($attendanceStats['membershipActiveDays'] ?? 0) > 0 
+                                    ? min(100, ($totalTidakHadir / $attendanceStats['membershipActiveDays']) * 100) : 0;
+                            @endphp
+                            <div class="w-full bg-slate-100 h-1.5 rounded-full mt-4">
+                                <div class="bg-rose-500 h-1.5 rounded-full" style="width: {{ $absentPercentage }}%"></div>
+                            </div>
+                        </div>
                     </div>
-                    @if (!$isEditMode)
-                        <button wire:click="toggleChangePasswordModal"
-                            class="mt-5 w-full bg-white border border-warna-400 hover:bg-warna-400 text-[#0F172A] hover:text-white font-semibold py-2 px-4 rounded-lg transition-all active:scale-95">
-                            Ganti Password
-                        </button>
-                    @endif
+
+                    <div class="bg-warna-500 rounded-[2rem] p-6 shadow-lg shadow-warna-500/20 relative overflow-hidden group">
+                        <i class="fa-solid fa-user-clock text-6xl absolute -bottom-4 -right-4 opacity-10 text-[#0F172A] group-hover:scale-110 transition-transform"></i>
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 bg-[#0F172A] rounded-xl flex items-center justify-center shadow-lg">
+                                <i class="fas fa-calendar text-warna-500"></i>
+                            </div>
+                            <h3 class="text-[10px] font-black text-[#0F172A] uppercase tracking-widest italic opacity-70">Masa Aktif</h3>
+                        </div>
+                        <div class="relative z-10">
+                            <p class="text-4xl font-black text-[#0F172A] italic">{{ $sisaHariAktif }} <span class="text-xs font-bold text-[#0F172A] uppercase not-italic opacity-70">Sisa</span></p>
+                            @php
+                                $progressPercentage = ($totalMembershipDays ?? 0) > 0 
+                                    ? min(100, max(0, ($sisaHariAktif / $totalMembershipDays) * 100)) : 0;
+                            @endphp
+                            <div class="w-full bg-[#0F172A]/10 h-1.5 rounded-full mt-4">
+                                <div class="bg-[#0F172A] h-1.5 rounded-full" style="width: {{ $progressPercentage }}%"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="w-2/3 space-y-6">
-                    <div class="w-full grid grid-cols-3 gap-6">
-                        <div
-                            class="bg-gradient-to-br from-white to-gray-50 shadow-lg rounded-2xl p-6 border border-gray-100">
-                            <div class="flex items-center justify-between mb-4">
-                                <div
-                                    class="w-12 h-12 bg-warna-700/30 rounded-xl flex items-center justify-center shadow-md">
-                                    <i class="fas fa-check text-xl text-warna-700"></i>
-                                </div>
-                                <div class="text-right">
-                                    <p class="text-3xl font-extrabold text-gray-800">{{ $totalHadir }}</p>
-                                    <span class="text-xs text-gray-500 bg-green-100 px-2 py-1 rounded-full">hari</span>
-                                </div>
-                            </div>
-                            <h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wider">Total Hadir</h3>
-                            <div class="w-full bg-gray-200 rounded-full h-2 mt-3">
-                                <div class="bg-warna-700 h-2 rounded-full"
-                                    style="width: {{ min(100, $persentaseKehadiran) }}%"></div>
-                            </div>
-                        </div>
-
-                        <div
-                            class="bg-gradient-to-br from-white to-gray-50 shadow-lg rounded-2xl p-6 border border-gray-100">
-                            <div class="flex items-center justify-between mb-4">
-                                <div
-                                    class="w-12 h-12 bg-warna-900/30 rounded-xl flex items-center justify-center shadow-md">
-                                    <i class="fas fa-times text-xl text-warna-900"></i>
-                                </div>
-                                <div class="text-right">
-                                    <p class="text-3xl font-extrabold text-gray-800">{{ $totalTidakHadir }}</p>
-                                    <span class="text-xs text-gray-500 bg-red-100 px-2 py-1 rounded-full">hari
-                                        aktif</span>
-                                </div>
-                            </div>
-                            <h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wider">Tidak Hadir</h3>
-                            <div class="w-full bg-gray-200 rounded-full h-2 mt-3">
-                                <!-- ✅ PERBAIKAN: Progress bar berdasarkan hari membership aktif -->
-                                @php
-                                    $absentPercentage =
-                                        $attendanceStats['membershipActiveDays'] > 0
-                                            ? min(
-                                                100,
-                                                ($totalTidakHadir / $attendanceStats['membershipActiveDays']) * 100,
-                                            )
-                                            : 0;
-                                @endphp
-                                <div class="bg-warna-900 h-2 rounded-full transition-all duration-500"
-                                    style="width: {{ $absentPercentage }}%"></div>
-                            </div>
-                            <!-- ✅ TAMBAHKAN: Info tambahan -->
-                            <div class="flex justify-between text-xs text-gray-500 mt-1">
-                                <span>{{ $totalTidakHadir }} dari {{ $attendanceStats['membershipActiveDays'] ?? 0 }}
-                                    hari aktif</span>
-                                <span></span>
-                            </div>
-                        </div>
-
-                        <div
-                            class="bg-gradient-to-br from-white to-gray-50 shadow-lg rounded-2xl p-6 border border-gray-100">
-                            <div class="flex items-center justify-between mb-4">
-                                <div
-                                    class="w-12 h-12 bg-warna-600/30 rounded-xl flex items-center justify-center shadow-md">
-                                    <i class="fas fa-calendar text-xl text-warna-600"></i>
-                                </div>
-                                <div class="text-right">
-                                    <p class="text-3xl font-extrabold text-gray-800">{{ $sisaHariAktif }}</p>
-                                    <span class="text-xs text-gray-500 bg-blue-100 px-2 py-1 rounded-full">hari
-                                        tersisa</span>
-                                </div>
-                            </div>
-                            <h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wider">Masa Aktif</h3>
-                            <div class="w-full bg-gray-200 rounded-full h-2 mt-3">
-                                <!-- ✅ PERBAIKAN: Progress bar decrease berdasarkan sisa hari -->
-                                @php
-                                    $progressPercentage =
-                                        $totalMembershipDays > 0
-                                            ? min(100, max(0, ($sisaHariAktif / $totalMembershipDays) * 100))
-                                            : 0;
-                                @endphp
-                                <div class="bg-warna-600 h-2 rounded-full transition-all duration-500"
-                                    style="width: {{ $progressPercentage }}%"></div>
-                            </div>
-                            <!-- ✅ TAMBAHKAN: Info tambahan -->
-                            <div class="flex justify-between text-xs text-gray-500 mt-1">
-                                <span>{{ $sisaHariAktif }} hari tersisa</span>
-                                <span>{{ $totalMembershipDays }} hari total</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bg-white shadow-md rounded-lg px-6 py-6 flex items-center justify-between">
-                        <div class="flex items-center gap-4">
-                            <div
-                                class="w-14 h-14 {{ $isAttendedToday ? 'bg-warna-700' : 'bg-warna-900' }} rounded-lg flex items-center justify-center shadow-md">
-                                <i
-                                    class="fas {{ $isAttendedToday ? 'fa-calendar-check' : 'fa-calendar-xmark' }} text-white text-3xl"></i>
-                            </div>
-                            <div>
-
-                                <h3 class="text-lg font-semibold text-gray-800">
-                                    Absensi Hari Ini
-
-                                </h3>
-                                <p class="text-sm text-gray-600">{{ now()->format('d F Y') }}</p>
-
-                            </div>
+                <div class="bg-[#0F172A] rounded-[2.5rem] p-8 flex items-center justify-between shadow-2xl relative overflow-hidden border border-white/5">
+                    <div class="absolute top-0 right-0 w-64 h-64 bg-warna-500 opacity-5 rounded-full -mr-32 -mt-32 blur-3xl"></div>
+                    <div class="flex items-center gap-6 relative z-10">
+                        <div class="w-20 h-20 {{ $isAttendedToday ? 'bg-warna-500 shadow-warna-500/40' : 'bg-slate-800' }} rounded-3xl flex items-center justify-center shadow-2xl transform rotate-3 transition-all duration-500">
+                            <i class="fas {{ $isAttendedToday ? 'fa-user-check text-[#0F172A]' : 'fa-fingerprint text-warna-500' }} text-4xl"></i>
                         </div>
                         <div>
-                            @if (Auth::user()->status != 'active')
-                                <p class="text-xs text-gray-600 mb-1">Status Akun: {{ Auth::user()->status }}</p>
-                            @endif
-                            <button wire:click="openQrScanner"
-                                class=" font-semibold py-2 px-4 rounded-lg transition-all active:scale-95 flex items-center justify-center gap-3
-                                    {{ $isAttendedToday || Auth::user()->status != 'active' ? 'border-2 border-gray-400 bg-gray-300 text-warna-300 cursor-not-allowed' : 'text-[#0F172A] bg-warna-400 hover:bg-warna-400/80' }}"
-                                @disabled($isAttendedToday || Auth::user()->status != 'active')>
-                                <i class="bi bi-qr-code-scan text-2xl"></i>
-                                {{ $isAttendedToday ? 'Sudah Absen' : 'Scan QR Absen' }}
-                            </button>
+                            <h3 class="text-2xl font-black text-white uppercase italic italic">Absensi Hari Ini</h3>
+                            <p class="text-warna-500 text-xs font-bold uppercase tracking-[0.3em] mt-1">{{ now()->translatedFormat('l, d F Y') }}</p>
                         </div>
+                    </div>
+                    <div class="relative z-10">
+                        <button wire:click="openQrScanner"
+                            @disabled($isAttendedToday || Auth::user()->status != 'active')
+                            class="px-8 py-4 rounded-2xl font-black text-xs uppercase italic tracking-widest transition-all active:scale-95 flex items-center gap-3
+                            {{ $isAttendedToday || Auth::user()->status != 'active' ? 'bg-slate-800 text-slate-500 cursor-not-allowed border border-white/5' : 'bg-warna-500 text-[#0F172A] hover:shadow-xl hover:shadow-warna-500/20' }}">
+                            <i class="bi bi-qr-code-scan text-xl"></i>
+                            {{ $isAttendedToday ? 'Selesai Absen' : 'Scan QR Absensi' }}
+                        </button>
+                    </div>
+                </div>
 
+                <div class="bg-white rounded-[2.5rem] p-8 shadow-sm border-2 border-slate-100">
+                    <div class="flex items-center justify-between mb-10">
+                        <div class="flex items-center gap-3">
+                            <div class="w-1.5 h-6 bg-warna-500 rounded-full shadow-[0_0_10px_rgba(var(--warna-500),0.5)]"></div>
+                            <span class="text-base font-black text-[#0F172A] uppercase italic tracking-wider">Histori <span class="text-warna-500">Absensi</span></span>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="px-5 py-2 bg-[#0F172A] rounded-2xl text-[11px] font-black text-warna-500 italic shadow-lg">
+                                SCORE: {{ $persentaseKehadiran }}%
+                            </div>
+                            <div class="flex gap-2 bg-slate-50 p-1.5 rounded-2xl border border-slate-100 shadow-inner">
+                                <select wire:model.live="selectedMonth" class="bg-transparent border-none text-[10px] font-black uppercase text-[#0F172A] focus:ring-0">
+                                    @foreach ($monthOptions as $value => $label) <option value="{{ $value }}">{{ $label }}</option> @endforeach
+                                </select>
+                                <select wire:model.live="selectedYear" class="bg-transparent border-none text-[10px] font-black uppercase text-[#0F172A] focus:ring-0">
+                                    @foreach ($yearOptions as $value => $label) <option value="{{ $value }}">{{ $label }}</option> @endforeach
+                                </select>
+                            </div>
+                        </div>
                     </div>
 
-                    <!--kalender riwayat absensi-->
-                    <div class="bg-white shadow-md rounded-lg px-6 py-6">
-                        <div class="flex items-center justify-between mb-6">
-                            <h3 class="text-lg font-semibold text-gray-800">Riwayat Kehadiran</h3>
-                            <div class="text-right">
-                                <div class="text-2xl font-bold text-warna-600">{{ $persentaseKehadiran }}%</div>
-                                <div class="text-sm text-gray-600">Tingkat Kehadiran</div>
+                    <div class="grid grid-cols-7 gap-3 mb-8">
+                        @foreach (['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'] as $day)
+                            <div class="text-center text-[10px] font-black text-slate-300 uppercase py-2 tracking-widest">{{ $day }}</div>
+                        @endforeach
+
+                        @foreach ($calendarDays as $day)
+                            <div class="aspect-video relative flex flex-col items-center justify-center text-sm font-black rounded-2xl border-2 transition-all duration-300
+                                {{ !$day['isCurrentMonth'] ? 'bg-slate-50 text-slate-200 border-transparent opacity-40' : '' }}
+                                {{ $day['isCurrentMonth'] && !$day['isMembershipActive'] ? 'bg-slate-50 text-slate-400 border-slate-100' : '' }}
+                                {{ $day['isCurrentMonth'] && $day['isMembershipActive'] && !$day['isAttended'] ? 'bg-white text-[#0F172A] border-warna-500/10 hover:border-warna-500 shadow-sm' : '' }}
+                                {{ $day['isAttended'] ? 'bg-[#0F172A] text-white border-warna-500 shadow-xl scale-[1.02] z-10' : '' }}
+                                {{ $day['isToday'] && !$day['isAttended'] ? 'ring-2 ring-warna-500 ring-offset-4 border-transparent' : '' }}">
+                                
+                                <span class="text-lg italic">{{ $day['day'] }}</span>
+
+                                @if ($day['isAttended'])
+                                    <div class="absolute top-2 right-2 w-2 h-2 bg-warna-500 rounded-full border border-[#0F172A] shadow-[0_0_8px_rgba(var(--warna-500),0.8)]"></div>
+                                @endif
+                                
+                                @if($day['isMembershipActive'] && !$day['isAttended'] && $day['isCurrentMonth'])
+                                    <span class="text-[7px] absolute bottom-2 font-black text-warna-500 uppercase italic opacity-60">Membership</span>
+                                @endif
                             </div>
+                        @endforeach
+                    </div>
+
+                    <div class="flex items-center justify-center gap-8 pt-8 border-t border-slate-100">
+                        <div class="flex items-center gap-2 text-[10px] font-black text-[#0F172A] uppercase italic">
+                            <div class="w-4 h-4 bg-[#0F172A] rounded-lg border border-warna-500/30"></div> Hadir
                         </div>
-
-                        <!-- Month/Year Selector Desktop -->
-                        <div class="flex gap-4 mb-6">
-                            <div class="flex-1">
-                                <select wire:model.live="selectedMonth"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-warna-500 focus:border-transparent">
-                                    @foreach ($monthOptions as $value => $label)
-                                        <option value="{{ $value }}">{{ $label }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="flex-1">
-                                <select wire:model.live="selectedYear"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-warna-500 focus:border-transparent">
-                                    @foreach ($yearOptions as $value => $label)
-                                        <option value="{{ $value }}">{{ $label }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+                        <div class="flex items-center gap-2 text-[10px] font-black text-warna-500 uppercase italic">
+                            <div class="w-4 h-4 bg-white border-2 border-warna-500/30 rounded-lg"></div> Membership Aktif
                         </div>
-
-                        <!-- Header Hari Desktop -->
-                        <div class="grid grid-cols-7 gap-1 mb-2">
-                            @foreach (['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'] as $day)
-                                <div class="text-center text-sm font-medium text-gray-500 py-2">
-                                    {{ $day }}
-                                </div>
-                            @endforeach
+                        <div class="flex items-center gap-2 text-[10px] font-black text-warna-500 uppercase italic">
+                            <div class="w-4 h-4 ring-2 ring-warna-500 rounded-lg ring-offset-2"></div> Hari Ini
                         </div>
-
-                        <!-- Kalender Grid Desktop -->
-                        <div class="grid grid-cols-7 gap-1 mb-6">
-                            @foreach ($calendarDays as $day)
-                                <div
-                                    class="relative h-10 flex items-center justify-center text-sm border border-gray-200 rounded
-                                    {{ !$day['isCurrentMonth'] ? 'bg-gray-50 text-gray-400' : 'bg-white' }}
-                                    {{ $day['isToday'] ? 'ring-2 ring-warna-500' : '' }}
-                                    {{ $day['isAttended'] ? 'bg-green-100' : '' }}
-                                    {{ $day['isMembershipActive'] && !$day['isAttended'] ? 'bg-blue-50 border-blue-200' : '' }}">
-
-                                    <span
-                                        class="
-                                        {{ $day['isAttended'] ? 'text-green-800 font-semibold' : '' }}
-                                        {{ $day['isMembershipActive'] && !$day['isAttended'] ? 'text-blue-400' : '' }}
-                                        {{ !$day['isMembershipActive'] && $day['isCurrentMonth'] ? 'text-gray-700' : '' }}
-                                        {{ !$day['isCurrentMonth'] ? 'text-gray-400' : '' }}">
-                                        {{ $day['day'] }}
-                                    </span>
-
-                                    @if ($day['isAttended'])
-                                        <div class="absolute top-0 right-0 -mt-1 -mr-1">
-                                            <div
-                                                class="w-4 h-4 bg-green-500 rounded-full flex items-center justify-center">
-                                                <i class="fas fa-check text-white text-xs"></i>
-                                            </div>
-                                        </div>
-                                    @endif
-                                </div>
-                            @endforeach
-                        </div>
-
-
-                        <!-- Keterangan Desktop -->
-                        <div class="flex flex-wrap items-center gap-4 mb-4 text-sm">
-                            <div class="flex items-center gap-2">
-                                <div
-                                    class="w-4 h-4 bg-green-100 border border-green-200 rounded flex items-center justify-center">
-                                    <i class="fas fa-check text-green-600 text-xs"></i>
-                                </div>
-                                <span class="text-gray-600">Hadir</span>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <div
-                                    class="w-4 h-4 bg-blue-50 border border-blue-200 rounded flex items-center justify-center text-blue-400 text-xs font-semibold">
-                                    1
-                                </div>
-                                <span class="text-gray-600">Membership Aktif</span>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <div
-                                    class="w-4 h-4 bg-white border border-gray-200 rounded flex items-center justify-center text-gray-700 text-xs">
-                                    1
-                                </div>
-                                <span class="text-gray-600">Membership Tidak Aktif</span>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <div class="w-4 h-4 bg-white border-2 border-warna-500 rounded"></div>
-                                <span class="text-gray-600">Hari Ini</span>
-                            </div>
-                        </div>
-
-
                     </div>
                 </div>
 
             </div>
         </div>
     </div>
+</div>
 
     @if ($showQrScanner)
         <div x-data="{

@@ -580,7 +580,7 @@
             x-transition:leave="transition-all ease-in-out duration-300"
             x-transition:leave-start="opacity-100 translate-x-0"
             x-transition:leave-end="opacity-0 translate-x-full"
-            class="fixed top-24 right-0 bg-warna-400 text-white px-4 py-2 rounded-l-full hover:bg-warna-500 transition-colors z-50 xl:hidden">
+            class="fixed top-24 right-0 bg-warna-500 text-black px-4 py-2 rounded-l-full hover:bg-warna-500 transition-colors z-50 xl:hidden">
             <i class="fa-solid fa-receipt text-lg"></i>
         </button>
         @endif
@@ -799,7 +799,7 @@
          
             <!-- Toggle Button -->
             <button @click="showTable = !showTable"
-                    class="absolute -top-10 right-4 bg-warna-400 text-white px-4 py-2 rounded-t-lg hover:bg-warna-500 transition-colors">
+                    class="absolute -top-10 right-4 bg-warna-500 text-black px-4 py-2 rounded-t-lg hover:bg-warna-500 transition-colors">
                 <i class="fa-solid fa-angle-up text-lg transition-transform duration-300" 
                 :class="showTable ? 'rotate-180' : ''"></i>
             </button>
@@ -862,88 +862,97 @@
                     </div>
                 </div>
                 <!-- Riwayat Transaksi -->
-                <div>
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-lg font-semibold text-warna-700">Riwayat Transaksi</h3>
-                        <div class="text-xs text-gray-600">
-                            {{ count($todayTransactions ?? []) }} transaksi
+               <div class="space-y-4">
+    <div class="flex items-center justify-between px-2">
+        <div class="flex items-center gap-2">
+            <div class="w-1.5 h-6 bg-warna-500 rounded-full"></div>
+            <h3 class="text-sm font-black text-[#0F172A] uppercase italic tracking-widest">Riwayat Transaksi</h3>
+        </div>
+        <div class="px-3 py-1 bg-[#0F172A] rounded-lg shadow-sm">
+            <span class="text-[10px] font-black text-warna-500 uppercase italic">
+                {{ count($todayTransactions ?? []) }} Transaksi
+            </span>
+        </div>
+    </div>
+    
+    <div class="space-y-3">
+        @forelse($todayTransactions ?? [] as $transaction)
+            <div class="bg-white border-l-4 border-l-warna-500 rounded-2xl p-4 shadow-[0_4px_15px_-3px_rgba(0,0,0,0.05)] border border-slate-100 relative overflow-hidden group">
+                <div class="absolute -right-4 -bottom-4 w-16 h-16 bg-slate-50 rounded-full group-hover:bg-warna-500/10 transition-colors duration-300"></div>
+
+                <div class="flex justify-between items-center relative z-10">
+                    <div class="flex-1">
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[9px] font-black uppercase tracking-tighter italic
+                                {{ $transaction->transaction_type === 'membership_payment' ? 'bg-blue-500 text-white' : 
+                                   ($transaction->transaction_type === 'daily_visit_fee' ? 'bg-warna-500 text-[#0F172A]' : 'bg-purple-600 text-white') }}">
+                                @switch($transaction->transaction_type)
+                                    @case('membership_payment')
+                                        <i class="fas fa-users mr-1"></i> Membership
+                                        @break
+                                    @case('daily_visit_fee')
+                                        <i class="fas fa-bolt mr-1"></i> Harian
+                                        @break
+                                    @case('additional_items_sale')
+                                        <i class="fas fa-box mr-1"></i> Produk
+                                        @break
+                                @endswitch
+                            </span>
+                            <span class="text-[10px] font-bold text-slate-400 italic">
+                                <i class="far fa-clock mr-1"></i>{{ \Carbon\Carbon::parse($transaction->created_at)->format('H:i') }}
+                            </span>
+                        </div>
+                        
+                        <h4 class="text-xs font-black text-slate-800 uppercase italic tracking-tight truncate w-40">
+                            {{ $transaction->description ? Str::limit($transaction->description, 35) : 'Tanpa Keterangan' }}
+                        </h4>
+                        
+                        <div class="mt-2">
+                            <span class="text-[9px] font-black uppercase italic tracking-widest px-2 py-0.5 rounded border
+                                {{ $transaction->payment_method === 'cash' ? 'border-emerald-200 text-emerald-600 bg-emerald-50' : 'border-blue-200 text-blue-600 bg-blue-50' }}">
+                                <i class="fas {{ $transaction->payment_method === 'cash' ? 'fa-wallet' : 'fa-qrcode' }} mr-1"></i>
+                                {{ $transaction->payment_method === 'cash' ? 'Tunai' : 'QRIS' }}
+                            </span>
                         </div>
                     </div>
                     
-                    @forelse($todayTransactions ?? [] as $transaction)
-                        <div class="bg-white border border-gray-200 rounded-lg p-3 mb-3 shadow-sm">
-                            <div class="flex justify-between items-start mb-2">
-                                <div class="flex-1">
-                                    <div class="flex items-center gap-2 mb-1">
-                                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium
-                                            {{ $transaction->transaction_type === 'membership_payment' ? 'bg-blue-100 text-blue-800' : 
-                                               ($transaction->transaction_type === 'daily_visit_fee' ? 'bg-green-100 text-green-800' : 'bg-purple-100 text-purple-800') }}">
-                                            @switch($transaction->transaction_type)
-                                                @case('membership_payment')
-                                                    <i class="fas fa-users mr-1"></i>
-                                                    Membership
-                                                    @break
-                                                @case('daily_visit_fee')
-                                                    <i class="fas fa-clock mr-1"></i>
-                                                    Harian
-                                                    @break
-                                                @case('additional_items_sale')
-                                                    <i class="fas fa-shopping-cart mr-1"></i>
-                                                    Produk
-                                                    @break
-                                            @endswitch
-                                        </span>
-                                        <span class="text-xs text-gray-500">
-                                            {{ \Carbon\Carbon::parse($transaction->created_at)->format('H:i') }}
-                                        </span>
-                                    </div>
-                                    
-                                    @if($transaction->description)
-                                        <p class="text-sm text-gray-600 mb-1">{{ Str::limit($transaction->description, 40) }}</p>
-                                    @endif
-                                    
-                                    <div class="flex items-center gap-2">
-                                        <span class="inline-flex items-center px-1.5 py-0.5 rounded text-xs
-                                            {{ $transaction->payment_method === 'cash' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700' }}">
-                                            @if($transaction->payment_method === 'cash')
-                                                <i class="fas fa-money-bill mr-1"></i>
-                                                Tunai
-                                            @else
-                                                <i class="fas fa-qrcode mr-1"></i>
-                                                QRIS
-                                            @endif
-                                        </span>
-                                    </div>
-                                </div>
-                                
-                                <div class="text-right">
-                                    <p class="text-sm font-bold text-warna-600">
-                                        Rp {{ number_format($transaction->total_amount, 0, ',', '.') }}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    @empty
-                        <div class="text-center py-8">
-                            <i class="fas fa-inbox text-gray-300 text-2xl mb-2"></i>
-                            <p class="text-gray-500 text-sm">Belum ada transaksi hari ini</p>
-                            <p class="text-xs text-gray-400 mt-1">Transaksi akan muncul setelah Anda melakukan penjualan</p>
-                        </div>
-                    @endforelse
-                    
-                    @if(count($todayTransactions ?? []) > 0)
-                        <div class="bg-warna-50 rounded-lg p-3 mt-4">
-                            <div class="flex justify-between items-center text-sm">
-                                <span class="text-gray-600">
-                                    Total {{ count($todayTransactions) }} transaksi
-                                </span>
-                                <span class="font-bold text-warna-600">
-                                    Rp {{ number_format($totalToday ?? 0, 0, ',', '.') }}
-                                </span>
-                            </div>
-                        </div>
-                    @endif
+                    <div class="text-right">
+                        <p class="text-[10px] text-slate-400 font-bold uppercase italic leading-none mb-1 text-warna-500">Amount</p>
+                        <p class="text-base font-black text-[#0F172A] italic tracking-tighter">
+                            <span class="text-xs">Rp</span>{{ number_format($transaction->total_amount, 0, ',', '.') }}
+                        </p>
+                    </div>
                 </div>
+            </div>
+        @empty
+            <div class="flex flex-col items-center justify-center py-12 bg-slate-50 rounded-[2rem] border-2 border-dashed border-slate-200">
+                <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-3">
+                    <i class="fas fa-receipt text-slate-300 text-2xl"></i>
+                </div>
+                <p class="text-[11px] font-black text-slate-400 uppercase italic tracking-widest">Zero Transactions</p>
+                <p class="text-[9px] text-slate-400 mt-1">Belum ada data transaksi untuk hari ini</p>
+            </div>
+        @endforelse
+    </div>
+    
+    @if(count($todayTransactions ?? []) > 0)
+        <div class="bg-[#0F172A] rounded-[2rem] p-5 shadow-xl shadow-slate-200 mt-6 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-24 h-24 bg-warna-500/10 rounded-full blur-2xl"></div>
+            
+            <div class="flex justify-between items-center relative z-10">
+                <div>
+                    <p class="text-[10px] font-black text-warna-500 uppercase italic tracking-[0.2em] mb-1">Total Revenue</p>
+                    <p class="text-white text-xs font-medium opacity-60">Hari ini, {{ date('d M Y') }}</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-2xl font-black text-white italic tracking-tighter leading-none">
+                        <span class="text-sm text-warna-500">Rp</span>{{ number_format($totalToday ?? 0, 0, ',', '.') }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    @endif
+</div>
             </div>
 
         </div>

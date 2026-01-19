@@ -35,87 +35,142 @@
             </div>
         @endif
 
-        <form wire:submit.prevent="register" class="space-y-6">
-            <div class="group">
-                <x-g-input id="name" label="Nama Lengkap" wireModel="name" type="text"
-                    class="bg-slate-50 border-transparent focus:border-warna-500 rounded-2xl font-bold italic text-black" />
-                @error('name')
-                    <span
-                        class="text-rose-600 text-[10px] font-black uppercase italic mt-2 ml-2 tracking-widest block">{{ $message }}</span>
-                @enderror
+       <form wire:submit.prevent="register" class="space-y-5">
+    
+    <div class="relative group mt-4">
+        <input type="text" id="name" wire:model="name" autocomplete="off"
+            class="block w-full pl-12 pr-5 py-4 bg-white border-2 border-slate-200 rounded-2xl text-[#0F172A] font-black italic text-sm transition-all focus:outline-none focus:border-warna-500 focus:ring-0 peer placeholder-transparent" 
+            placeholder="Nama Lengkap" required/>
+        
+        <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-slate-400 peer-focus:text-warna-500 transition-colors">
+            <i class="fa-solid fa-address-card text-sm"></i>
+        </div>
+
+        <label for="name" 
+            class="absolute left-10 -top-2.5 px-2 bg-white text-[10px] font-black text-warna-500 uppercase tracking-widest italic transition-all 
+            peer-placeholder-shown:text-sm peer-placeholder-shown:text-slate-400 peer-placeholder-shown:top-4 peer-placeholder-shown:left-12 peer-placeholder-shown:font-bold
+            peer-focus:-top-2.5 peer-focus:left-10 peer-focus:text-[10px] peer-focus:text-warna-500 peer-focus:font-black
+            pointer-events-none">
+            Nama Lengkap
+        </label>
+        @error('name')
+            <span class="text-rose-600 text-[9px] font-black uppercase italic mt-1 ml-4 tracking-widest block">{{ $message }}</span>
+        @enderror
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div class="relative group mt-2">
+            <input type="number" id="nomor_telepon" wire:model="nomor_telepon"
+                class="block w-full pl-12 pr-5 py-4 bg-white border-2 border-slate-200 rounded-2xl text-[#0F172A] font-black italic text-sm transition-all focus:outline-none focus:border-warna-500 focus:ring-0 peer placeholder-transparent" 
+                placeholder="Nomor Telepon" required/>
+            
+            <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-slate-400 peer-focus:text-warna-500 transition-colors">
+                <i class="fa-solid fa-phone-flip text-sm"></i>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="group">
-                    <x-g-input id="nomor_telepon" label="Nomor Telepon" wireModel="nomor_telepon" type="number"
-                        class="bg-slate-50 border-transparent focus:border-warna-500 rounded-2xl font-bold italic text-black" />
-                    @error('nomor_telepon')
-                        <span
-                            class="text-rose-600 text-[10px] font-black uppercase italic mt-2 ml-2 tracking-widest block">{{ $message }}</span>
-                    @enderror
-                </div>
+            <label for="nomor_telepon" 
+                class="absolute left-10 -top-2.5 px-2 bg-white text-[10px] font-black text-warna-500 uppercase tracking-widest italic transition-all 
+                peer-placeholder-shown:text-sm peer-placeholder-shown:text-slate-400 peer-placeholder-shown:top-4 peer-placeholder-shown:left-12 peer-placeholder-shown:font-bold
+                peer-focus:-top-2.5 peer-focus:left-10 peer-focus:text-[10px] peer-focus:text-warna-500 peer-focus:font-black
+                pointer-events-none">
+                Nomor Telepon
+            </label>
+            @error('nomor_telepon')
+                <span class="text-rose-600 text-[9px] font-black uppercase italic mt-1 ml-4 tracking-widest block">{{ $message }}</span>
+            @enderror
+        </div>
 
-                <div class="group">
-                    <x-g-input id="username" label="Username" wireModel="username"
-                        class="bg-slate-50 border-transparent focus:border-warna-500 rounded-2xl font-bold italic text-black" />
-                    @error('username')
-                        <span
-                            class="text-rose-600 text-[10px] font-black uppercase italic mt-2 ml-2 tracking-widest block">{{ $message }}</span>
-                    @enderror
-                </div>
+        <div class="relative group mt-2">
+            <input type="text" id="username" wire:model="username"
+                class="block w-full pl-12 pr-5 py-4 bg-white border-2 border-slate-200 rounded-2xl text-[#0F172A] font-black italic text-sm transition-all focus:outline-none focus:border-warna-500 focus:ring-0 peer placeholder-transparent" 
+                placeholder="Username" required/>
+            
+            <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-slate-400 peer-focus:text-warna-500 transition-colors">
+                <i class="fa-solid fa-user-ninja text-sm"></i>
             </div>
 
-            <div class="group">
-                <x-g-input id="email" label="Email Address" wireModel="email" type="email"
-                    class="bg-slate-50 border-transparent focus:border-warna-500 rounded-2xl font-bold italic text-black" />
-                @error('email')
-                    <span
-                        class="text-rose-600 text-[10px] font-black uppercase italic mt-2 ml-2 tracking-widest block">{{ $message }}</span>
-                @enderror
-            </div>
+            <label for="username" 
+                class="absolute left-10 -top-2.5 px-2 bg-white text-[10px] font-black text-warna-500 uppercase tracking-widest italic transition-all 
+                peer-placeholder-shown:text-sm peer-placeholder-shown:text-slate-400 peer-placeholder-shown:top-4 peer-placeholder-shown:left-12 peer-placeholder-shown:font-bold
+                peer-focus:-top-2.5 peer-focus:left-10 peer-focus:text-[10px] peer-focus:text-warna-500 peer-focus:font-black
+                pointer-events-none">
+                Username
+            </label>
+            @error('username')
+                <span class="text-rose-600 text-[9px] font-black uppercase italic mt-1 ml-4 tracking-widest block">{{ $message }}</span>
+            @enderror
+        </div>
+    </div>
 
-            <div class="relative group">
-                <div class="relative">
-                    <input type="password" id="password" name="password" wire:model="password"
-                        class="block w-full px-5 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:outline-none focus:border-warna-500 focus:bg-white text-sm font-bold text-[#0F172A] transition-all peer italic text-black"
-                        placeholder=" " required />
+    <div class="relative group mt-2">
+        <input type="email" id="email" wire:model="email"
+            class="block w-full pl-12 pr-5 py-4 bg-white border-2 border-slate-200 rounded-2xl text-[#0F172A] font-black italic text-sm transition-all focus:outline-none focus:border-warna-500 focus:ring-0 peer placeholder-transparent" 
+            placeholder="Email Address" required/>
+        
+        <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-slate-400 peer-focus:text-warna-500 transition-colors">
+            <i class="fa-solid fa-envelope text-sm"></i>
+        </div>
 
-                    <label for="password"
-                        class="absolute text-[10px] font-black uppercase tracking-widest text-slate-400 italic duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-transparent px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-4 peer-placeholder-shown:text-sm peer-focus:text-warna-600 peer-focus:scale-75 peer-focus:-translate-y-4 left-4 pointer-events-none transition-all">
-                        Password
-                    </label>
+        <label for="email" 
+            class="absolute left-10 -top-2.5 px-2 bg-white text-[10px] font-black text-warna-500 uppercase tracking-widest italic transition-all 
+            peer-placeholder-shown:text-sm peer-placeholder-shown:text-slate-400 peer-placeholder-shown:top-4 peer-placeholder-shown:left-12 peer-placeholder-shown:font-bold
+            peer-focus:-top-2.5 peer-focus:left-10 peer-focus:text-[10px] peer-focus:text-warna-500 peer-focus:font-black
+            pointer-events-none">
+            Email 
+        </label>
+        @error('email')
+            <span class="text-rose-600 text-[9px] font-black uppercase italic mt-1 ml-4 tracking-widest block">{{ $message }}</span>
+        @enderror
+    </div>
 
-                    <button type="button" onclick="togglePassword()"
-                        class="absolute inset-y-0 right-4 flex items-center text-slate-300 hover:text-warna-600">
-                        <span id="eyeIcon"><i class="fa-solid fa-eye text-xs"></i></span>
-                    </button>
-                </div>
-                @error('password')
-                    <span
-                        class="text-rose-600 text-[10px] font-black uppercase italic mt-2 ml-2 tracking-widest block">{{ $message }}</span>
-                @enderror
-            </div>
+    <div class="relative group mt-2">
+        <input type="password" id="password" wire:model="password"
+            class="block w-full pl-12 pr-14 py-4 bg-white border-2 border-slate-200 rounded-2xl text-[#0F172A] font-black italic text-sm transition-all focus:outline-none focus:border-warna-500 focus:ring-0 peer placeholder-transparent" 
+            placeholder="Password" required/>
+        
+        <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-slate-400 peer-focus:text-warna-500 transition-colors">
+            <i class="fa-solid fa-shield-halved text-sm"></i>
+        </div>
 
-            <div class="pt-6">
-                <button type="submit" wire:loading.attr="disabled" wire:target="register"
-                    class="w-full py-5 bg-[#0F172A] text-warna-500 rounded-2xl font-black text-xs uppercase tracking-[0.3em] italic hover:bg-slate-800 transition-all active:scale-[0.98] shadow-2xl shadow-slate-200 flex items-center justify-center gap-3">
+        <label for="password" 
+            class="absolute left-10 -top-2.5 px-2 bg-white text-[10px] font-black text-warna-500 uppercase tracking-widest italic transition-all 
+            peer-placeholder-shown:text-sm peer-placeholder-shown:text-slate-400 peer-placeholder-shown:top-4 peer-placeholder-shown:left-12 peer-placeholder-shown:font-bold
+            peer-focus:-top-2.5 peer-focus:left-10 peer-focus:text-[10px] peer-focus:text-warna-500 peer-focus:font-black
+            pointer-events-none">
+            password
+        </label>
+        
+        <button type="button" onclick="togglePassword()" 
+            class="absolute inset-y-0 right-0 pr-5 flex items-center text-slate-300 hover:text-warna-500 transition-colors">
+            <span id="eyeIcon"><i class="fa-solid fa-eye text-sm"></i></span>
+        </button>
+        @error('password')
+            <span class="text-rose-600 text-[9px] font-black uppercase italic mt-1 ml-4 tracking-widest block">{{ $message }}</span>
+        @enderror
+    </div>
 
-                    <i wire:loading wire:target="register" class="fas fa-spinner fa-spin"></i>
+    <div class="pt-4">
+        <button type="submit" wire:loading.attr="disabled" wire:target="register"
+             class="group relative w-full py-5 bg-[#0F172A] text-warna-500 font-black uppercase tracking-[0.3em] text-[10px] italic rounded-2xl overflow-hidden transition-all duration-300 hover:bg-slate-800 shadow-[0_10px_30px_rgba(15,23,42,0.3)] active:scale-[0.97] flex items-center justify-center gap-3">
+            
+            <i wire:loading wire:target="register" class="fas fa-spinner fa-spin text-warna-500"></i>
 
-                    <span wire:loading.remove wire:target="register" class="flex items-center gap-2">
-                        <i class="fas fa-user-plus text-[10px]"></i> Register Now
-                    </span>
-                    <span wire:loading wire:target="register">Processing...</span>
-                </button>
-            </div>
+            <span wire:loading.remove wire:target="register" class="flex items-center gap-2">
+                JOIN THE ARENA <i class="fas fa-user-plus text-[10px]"></i>
+            </span>
+            <span wire:loading wire:target="register" class="text-warna-500">PROCESSING...</span>
+        </button>
+    </div>
 
-            <p class="text-center text-[11px] font-bold text-slate-400 uppercase italic tracking-widest mt-8">
-                Sudah punya akun?
-                <a href="{{ route('login') }}"
-                    class="text-warna-600 hover:text-[#0F172A] underline underline-offset-4 ml-1 transition-colors">Masuk
-                    Sekarang</a>
-            </p>
-        </form>
+    <div class="text-center pt-4">
+        <p class="text-slate-400 text-[10px] font-black uppercase italic tracking-widest">
+            Sudah terdaftar sebelumnya? 
+            <a href="{{ route('login') }}" class="text-[#0F172A] hover:text-warna-500 transition-all font-black border-b-2 border-warna-500/20 hover:border-warna-500 pb-0.5 ml-1">
+                MASUK SEKARANG
+            </a>
+        </p>
+    </div>
+</form>
     </div>
 
     <script>

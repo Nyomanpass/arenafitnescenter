@@ -4,29 +4,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QR Code Absensi - GYMYANKARTA</title>
+    <title>QR Code Absensi - ARENA FITNES CENTER</title>
     @vite(['resources/css/app.css'])
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.12.0/cdn.min.js" defer></script>
 </head>
 <body class="font-poppins bg-gray-100 min-h-screen overflow-hidden">
-    <div 
+<div 
     x-data="{
         currentTime: '',
         showInstructions: false,
         progress: 0,
-        
         init() {
             this.updateTime();
             setInterval(() => this.updateTime(), 1000);
             this.startProgress();
         },
-        
         updateTime() {
             this.currentTime = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
         },
-
         startProgress() {
             setInterval(() => {
                 if(this.progress >= 100) {
@@ -41,13 +38,13 @@
     x-init="init()"
     class="min-h-screen flex items-center justify-center bg-[#F8FAFC] font-sans p-4"
 >
-    <div class="hidden md:flex w-full max-w-6xl h-[700px] bg-white rounded-[3rem] shadow-[0_40px_100px_-20px_rgba(15,23,42,0.15)] overflow-hidden border border-slate-100">
+    <div class="hidden md:flex w-full max-w-[1400px] h-[85vh] bg-white rounded-[3.5rem] shadow-[0_40px_100px_-20px_rgba(15,23,42,0.15)] overflow-hidden border border-slate-100">
         
-        <div class="w-[35%] bg-[#0F172A] p-12 flex flex-col relative overflow-hidden">
-            <div class="absolute -top-20 -left-20 w-64 h-64 bg-warna-500/10 rounded-full blur-3xl"></div>
+        <div class="w-[28%] bg-[#0F172A] p-12 flex flex-col relative overflow-hidden">
+            <div class="absolute -top-20 -left-20 w-80 h-80 bg-warna-500/10 rounded-full blur-[100px]"></div>
             
-            <div class="relative z-10">
-                <div class="flex items-center gap-4 mb-10">
+            <div class="relative z-10 flex flex-col h-full">
+                <div class="flex items-center gap-4 mb-12">
                     <div class="w-16 h-16 bg-warna-500 rounded-2xl flex items-center justify-center rotate-3 shadow-lg shadow-warna-500/20">
                         <i class="fas fa-dumbbell text-[#0F172A] text-3xl"></i>
                     </div>
@@ -57,146 +54,121 @@
                     </div>
                 </div>
 
-                <div class="h-[2px] w-12 bg-warna-500 mb-10"></div>
-
-                <h3 class="text-white text-xl font-black italic uppercase tracking-tight mb-8">
-                    Self <span class="text-warna-500">Check-in</span> Guide
-                </h3>
-
-                <div class="space-y-8">
-                    @foreach([
-                        ['1', 'Open Member App', 'Buka aplikasi member di smartphone Anda'],
-                        ['2', 'Tap Scan QR', 'Tekan tombol Scan QR pada dashboard'],
-                        ['3', 'Align Camera', 'Arahkan kamera ke kode QR di layar ini'],
-                        ['4', 'Success!', 'Tunggu hingga konfirmasi berhasil muncul']
-                    ] as $step)
-                    <div class="flex items-start gap-5 group">
-                        <div class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-warna-500 text-xs font-black italic border border-slate-700 group-hover:bg-warna-500 group-hover:text-[#0F172A] transition-all duration-300">
-                            {{ $step[0] }}
-                        </div>
-                        <div>
-                            <p class="text-white text-[11px] font-black uppercase tracking-widest mb-1 italic">{{ $step[1] }}</p>
-                            <p class="text-slate-400 text-xs font-medium leading-relaxed">{{ $step[2] }}</p>
+                <div class="space-y-10">
+                    <div>
+                        <h3 class="text-white text-xl font-black italic uppercase tracking-tight mb-6">
+                            Self <span class="text-warna-500">Check-in</span>
+                        </h3>
+                        <div class="space-y-8">
+                            @foreach([
+                                ['1', 'Buka Aplikasi', 'Gunakan menu Scan QR di HP'],
+                                ['2', 'Pindai Kode', 'Arahkan kamera ke QR di samping'],
+                                ['3', 'Berhasil', 'Masuk area gym dengan nyaman']
+                            ] as $step)
+                            <div class="flex items-start gap-5">
+                                <div class="w-8 h-8 shrink-0 rounded-lg bg-slate-800 flex items-center justify-center text-warna-500 text-xs font-black italic border border-slate-700">
+                                    {{ $step[0] }}
+                                </div>
+                                <div>
+                                    <p class="text-white text-[11px] font-black uppercase tracking-widest mb-1 italic">{{ $step[1] }}</p>
+                                    <p class="text-slate-400 text-xs font-medium leading-relaxed">{{ $step[2] }}</p>
+                                </div>
+                            </div>
+                            @endforeach
                         </div>
                     </div>
-                    @endforeach
                 </div>
-            </div>
 
-            <div class="mt-auto relative z-10">
-                <div class="p-4 bg-slate-900/50 rounded-2xl border border-slate-800">
-                    <p class="text-slate-500 text-[9px] font-black uppercase tracking-[0.2em] mb-1 italic text-center">Current Terminal Time</p>
-                    <p class="text-white text-2xl font-black italic text-center tracking-widest" x-text="currentTime"></p>
+                <div class="mt-auto">
+                    <div class="p-6 bg-slate-900/50 rounded-[2rem] border border-slate-800 backdrop-blur-sm">
+                        <p class="text-slate-500 text-[9px] font-black uppercase tracking-[0.2em] mb-2 italic text-center">Terminal Local Time</p>
+                        <p class="text-white text-3xl font-black italic text-center tracking-widest" x-text="currentTime"></p>
+                    </div>
                 </div>
             </div>
         </div>
         
-        <div class="flex-1 bg-white p-12 flex flex-col items-center justify-center relative">
-            <div class="text-center mb-10">
-                <div class="inline-block px-4 py-1.5 bg-warna-500/10 rounded-full mb-4 border border-warna-500/20">
-                    <span class="text-[10px] font-black text-warna-600 uppercase tracking-[0.2em] italic">Secure Access Control</span>
-                </div>
-                <h2 class="text-4xl font-black text-[#0F172A] uppercase italic tracking-tighter mb-2">Scan <span class="text-warna-500">QR Code</span></h2>
-                <p class="text-slate-400 text-sm font-medium">Arahkan smartphone Anda untuk melakukan absensi otomatis</p>
+       <div class="flex-1 bg-white p-8 lg:p-12 flex flex-col items-center justify-between min-h-0 relative">
+    
+    <div class="text-center shrink-0">
+        <div class="inline-block px-5 py-2 bg-warna-500/10 rounded-full mb-3 border border-warna-500/20">
+            <span class="text-[10px] font-black text-warna-600 uppercase tracking-[0.2em] italic">High Definition Secure Access Control</span>
+        </div>
+        <h2 class="text-4xl lg:text-5xl font-black text-[#0F172A] uppercase italic tracking-tighter leading-tight">
+            SCAN <span class="text-warna-500">SEKARANG</span>
+        </h2>
+    </div>
+    
+    <div class="relative flex-1 w-full flex items-center justify-center min-h-0 my-2">
+        
+        <div class="absolute aspect-square h-full max-h-[60vh] pointer-events-none z-20">
+            <div class="absolute -top-2 -left-2 w-20 h-20 border-t-[10px] border-l-[10px] border-warna-500 rounded-tl-[2rem]"></div>
+            <div class="absolute -top-2 -right-2 w-20 h-20 border-t-[10px] border-r-[10px] border-warna-500 rounded-tr-[2rem]"></div>
+            <div class="absolute -bottom-2 -left-2 w-20 h-20 border-b-[10px] border-l-[10px] border-warna-500 rounded-bl-[2rem]"></div>
+            <div class="absolute -bottom-2 -right-2 w-20 h-20 border-b-[10px] border-r-[10px] border-warna-500 rounded-br-[2rem]"></div>
+        </div>
+
+        <div class="aspect-square h-full max-h-[60vh] bg-white rounded-[2.5rem] shadow-[0_30px_80px_-15px_rgba(0,0,0,0.1)] flex items-center justify-center relative overflow-hidden p-6 border border-slate-50">
+            
+            <div id="qr-loading" class="absolute inset-0 flex flex-col items-center justify-center bg-white z-20">
+                <div class="w-12 h-12 border-[6px] border-slate-100 border-t-warna-500 rounded-full animate-spin"></div>
             </div>
             
-            <div class="relative group">
-                <div class="absolute -top-4 -left-4 w-12 h-12 border-t-4 border-l-4 border-warna-500 rounded-tl-2xl"></div>
-                <div class="absolute -top-4 -right-4 w-12 h-12 border-t-4 border-r-4 border-warna-500 rounded-tr-2xl"></div>
-                <div class="absolute -bottom-4 -left-4 w-12 h-12 border-b-4 border-l-4 border-warna-500 rounded-bl-2xl"></div>
-                <div class="absolute -bottom-4 -right-4 w-12 h-12 border-b-4 border-r-4 border-warna-500 rounded-br-2xl"></div>
-
-                <div class="size-64 lg:size-80 bg-white rounded-3xl shadow-[0_25px_60px_-15px_rgba(0,0,0,0.1)] flex items-center justify-center relative overflow-hidden p-6 border border-slate-50 transition-transform duration-500 group-hover:scale-[1.02]">
-                    <div id="qr-loading" class="absolute inset-0 flex flex-col items-center justify-center bg-white z-20">
-                        <div class="w-12 h-12 border-[6px] border-slate-100 border-t-warna-500 rounded-full animate-spin mb-4"></div>
-                        <p class="text-[10px] font-black text-slate-400 uppercase italic">Generating Secure Key...</p>
-                    </div>
-                    
-                    <div id="qr-display" class="absolute inset-0 flex items-center justify-center p-8 opacity-0 z-10">
-                        <object id="qr-object" data="{{ route('qr.generate') }}?t={{ time() }}" type="image/svg+xml" class="w-full h-full">
-                            <embed src="{{ route('qr.generate') }}?t={{ time() }}" type="image/svg+xml" class="w-full h-full" />
-                        </object>
-                    </div>
-
-                    <div id="qr-error" class="absolute inset-0 flex flex-col items-center justify-center bg-white opacity-0 z-10 p-8 text-center">
-                        <i class="fas fa-exclamation-triangle text-rose-500 text-4xl mb-4"></i>
-                        <p class="text-xs font-black text-slate-800 uppercase italic">Sync Failed</p>
-                        <button onclick="refreshQrCode()" class="mt-4 text-[10px] font-black text-warna-500 underline uppercase italic">Try Re-Sync</button>
-                    </div>
-                </div>
+            <div id="qr-display" class="w-full h-full flex items-center justify-center opacity-0 z-10 transition-opacity duration-500">
+                <object id="qr-object" data="{{ route('qr.generate') }}?t={{ time() }}" type="image/svg+xml" class="w-full h-full scale-[1.05]">
+                    <embed src="{{ route('qr.generate') }}?t={{ time() }}" type="image/svg+xml" class="w-full h-full" />
+                </object>
             </div>
-
-            <div class="mt-16 w-full max-w-sm">
-                <div class="flex justify-between items-center mb-3 px-2">
-                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest italic">Security Refresh</span>
-                    <span class="text-[10px] font-black text-[#0F172A] italic uppercase" x-text="'30 SEC INTERVAL'"></span>
-                </div>
-                <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden border border-slate-200/50">
-                    <div class="bg-warna-500 h-full transition-all duration-1000 ease-linear shadow-[0_0_15px_rgba(163,230,53,0.5)]" :style="`width: ${progress}%` text-warna-500"></div>
-                </div>
-            </div>
-
-            <button onclick="refreshQrCode()" class="mt-8 flex items-center gap-3 px-8 py-3 bg-[#0F172A] text-warna-500 rounded-2xl font-black text-[10px] uppercase italic tracking-[0.2em] hover:bg-[#1e293b] transition-all active:scale-95 shadow-xl shadow-slate-200">
-                <i class="fas fa-sync-alt animate-spin-slow"></i>
-                Manual Refresh Key
-            </button>
         </div>
     </div>
 
+    <div class="w-full max-w-xl shrink-0 mt-4">
+        <div class="flex justify-between items-center mb-2 px-2">
+            <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest italic">Dynamic Key Refresh</span>
+            <span class="text-[10px] font-black text-[#0F172A] italic uppercase bg-warna-500 px-4 py-1 rounded-lg" x-text="'30s Auto Refresh'"></span>
+        </div>
+        <div class="w-full bg-slate-100 rounded-full h-3 overflow-hidden border border-slate-200/50">
+            <div class="bg-warna-500 h-full transition-all duration-1000 ease-linear shadow-[0_0_20px_rgba(163,230,53,0.6)]" :style="`width: ${progress}%` text-warna-500"></div>
+        </div>
+    </div>
+</div>
+    </div>
+
     <div class="md:hidden flex flex-col w-full h-screen bg-white">
-        <div class="bg-[#0F172A] px-8 py-6 flex items-center justify-between rounded-b-[2rem] shadow-xl">
+        <div class="bg-[#0F172A] px-8 py-10 flex items-center justify-between rounded-b-[3.5rem] shadow-xl">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-warna-500 rounded-xl flex items-center justify-center rotate-3">
-                    <i class="fas fa-dumbbell text-[#0F172A] text-xl"></i>
+                <div class="w-12 h-12 bg-warna-500 rounded-2xl flex items-center justify-center rotate-3">
+                    <i class="fas fa-dumbbell text-[#0F172A] text-2xl"></i>
                 </div>
-                <h1 class="text-white text-lg font-black italic uppercase tracking-tighter">Arena <span class="text-warna-500">Scan</span></h1>
+                <h1 class="text-white text-xl font-black italic uppercase tracking-tighter">Arena <span class="text-warna-500">Scan</span></h1>
             </div>
-            <a href="{{ route('dashboard') }}" class="text-slate-400 hover:text-white"><i class="fas fa-times text-xl"></i></a>
+            <a href="{{ route('dashboard') }}" class="text-slate-400 text-2xl"><i class="fas fa-times"></i></a>
         </div>
         
-        <div class="flex-1 flex flex-col items-center justify-center px-8">
-            <div class="text-center mb-10">
-                <h2 class="text-3xl font-black text-[#0F172A] uppercase italic tracking-tighter">Check-In</h2>
-                <p class="text-slate-400 text-xs font-medium mt-2">Pindai kode untuk masuk area gym</p>
-            </div>
-
-            <div class="relative mb-10">
-                <div class="absolute -top-3 -left-3 w-8 h-8 border-t-4 border-l-4 border-warna-500"></div>
-                <div class="absolute -bottom-3 -right-3 w-8 h-8 border-b-4 border-r-4 border-warna-500"></div>
+        <div class="flex-1 flex flex-col items-center justify-center px-6">
+            <div class="relative mb-12">
+                <div class="absolute -top-4 -left-4 w-12 h-12 border-t-8 border-l-8 border-warna-500 rounded-tl-2xl"></div>
+                <div class="absolute -bottom-4 -right-4 w-12 h-12 border-b-8 border-r-8 border-warna-500 rounded-br-2xl"></div>
                 
-                <div class="size-64 bg-white rounded-3xl shadow-2xl flex items-center justify-center relative overflow-hidden border border-slate-100 p-4">
+                <div class="size-80 bg-white rounded-[2.5rem] shadow-2xl flex items-center justify-center relative overflow-hidden border border-slate-100 p-6">
                      <div id="qr-loading-mobile" class="absolute inset-0 flex flex-col items-center justify-center bg-white z-20">
-                        <div class="w-8 h-8 border-4 border-slate-100 border-t-warna-500 rounded-full animate-spin mb-2"></div>
+                        <div class="w-10 h-10 border-4 border-slate-100 border-t-warna-500 rounded-full animate-spin"></div>
                     </div>
-                    <div id="qr-display-mobile" class="absolute inset-0 flex items-center justify-center p-6 opacity-0 z-10">
-                         <object id="qr-object-mobile" data="{{ route('qr.generate') }}?t={{ time() }}" type="image/svg+xml" class="w-full h-full">
+                    <div id="qr-display-mobile" class="absolute inset-0 flex items-center justify-center p-4 opacity-0 z-10">
+                         <object id="qr-object-mobile" data="{{ route('qr.generate') }}?t={{ time() }}" type="image/svg+xml" class="w-full h-full scale-110">
                             <embed src="{{ route('qr.generate') }}?t={{ time() }}" type="image/svg+xml" class="w-full h-full" />
                         </object>
                     </div>
                 </div>
             </div>
 
-            <div class="w-64 mb-10">
-                <div class="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
-                    <div class="bg-warna-500 h-full transition-all duration-1000 ease-linear" :style="`width: ${progress}%` text-warna-500"></div>
-                </div>
+            <div class="w-72 bg-slate-100 rounded-full h-3 overflow-hidden mb-10 border border-slate-200">
+                <div class="bg-warna-500 h-full transition-all duration-1000 ease-linear shadow-[0_0_15px_rgba(163,230,53,0.5)]" :style="`width: ${progress}%` text-warna-500"></div>
             </div>
 
-            <button onclick="refreshQrCode()" class="w-full py-4 bg-[#0F172A] text-warna-500 rounded-2xl font-black text-xs uppercase italic tracking-widest shadow-lg">
-                <i class="fas fa-sync-alt mr-2"></i> Refresh Key
+            <button onclick="refreshQrCode()" class="w-full max-w-xs py-5 bg-[#0F172A] text-warna-500 rounded-3xl font-black text-sm uppercase italic tracking-widest shadow-xl active:scale-95 transition-all">
+                <i class="fas fa-sync-alt mr-2"></i> Refresh QR Code
             </button>
-        </div>
-
-        <div class="p-6 bg-slate-50 border-t border-slate-100">
-             <button @click="showInstructions = !showInstructions" class="w-full flex justify-between items-center text-[10px] font-black text-[#0F172A] uppercase tracking-widest italic">
-                <span>Panduan Absensi</span>
-                <i class="fas" :class="showInstructions ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
-             </button>
-             <div x-show="showInstructions" x-collapse class="mt-4 space-y-3">
-                <p class="text-[11px] text-slate-500 font-medium">1. Buka aplikasi di HP</p>
-                <p class="text-[11px] text-slate-500 font-medium">2. Tekan Scan QR di Dashboard</p>
-                <p class="text-[11px] text-slate-500 font-medium">3. Scan kode di atas</p>
-             </div>
         </div>
     </div>
 </div>
