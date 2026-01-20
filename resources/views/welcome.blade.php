@@ -24,97 +24,83 @@
 <body class="bg-gray-100 font-poppins">
 
 
-    <header id="header" x-data="{ mobileMenuOpen: false, scrolled: false }" class="fixed top-0 left-0 w-full z-50 transition-all duration-500"
-        @scroll.window="scrolled = window.pageYOffset > 50"
-        :class="scrolled ? 'py-3 bg-black/80 backdrop-blur-lg border-b border-white/10' : 'py-6 bg-transparent'">
-        <div class="container mx-auto flex items-center justify-between px-6 lg:px-14">
+    <header id="header" 
+    x-data="{ mobileMenuOpen: false, scrolled: false }" 
+    class="fixed top-0 left-0 w-full z-50 transition-all duration-500"
+    @scroll.window="scrolled = window.pageYOffset > 50"
+    /* Logika: Jika di-scroll ATAU menu mobile terbuka, maka background jadi hitam pekat */
+    :class="(scrolled || mobileMenuOpen) ? 'py-3 bg-black border-b border-white/10' : 'py-6 bg-transparent'">
+    
+    <div class="container mx-auto flex items-center justify-between px-6 lg:px-14">
+        <div class="flex items-center group cursor-pointer">
+            <div class="w-10 h-10 bg-[#D9FF00] flex items-center justify-center rounded-sm rotate-3 group-hover:rotate-0 transition-transform duration-300">
+                <span class="text-black font-black text-xl italic">A</span>
+            </div>
+            <div class="ml-3 flex flex-col leading-none">
+                <span class="text-white font-black text-xl tracking-tighter">ARENA</span>
+                <span class="text-[#D9FF00] text-[10px] font-bold tracking-[0.2em] uppercase">Fitness Center</span>
+            </div>
+        </div>
 
-            <div class="flex items-center group cursor-pointer">
-                <div
-                    class="w-10 h-10 bg-[#D9FF00] flex items-center justify-center rounded-sm rotate-3 group-hover:rotate-0 transition-transform duration-300">
-                    <span class="text-black font-black text-xl italic">A</span>
-                </div>
-                <div class="ml-3 flex flex-col leading-none">
-                    <span class="text-white font-black text-xl tracking-tighter">ARENA</span>
-                    <span class="text-[#D9FF00] text-[10px] font-bold tracking-[0.2em] uppercase">Fitness Center</span>
-                </div>
+        <nav class="hidden lg:flex items-center">
+            <div class="flex space-x-10 mr-12">
+                <a href="#home" class="relative text-xs font-bold uppercase tracking-[0.2em] text-white hover:text-[#D9FF00] transition-colors group">
+                    Home
+                    <span class="absolute -bottom-1 left-0 w-0 h-[2px] bg-[#D9FF00] transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="#about" class="relative text-xs font-bold uppercase tracking-[0.2em] text-white hover:text-[#D9FF00] transition-colors group">
+                    About
+                    <span class="absolute -bottom-1 left-0 w-0 h-[2px] bg-[#D9FF00] transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="#price" class="relative text-xs font-bold uppercase tracking-[0.2em] text-white hover:text-[#D9FF00] transition-colors group">
+                    Price
+                    <span class="absolute -bottom-1 left-0 w-0 h-[2px] bg-[#D9FF00] transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="#contact" class="relative text-xs font-bold uppercase tracking-[0.2em] text-white hover:text-[#D9FF00] transition-colors group">
+                    Contact
+                    <span class="absolute -bottom-1 left-0 w-0 h-[2px] bg-[#D9FF00] transition-all duration-300 group-hover:w-full"></span>
+                </a>
             </div>
 
-            <nav class="hidden lg:flex items-center">
-                <div class="flex space-x-10 mr-12">
-                    <a href="#home"
-                        class="relative text-xs font-bold uppercase tracking-[0.2em] text-white hover:text-[#D9FF00] transition-colors group">
-                        Home
-                        <span
-                            class="absolute -bottom-1 left-0 w-0 h-[2px] bg-[#D9FF00] transition-all duration-300 group-hover:w-full"></span>
-                    </a>
-                    <a href="#about"
-                        class="relative text-xs font-bold uppercase tracking-[0.2em] text-white hover:text-[#D9FF00] transition-colors group">
-                        About
-                        <span
-                            class="absolute -bottom-1 left-0 w-0 h-[2px] bg-[#D9FF00] transition-all duration-300 group-hover:w-full"></span>
-                    </a>
-                    <a href="#price"
-                        class="relative text-xs font-bold uppercase tracking-[0.2em] text-white hover:text-[#D9FF00] transition-colors group">
-                        Price
-                        <span
-                            class="absolute -bottom-1 left-0 w-0 h-[2px] bg-[#D9FF00] transition-all duration-300 group-hover:w-full"></span>
-                    </a>
-                    <a href="#contact"
-                        class="relative text-xs font-bold uppercase tracking-[0.2em] text-white hover:text-[#D9FF00] transition-colors group">
-                        Contact
-                        <span
-                            class="absolute -bottom-1 left-0 w-0 h-[2px] bg-[#D9FF00] transition-all duration-300 group-hover:w-full"></span>
-                    </a>
-                </div>
+            <div class="flex items-center space-x-4 border-l border-white/20 pl-8">
+                <a href="{{ route('login') }}" class="text-xs font-bold uppercase tracking-widest text-white hover:text-[#D9FF00] transition-all">Login</a>
+                <a href="{{ route('register') }}" class="px-6 py-3 bg-[#D9FF00] hover:bg-white text-black text-[11px] font-black uppercase tracking-widest transition-all duration-300 transform hover:scale-105">Join Now</a>
+            </div>
+        </nav>
 
-                <div class="flex items-center space-x-4 border-l border-white/20 pl-8">
-                    <a href="{{ route('login') }}"
-                        class="text-xs font-bold uppercase tracking-widest text-white hover:text-[#D9FF00] transition-all">
-                        Login
-                    </a>
-                    <a href="{{ route('register') }}"
-                        class="px-6 py-3 bg-[#D9FF00] hover:bg-white text-black text-[11px] font-black uppercase tracking-widest transition-all duration-300 transform hover:scale-105">
-                        Join Now
-                    </a>
-                </div>
-            </nav>
+        <button @click="mobileMenuOpen = !mobileMenuOpen" class="lg:hidden group focus:outline-none z-50">
+            <div class="space-y-1.5">
+                <span class="block w-8 h-0.5 bg-white transition-all duration-300"
+                    :class="mobileMenuOpen ? 'rotate-45 translate-y-2 !bg-[#D9FF00]' : ''"></span>
+                <span class="block w-5 h-0.5 bg-white transition-all duration-300"
+                    :class="mobileMenuOpen ? 'opacity-0' : ''"></span>
+                <span class="block w-8 h-0.5 bg-white transition-all duration-300"
+                    :class="mobileMenuOpen ? '-rotate-45 -translate-y-2 !bg-[#D9FF00]' : ''"></span>
+            </div>
+        </button>
+    </div>
 
-            <button @click="mobileMenuOpen = !mobileMenuOpen" class="lg:hidden group focus:outline-none">
-                <div class="space-y-1.5">
-                    <span class="block w-8 h-0.5 bg-white transition-all duration-300"
-                        :class="mobileMenuOpen ? 'rotate-45 translate-y-2 !bg-[#D9FF00]' : ''"></span>
-                    <span class="block w-5 h-0.5 bg-white transition-all duration-300"
-                        :class="mobileMenuOpen ? 'opacity-0' : ''"></span>
-                    <span class="block w-8 h-0.5 bg-white transition-all duration-300"
-                        :class="mobileMenuOpen ? '-rotate-45 -translate-y-2 !bg-[#D9FF00]' : ''"></span>
-                </div>
-            </button>
-        </div>
+    <div x-show="mobileMenuOpen" 
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0 translate-y-full" 
+        x-transition:enter-end="opacity-100 translate-y-0"
+        x-transition:leave="transition ease-in duration-200"
+        class="fixed inset-0 z-40 bg-black flex flex-col items-center justify-center lg:hidden"
+        style="display: none;">
+        
+        <nav class="flex flex-col items-center space-y-8 text-center">
+            <a href="#home" @click="mobileMenuOpen = false" class="text-3xl font-black text-white hover:text-[#D9FF00] uppercase italic">Home</a>
+            <a href="#about" @click="mobileMenuOpen = false" class="text-3xl font-black text-white hover:text-[#D9FF00] uppercase italic">About</a>
+            <a href="#faq" @click="mobileMenuOpen = false" class="text-3xl font-black text-white hover:text-[#D9FF00] uppercase italic">FAQ</a>
+            <a href="#contact" @click="mobileMenuOpen = false" class="text-3xl font-black text-white hover:text-[#D9FF00] uppercase italic">Contact</a>
 
-        <div x-show="mobileMenuOpen" x-transition:enter="transition ease-out duration-300"
-            x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
-            x-transition:leave="transition ease-in duration-200"
-            class="fixed inset-0 z-[-1] bg-black flex items-center justify-center lg:hidden">
-            <nav class="flex flex-col items-center space-y-8 text-center">
-                <a href="#home" @click="mobileMenuOpen = false"
-                    class="text-3xl font-black text-white hover:text-[#D9FF00] uppercase tracking-tighter">Home</a>
-                <a href="#about" @click="mobileMenuOpen = false"
-                    class="text-3xl font-black text-white hover:text-[#D9FF00] uppercase tracking-tighter">About</a>
-                <a href="#faq" @click="mobileMenuOpen = false"
-                    class="text-3xl font-black text-white hover:text-[#D9FF00] uppercase tracking-tighter">FAQ</a>
-                <a href="#contact" @click="mobileMenuOpen = false"
-                    class="text-3xl font-black text-white hover:text-[#D9FF00] uppercase tracking-tighter">Contact</a>
-
-                <div class="pt-8 flex flex-col space-y-4 w-64">
-                    <a href="{{ route('register') }}"
-                        class="py-4 bg-[#D9FF00] text-black font-black uppercase tracking-widest">Join Member</a>
-                    <a href="{{ route('login') }}"
-                        class="py-4 border border-white/20 text-white font-black uppercase tracking-widest">Login</a>
-                </div>
-            </nav>
-        </div>
-    </header>
+            <div class="pt-8 flex flex-col space-y-4 w-64">
+                <a href="{{ route('register') }}" class="py-4 bg-[#D9FF00] text-black font-black uppercase tracking-widest text-center">Join Member</a>
+                <a href="{{ route('login') }}" class="py-4 border border-white/20 text-white font-black uppercase tracking-widest text-center">Login</a>
+            </div>
+        </nav>
+    </div>
+</header>
 
     <!-- Hero Section -->
     <section id="home" class="relative min-h-screen bg-[#050505] overflow-hidden flex items-center">
@@ -134,7 +120,7 @@
                         Jimbaran</span>
                 </div>
 
-                <h1 class="text-5xl md:text-6xl font-black text-white leading-none mb-8" data-aos="fade-up"
+                <h1 class="text-5xl md:text-6xl md:mt-0 mt-20 font-black text-white leading-none mb-8" data-aos="fade-up"
                     data-aos-delay="200">
                     BEAT YOUR <br>
                     <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#D9FF00] to-[#a2bd00]">
@@ -273,18 +259,18 @@
                         hebat."
                     </p>
 
-                    <div class="grid grid-cols-2 gap-y-4 gap-x-8">
-                        <div class="flex items-center text-gray-400 text-xs font-bold uppercase tracking-widest">
-                            <i class="fas fa-check-square text-[#D9FF00] mr-3"></i> Free High-Speed WiFi
-                        </div>
-                        <div class="flex items-center text-gray-400 text-xs font-bold uppercase tracking-widest">
-                            <i class="fas fa-check-square text-[#D9FF00] mr-3"></i> Shower Room
-                        </div>
+                  <div class="grid grid-cols-2 gap-y-4 gap-x-8">
                         <div class="flex items-center text-gray-400 text-xs font-bold uppercase tracking-widest">
                             <i class="fas fa-check-square text-[#D9FF00] mr-3"></i> Parkir Luas
                         </div>
                         <div class="flex items-center text-gray-400 text-xs font-bold uppercase tracking-widest">
-                            <i class="fas fa-check-square text-[#D9FF00] mr-3"></i> Free Air Minum
+                            <i class="fas fa-check-square text-[#D9FF00] mr-3"></i> Modern Equipment
+                        </div>
+                        <div class="flex items-center text-gray-400 text-xs font-bold uppercase tracking-widest">
+                            <i class="fas fa-check-square text-[#D9FF00] mr-3"></i> Certified Trainer
+                        </div>
+                        <div class="flex items-center text-gray-400 text-xs font-bold uppercase tracking-widest">
+                            <i class="fas fa-check-square text-[#D9FF00] mr-3"></i> Clean & Fresh
                         </div>
                     </div>
                 </div>
@@ -599,98 +585,7 @@
         </div>
     </footer>
 
-    <script>
-        // JavaScript untuk mendeteksi scroll dan mengubah background header
-        window.addEventListener("scroll", function() {
-            const header = document.getElementById("header");
-            const mobileDropdown = document.getElementById("mobile-dropdown");
-
-            const isDropdownVisible = !mobileDropdown.classList.contains("hidden"); // Cek apakah dropdown terbuka
-            if (window.scrollY > 50 || isDropdownVisible) {
-                // Jika scroll lebih dari 50px atau dropdown terbuka
-                header.classList.add("bg-warna-300", "shadow-lg");
-                header.classList.remove("bg-transparent");
-            } else {
-                header.classList.add("bg-transparent");
-                header.classList.remove("bg-warna-300", "shadow-lg");
-            }
-        });
-
-        // START FAQ ACCORDION LOGIC - VERSI DIPERBAIKI
-        const faqItems = document.querySelectorAll('[id^="faq"]'); // Memilih semua elemen FAQ
-
-        faqItems.forEach(item => {
-            item.addEventListener('click', () => {
-                const answerId = `answer${item.id.replace('faq', '')}`;
-                const currentAnswer = document.getElementById(answerId);
-                const chevronIcon = item.querySelector('.fa-chevron-down');
-
-                // Cek apakah jawaban yang sedang diklik sudah terbuka
-                const isOpen = !currentAnswer.classList.contains('hidden');
-
-                // Tutup semua jawaban FAQ yang sedang terbuka (kecuali yang baru saja diklik jika mau dibuka)
-                faqItems.forEach(otherItem => {
-                    const otherAnswerId = `answer${otherItem.id.replace('faq', '')}`;
-                    const otherAnswer = document.getElementById(otherAnswerId);
-                    const otherChevronIcon = otherItem.querySelector('.fa-chevron-down');
-
-                    // Jika jawaban item lain terbuka, tutup mereka
-                    if (otherAnswer && !otherAnswer.classList.contains(
-                        'hidden')) { // Pastikan otherAnswer ada dan terbuka
-                        otherAnswer.classList.add('hidden'); // Sembunyikan jawaban
-                        otherChevronIcon.classList.remove('rotate-180'); // Putar ikon kembali
-                    }
-                });
-
-                // Hanya jika item yang diklik sebelumnya tertutup, buka sekarang
-                // Jika sebelumnya sudah terbuka (dan sudah ditutup di loop di atas), biarkan tertutup
-                if (!isOpen) {
-                    currentAnswer.classList.remove('hidden'); // Buka jawaban yang diklik
-                    chevronIcon.classList.add('rotate-180'); // Putar ikon
-                }
-                // Jika `isOpen` adalah true, artinya diklik untuk menutupnya,
-                // maka class 'hidden' sudah ditambahkan dan rotate-180 sudah dihapus di loop atas.
-                // Tidak perlu tindakan tambahan di sini.
-            });
-        });
-        // END FAQ ACCORDION LOGIC
-
-        // JavaScript to toggle the mobile dropdown menu
-        const mobileMenuButton = document.getElementById('mobile-menu');
-        const mobileDropdown = document.getElementById('mobile-dropdown');
-        const header = document.getElementById('header');
-
-        mobileMenuButton.addEventListener('click', () => {
-            const isHidden = mobileDropdown.classList.contains('hidden');
-
-            if (isHidden) {
-                mobileDropdown.classList.remove('hidden', '-translate-y-full');
-                header.classList.add('bg-warna-300');
-            } else {
-                mobileDropdown.classList.add('-translate-y-full');
-                setTimeout(() => {
-                    mobileDropdown.classList.add('hidden');
-                }, 300);
-            }
-        });
-
-        // JavaScript to close mobile dropdown and scroll to top when clicking a link
-        const mobileMenuLinks = document.querySelectorAll('#mobile-dropdown a');
-
-        mobileMenuLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                mobileDropdown.classList.add('-translate-y-full');
-                setTimeout(() => {
-                    mobileDropdown.classList.add('hidden');
-                }, 300);
-
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
-                });
-            });
-        });
-    </script>
+  
 
 </body>
 

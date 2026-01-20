@@ -1,7 +1,6 @@
 import { defineConfig } from "vite";
 import laravel from "laravel-vite-plugin";
 import tailwindcss from "@tailwindcss/vite";
-import fs from "fs";
 
 export default defineConfig({
     plugins: [
@@ -11,18 +10,11 @@ export default defineConfig({
         }),
         tailwindcss(),
     ],
-    // server: {
-    //     cors: true,
-    //     host: "0.0.0.0",
-    //     port: 5173,
-    //     https: {
-    //         key: fs.readFileSync("ssl/vite.key"),
-    //         cert: fs.readFileSync("ssl/vite.crt"),
-    //     },
-    //     hmr: {
-    //         host: process.env.VITE_DEV_SERVER_HOST || "192.168.110.234",
-    //         protocol: "wss",
-    //         port: 5173,
-    //     },
-    // },
+    server: {
+        host: "127.0.0.1",
+        port: 5173,
+        hmr: {
+            host: "127.0.0.1",
+        },
+    },
 });
