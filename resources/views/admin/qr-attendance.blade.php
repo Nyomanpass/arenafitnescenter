@@ -49,8 +49,8 @@
                         <i class="fas fa-dumbbell text-[#0F172A] text-3xl"></i>
                     </div>
                     <div>
-                        <h1 class="text-2xl font-black text-white italic tracking-tighter leading-none uppercase">Arena</h1>
-                        <h2 class="text-warna-500 text-sm font-black italic tracking-[0.3em] uppercase">Fitness</h2>
+                        <h1 class="text-2xl font-black text-white italic tracking-tighter leading-none uppercase">Sport</h1>
+                        <h2 class="text-warna-500 text-sm font-black italic tracking-[0.3em] uppercase">Center</h2>
                     </div>
                 </div>
 

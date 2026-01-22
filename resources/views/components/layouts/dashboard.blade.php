@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Dashboard Admin ARENA FITNES CENTER</title>
+    <title>Dashboard Admin Jimbaran Sport Center</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
     <style>
@@ -42,12 +42,12 @@
             <!-- Logo -->
             <div class="hidden lg:flex items-center flex-shrink-0">
                 <div class="h-10 w-10 bg-[#0F172A] rounded-xl flex items-center justify-center shadow-lg shadow-slate-200 mr-3 group transition-transform hover:rotate-6">
-                    <span class="text-warna-500 font-black text-2xl italic tracking-tighter">A</span>
+                    <span class="text-warna-500 font-black text-2xl italic tracking-tighter">S</span>
                 </div>
                 
                 <a href="{{ route('dashboard') }}" class="flex flex-col leading-none">
                     <span class="text-xl font-black text-[#0F172A] tracking-tighter uppercase italic">
-                        ARENA <span class="text-warna-500">FITNESS</span>
+                        SPORT <span class="text-warna-500">CENTER</span>
                     </span>
                     <span class="text-[9px] font-bold text-slate-400 tracking-[0.3em] uppercase">Center Management</span>
                 </a>
